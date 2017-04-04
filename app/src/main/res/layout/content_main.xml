@@ -10,8 +10,9 @@
     tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
+        android:id="@+id/linear_layout_one"
         android:layout_width="match_parent"
-        android:background="#44395F"
+        android:background="@drawable/transition"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -189,9 +190,12 @@
         <!--android:padding="10dp"-->
         <!--android:scrollbars="vertical" />-->
 
-    <com.dynamitechetan.flowinggradient.FlowingGradient
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<com.dynamitechetan.flowinggradient.FlowingGradient-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:transition_duration = "4000"-->
+        <!--app:transition_drawable="@drawable/transition">-->
+        <!--</com.dynamitechetan.flowinggradient.FlowingGradient>-->
 
 
 </LinearLayout>
