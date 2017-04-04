@@ -85,8 +85,8 @@
                     android:padding="5dp"
                     android:id="@+id/date_mon"
                     android:layout_gravity="center"
-                    android:background="@drawable/circular_image"
                     android:textStyle="bold"
+                    android:textColor="#fff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12"/>
@@ -108,8 +108,8 @@
                     android:padding="5dp"
                     android:id="@+id/date_tue"
                     android:layout_gravity="center"
-                    android:background="@drawable/circular_image"
                     android:textStyle="bold"
+                    android:textColor="#fff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="13"/>
@@ -133,7 +133,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/circular_image"
+                    android:textColor="#fff"
                     android:textStyle="bold"
                     android:text="14"/>
             </LinearLayout>
@@ -156,7 +156,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/circular_image"
+                    android:textColor="#fff"
                     android:textStyle="bold"
                     android:text="15"/>
             </LinearLayout>
@@ -179,7 +179,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/circular_image"
+                    android:textColor="#fff"
                     android:textStyle="bold"
                     android:text="16"/>
             </LinearLayout>

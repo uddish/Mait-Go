@@ -46,11 +46,17 @@ public class MainActivity extends AppCompatActivity
     LinearLayout linearLayout;
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
-    public List<DailySchedule> scheduleList = new ArrayList<>();
+    public List<DailySchedule> mondaySchedule = new ArrayList<>();
     public RecyclerView recyclerView;
     public DailyScheduleListAdapter scheduleListAdapter;
     String currentDate, currentDay, currentYear, currentMonth;
     TextView date, day, month;
+    TextView mon, tue, wed, thu, fri;
+    static int monSelected = 0;
+    static int tueSelected = 0;
+    static int wedSelected = 0;
+    static int thuSelected = 0;
+    static int friSelected = 0;
 
 
     @Override
@@ -61,11 +67,11 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        scheduleListAdapter = new DailyScheduleListAdapter(scheduleList);
+        scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(scheduleListAdapter);
-        prepareSchedule();
+        mondayScheduleFunction();
 
         //Attaching all the fields
         attachFields();
@@ -77,6 +83,67 @@ public class MainActivity extends AppCompatActivity
         date.setText(currentDate);
         day.setText(currentDay);
         month.setText(currentMonth.substring(0,3) + " " + currentYear);
+
+        Log.d(TAG, "onCreate: " + monSelected);
+
+        /**
+         * Checking which day is selected
+         */
+        mon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monSelected = 1;
+                tueSelected = 0;
+                wedSelected = 0;
+                thuSelected = 0;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        tue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monSelected = 0;
+                tueSelected = 1;
+                wedSelected = 0;
+                thuSelected = 0;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        wed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monSelected = 0;
+                tueSelected = 0;
+                wedSelected = 1;
+                thuSelected = 0;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        thu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monSelected = 0;
+                tueSelected = 0;
+                wedSelected = 0;
+                thuSelected = 1;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        fri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                monSelected = 0;
+                tueSelected = 0;
+                wedSelected = 0;
+                thuSelected = 0;
+                friSelected = 1;
+                changeDayCircleColor();
+            }
+        });
 
 
         getSupportActionBar().setElevation(0);
@@ -160,6 +227,11 @@ public class MainActivity extends AppCompatActivity
         date = (TextView) findViewById(R.id.date_tv);
         day = (TextView) findViewById(R.id.day_tv);
         month = (TextView) findViewById(R.id.month_tv);
+        mon = (TextView) findViewById(R.id.date_mon);
+        tue = (TextView) findViewById(R.id.date_tue);
+        wed = (TextView) findViewById(R.id.date_wed);
+        thu = (TextView) findViewById(R.id.date_thu);
+        fri = (TextView) findViewById(R.id.date_fri);
     }
 
     private String getCurrentDate() {
@@ -218,21 +290,89 @@ public class MainActivity extends AppCompatActivity
         return currMonth;
     }
 
-    private void prepareSchedule() {
+    private void mondayScheduleFunction() {
         DailySchedule movie = new DailySchedule("8:15 - 9:15", "Theory of Computation", "841");
-        scheduleList.add(movie);
+        mondaySchedule.add(movie);
         movie = new DailySchedule("8:15 - 10:15", "Control System", "841");
-        scheduleList.add(movie);
+        mondaySchedule.add(movie);
         movie = new DailySchedule("10:15 - 11:15", "Maths", "843");
-        scheduleList.add(movie);
+        mondaySchedule.add(movie);
         movie = new DailySchedule("11:15 - 12:15", "COA", "841");
-        scheduleList.add(movie);
+        mondaySchedule.add(movie);
         movie = new DailySchedule("12:15 - 1:15", "OOPS", "842");
-        scheduleList.add(movie);
+        mondaySchedule.add(movie);
         movie = new DailySchedule("1:15 - 2:15", "DBMS", "841");
-        scheduleList.add(movie);
+        mondaySchedule.add(movie);
 
         scheduleListAdapter.notifyDataSetChanged();
+    }
+
+    private void changeDayCircleColor()   {
+        if(monSelected == 1)    {
+            mon.setBackgroundResource(R.drawable.circular_image);
+            mon.setTextColor(Color.BLACK);
+
+            tue.setBackgroundResource(0);
+            tue.setTextColor(Color.WHITE);
+            wed.setBackgroundResource(0);
+            wed.setTextColor(Color.WHITE);
+            thu.setBackgroundResource(0);
+            thu.setTextColor(Color.WHITE);
+            fri.setBackgroundResource(0);
+            fri.setTextColor(Color.WHITE);
+        }
+        else if(tueSelected == 1)    {
+            tue.setBackgroundResource(R.drawable.circular_image);
+            tue.setTextColor(Color.BLACK);
+
+            mon.setBackgroundResource(0);
+            mon.setTextColor(Color.WHITE);
+            wed.setBackgroundResource(0);
+            wed.setTextColor(Color.WHITE);
+            thu.setBackgroundResource(0);
+            thu.setTextColor(Color.WHITE);
+            fri.setBackgroundResource(0);
+            fri.setTextColor(Color.WHITE);
+        }
+        else if(wedSelected == 1)   {
+            wed.setBackgroundResource(R.drawable.circular_image);
+            wed.setTextColor(Color.BLACK);
+
+            mon.setBackgroundResource(0);
+            mon.setTextColor(Color.WHITE);
+            tue.setBackgroundResource(0);
+            tue.setTextColor(Color.WHITE);
+            thu.setBackgroundResource(0);
+            thu.setTextColor(Color.WHITE);
+            fri.setBackgroundResource(0);
+            fri.setTextColor(Color.WHITE);
+        }
+        else if(thuSelected == 1)   {
+            thu.setBackgroundResource(R.drawable.circular_image);
+            thu.setTextColor(Color.BLACK);
+
+            mon.setBackgroundResource(0);
+            mon.setTextColor(Color.WHITE);
+            tue.setBackgroundResource(0);
+            tue.setTextColor(Color.WHITE);
+            wed.setBackgroundResource(0);
+            wed.setTextColor(Color.WHITE);
+            fri.setBackgroundResource(0);
+            fri.setTextColor(Color.WHITE);
+        }
+        else if(friSelected == 1)   {
+            fri.setBackgroundResource(R.drawable.circular_image);
+            fri.setTextColor(Color.BLACK);
+
+            mon.setBackgroundResource(0);
+            mon.setTextColor(Color.WHITE);
+            tue.setBackgroundResource(0);
+            tue.setTextColor(Color.WHITE);
+            thu.setBackgroundResource(0);
+            thu.setTextColor(Color.WHITE);
+            wed.setBackgroundResource(0);
+            wed.setTextColor(Color.WHITE);
+        }
     }
 
     @Override
