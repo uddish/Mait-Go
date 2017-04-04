@@ -16,10 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/transition"
-            android:theme="@style/noElevationBar"/>
+            android:theme="@style/DrawerArrowStyle"/>
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-
 
 </android.support.design.widget.CoordinatorLayout>

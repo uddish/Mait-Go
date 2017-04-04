@@ -83,10 +83,10 @@
                     android:text="MON"/>
                 <TextView
                     android:padding="5dp"
-                    android:layout_gravity="center"
                     android:id="@+id/date_mon"
-                    android:textStyle="bold"
+                    android:layout_gravity="center"
                     android:background="@drawable/circular_image"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="12"/>

@@ -1,5 +1,7 @@
 package com.example.uddishverma22.mait_go;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
@@ -16,14 +18,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.TranslateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     LinearLayout linearLayout;
     AnimationDrawable gradAnim;
+    ActionBarDrawerToggle toggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +41,15 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setElevation(0);
 
-        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
-
-        gradAnim = (AnimationDrawable) linearLayout.getBackground();
-//        gradAnim = (AnimationDrawable) toolbar.getBackground();
-        gradAnim.setEnterFadeDuration(2000);
-        gradAnim.setExitFadeDuration(2000);
-//        TransitionDrawable trans = (TransitionDrawable) linearLayout.getBackground();
-//        trans.startTransition(20000);
+        //Gradient animation
+//        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
+//        gradAnim = (AnimationDrawable) linearLayout.getBackground();
+//        gradAnim.setEnterFadeDuration(2000);
+//        gradAnim.setExitFadeDuration(2000);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-
 
 
     @Override
@@ -116,14 +119,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if (gradAnim != null && !gradAnim.isRunning())
-            gradAnim.start();
+//        if (gradAnim != null && !gradAnim.isRunning())
+//            gradAnim.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (gradAnim != null && gradAnim.isRunning())
-            gradAnim.stop();
+//        if (gradAnim != null && gradAnim.isRunning())
+//            gradAnim.stop();
     }
 }
