@@ -1,6 +1,7 @@
 package com.example.uddishverma22.mait_go;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -28,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.uddishverma22.mait_go.Activities.Notices;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            startActivity(new Intent(this, Notices.class));
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
