@@ -79,8 +79,10 @@
                     android:layout_width="wrap_content"
                     android:textColor="#fff"
                     android:layout_height="wrap_content"
+                    android:padding="3dp"
                     android:text="MON"/>
                 <TextView
+                    android:padding="5dp"
                     android:layout_gravity="center"
                     android:id="@+id/date_mon"
                     android:textStyle="bold"
@@ -100,8 +102,10 @@
                     android:textColor="#fff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="3dp"
                     android:text="TUE"/>
                 <TextView
+                    android:padding="5dp"
                     android:id="@+id/date_tue"
                     android:layout_gravity="center"
                     android:background="@drawable/circular_image"
@@ -121,8 +125,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
+                    android:padding="3dp"
                     android:text="WED"/>
                 <TextView
+                    android:padding="5dp"
                     android:id="@+id/date_wed"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
@@ -142,8 +148,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
+                    android:padding="3dp"
                     android:text="THU"/>
                 <TextView
+                    android:padding="5dp"
                     android:id="@+id/date_thu"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
@@ -163,8 +171,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
+                    android:padding="3dp"
                     android:text="FRI"/>
                 <TextView
+                    android:padding="5dp"
                     android:id="@+id/date_fri"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
@@ -183,19 +193,13 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recycler_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:padding="10dp"-->
-        <!--android:scrollbars="vertical" />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:scrollbars="vertical" />
 
-    <!--<com.dynamitechetan.flowinggradient.FlowingGradient-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:transition_duration = "4000"-->
-        <!--app:transition_drawable="@drawable/transition">-->
-        <!--</com.dynamitechetan.flowinggradient.FlowingGradient>-->
 
 
 </LinearLayout>
