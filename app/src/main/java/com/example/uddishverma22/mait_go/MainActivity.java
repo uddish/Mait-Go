@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.transition.Transition;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,13 +26,31 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
+import com.example.uddishverma22.mait_go.Models.DailySchedule;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String TAG = "MainActivity";
+
     LinearLayout linearLayout;
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
+    public List<DailySchedule> scheduleList = new ArrayList<>();
+    public RecyclerView recyclerView;
+    public DailyScheduleListAdapter scheduleListAdapter;
+    String currentDate, currentDay, currentYear, currentMonth;
+    TextView date, day, month;
 
 
     @Override
@@ -38,6 +59,25 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        scheduleListAdapter = new DailyScheduleListAdapter(scheduleList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(scheduleListAdapter);
+        prepareSchedule();
+
+        //Attaching all the fields
+        attachFields();
+
+        currentDate = getCurrentDate();
+        currentDay = getCurrentDay();
+        currentYear = getCurrentYear();
+        currentMonth = getCurrentMonth();
+        date.setText(currentDate);
+        day.setText(currentDay);
+        month.setText(currentMonth.substring(0,3) + " " + currentYear);
+
 
         getSupportActionBar().setElevation(0);
 
@@ -114,6 +154,85 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void attachFields()  {
+        date = (TextView) findViewById(R.id.date_tv);
+        day = (TextView) findViewById(R.id.day_tv);
+        month = (TextView) findViewById(R.id.month_tv);
+    }
+
+    private String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = mdformat.format(calendar.getTime());
+        String date = strDate.substring(0,2);
+        return date;
+    }
+
+    private String getCurrentDay()    {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        Date d = new Date();
+        String dayOfTheWeek = sdf.format(d);
+        return dayOfTheWeek;
+    }
+
+    private String getCurrentYear() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("yyyy/MM/dd");
+        String strDate = mdformat.format(calendar.getTime());
+        String year = strDate.substring(0,4);
+        return year;
+    }
+
+    private String getCurrentMonth()    {
+        DateFormat dateFormat = new SimpleDateFormat("MM");
+        Date date = new Date();
+        String month = (dateFormat.format(date));
+        String currMonth = null;
+        if(month.equals("01")) {
+            currMonth = "January";
+        }else if(month.equals("02")) {
+            currMonth = "February";
+        }else if(month.equals("03")) {
+            currMonth = "March";
+        }else if(month.equals("04")) {
+            currMonth = "April";
+        }else if(month.equals("05")) {
+            currMonth = "May";
+        }else if(month.equals("06")) {
+            currMonth = "June";
+        }else if(month.equals("07")) {
+            currMonth = "July";
+        }else if(month.equals("08")) {
+            currMonth = "August";
+        }else if(month.equals("09")) {
+            currMonth = "September";
+        }else if(month.equals("10")) {
+            currMonth = "October";
+        }else if(month.equals("11")) {
+            currMonth = "November";
+        }else if(month.equals("12")) {
+            currMonth = "December";
+        }
+        return currMonth;
+    }
+
+    private void prepareSchedule() {
+        DailySchedule movie = new DailySchedule("8:15 - 9:15", "Theory of Computation", "841");
+        scheduleList.add(movie);
+        movie = new DailySchedule("8:15 - 10:15", "Control System", "841");
+        scheduleList.add(movie);
+        movie = new DailySchedule("10:15 - 11:15", "Maths", "843");
+        scheduleList.add(movie);
+        movie = new DailySchedule("11:15 - 12:15", "COA", "841");
+        scheduleList.add(movie);
+        movie = new DailySchedule("12:15 - 1:15", "OOPS", "842");
+        scheduleList.add(movie);
+        movie = new DailySchedule("1:15 - 2:15", "DBMS", "841");
+        scheduleList.add(movie);
+
+        scheduleListAdapter.notifyDataSetChanged();
     }
 
     @Override

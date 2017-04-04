@@ -2,15 +2,15 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_margin="10dp"
-    android:padding="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:padding="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_alarm_black_36dp"/>
 
     <LinearLayout
@@ -25,10 +25,11 @@
             android:layout_height="0dp"
             android:background="@android:color/darker_gray"/>
         <ImageView
+            android:id="@+id/dot_design"
             android:layout_weight="0.3"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/green_circle"/>
+            android:background="@drawable/purple_circle"/>
         <View
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -43,16 +44,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/time"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:text="8:15 - 9:15"/>
         <TextView
+            android:id="@+id/subject"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:text="Maths"/>
         <TextView
+            android:id="@+id/room"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
