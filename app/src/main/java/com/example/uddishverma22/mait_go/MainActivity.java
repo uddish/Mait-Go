@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.uddishverma22.mait_go.Activities.Notices;
+import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 
@@ -206,9 +207,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_notices) {
             startActivity(new Intent(this, Notices.class));
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_profile) {
+            startActivity(new Intent(this, UserProfile.class));
 
         } else if (id == R.id.nav_slideshow) {
 
