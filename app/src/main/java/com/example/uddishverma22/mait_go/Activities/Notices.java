@@ -1,13 +1,16 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -23,6 +26,7 @@ import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 
 import org.json.JSONArray;
@@ -55,6 +59,24 @@ public class Notices extends AppCompatActivity {
         pd.show();
         recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener()    {
+
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Notice notice = noticeList.get(position);
+                        Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
+                        i.putExtra("url", notice.url);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
+
         noticeHeading = (TextView) findViewById(R.id.notice_tv);
         Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Regular.ttf");
         noticeHeading.setTypeface(tf);
@@ -80,8 +102,6 @@ public class Notices extends AppCompatActivity {
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setAdapter(noticeAdapter);
-
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
