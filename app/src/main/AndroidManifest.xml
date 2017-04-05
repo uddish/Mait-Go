@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.Notices" />
-        <activity android:name=".Activities.NoticeWebView"></activity>
+        <activity android:name=".Activities.NoticeWebView" />
+        <activity android:name=".Activities.UserProfile"></activity>
     </application>
 
 </manifest>
