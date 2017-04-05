@@ -1,8 +1,13 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -13,12 +18,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
+import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
+import com.example.uddishverma22.mait_go.Models.DailySchedule;
+import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Notices extends AppCompatActivity {
 
@@ -27,58 +39,49 @@ public class Notices extends AppCompatActivity {
 
     public static final String TAG = "Notices";
 
+    public List<Notice> noticeList = new ArrayList<>();
+    public RecyclerView recyclerView;
+    public NoticeAdapter noticeAdapter;
+    TextView noticeHeading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notices);
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Please Wait...");
+        pd.show();
+        recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
 
-//        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                // we got the response, now our job is to handle it
-//                Log.d(TAG, "onResponse: " + response);
-//
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                //something happened, treat the error.
-//                Log.d(TAG, "onErrorResponse: ERROR " + error.toString());
-//            }
-//        });
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
-
-
-//        JsonObjectRequest request = new JsonObjectRequest(url, null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d(TAG, "onResponse: " + response.toString());
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d(TAG, "onErrorResponse: " + error.toString());
-//            }
-//        });
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
-//
+        noticeHeading = (TextView) findViewById(R.id.notice_tv);
+        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Regular.ttf");
+        noticeHeading.setTypeface(tf);
 
         JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-//                        Log.d(TAG, response.toString());
+
+                        pd.dismiss();
                         try {
                             for(int n = 0; n < response.length(); n++)
                             {
                                 object = response.getJSONObject(n);
+                                Notice noticeObj = new Notice();
+                                noticeObj.notice = object.getString("name");
+                                noticeObj.url = object.getString("url");
                                 Log.d(TAG, "onResponse: JSON " + object.get("name"));
+                                noticeList.add(noticeObj);
                             }
+
+                            noticeAdapter = new NoticeAdapter(noticeList);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setAdapter(noticeAdapter);
+
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
