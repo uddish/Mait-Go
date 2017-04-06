@@ -12,12 +12,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
     <RelativeLayout
-        android:id="@+id/background"
+        android:id="@+id/diagonal_view"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:background="@drawable/diagonal_background" >
+        android:background="@drawable/diagonal_background_blue" >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circleImageView"
@@ -40,39 +39,76 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Uddish Verma"
-            android:textColor="#25305C"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:textAppearance="?android:textAppearanceLarge"/>
+            android:orientation="horizontal">
+
+            <View
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="#25305C"/>
+            <TextView
+                android:layout_weight="2"
+                android:id="@+id/name_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Uddish Verma"
+                android:textColor="#25305C"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textAppearance="?android:textAppearanceLarge"/>
+            <View
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="#25305C"/>
+        </LinearLayout>
+
         <TextView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/enrollment_tv"
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:text="40514803115"
+            android:textColor="#25305C"
             android:textAppearance="?android:textAppearanceMedium"/>
 
 
     </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/orange_theme"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/orange_circle"/>
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/purple_circle"/>
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/green_circle"/>
+            <ImageView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/orange_circle"/>
+        </LinearLayout>
 
     </LinearLayout>
-
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?android:attr/actionBarSize"-->
-        <!--android:layout_marginTop="24dp">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:fontFamily="sans-serif-light"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:text="About"-->
-            <!--android:textSize="24sp" />-->
-    <!--</android.support.v7.widget.Toolbar>-->
 
 </ScrollView>

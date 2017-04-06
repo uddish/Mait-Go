@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
     public RecyclerView recyclerView;
     public DailyScheduleListAdapter scheduleListAdapter;
     String currentDate, currentDay, currentYear, currentMonth;
+    Toolbar toolbar;
     TextView date, day, month;
     TextView mon, tue, wed, thu, fri;
     static int monSelected = 0;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -75,6 +76,8 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(scheduleListAdapter);
         mondayScheduleFunction();
+
+        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
         //Attaching all the fields
         attachFields();
@@ -87,7 +90,10 @@ public class MainActivity extends AppCompatActivity
         day.setText(currentDay);
         month.setText(currentMonth.substring(0,3) + " " + currentYear);
 
-        Log.d(TAG, "onCreate: " + monSelected);
+//        if(UserProfile.themeColor == 101) {
+//            Log.d(TAG, "onCreate: Theme " + UserProfile.themeColor);
+//            linearLayout.setBackgroundResource(R.drawable.orange_gradient);
+//        }
 
         /**
          * Checking which day is selected
@@ -384,6 +390,12 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 //        if (gradAnim != null && !gradAnim.isRunning())
 //            gradAnim.start();
+        if(UserProfile.themeColor == 101) {
+            Log.d(TAG, "onCreate: Theme " + UserProfile.themeColor);
+            linearLayout.setBackgroundResource(R.drawable.orange_gradient);
+            toolbar.setBackgroundResource(R.drawable.orange_gradient);
+            recyclerView.setAdapter(scheduleListAdapter);
+        }
     }
 
     @Override
