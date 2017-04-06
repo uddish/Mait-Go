@@ -1,12 +1,14 @@
 package com.example.uddishverma22.mait_go.Adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.R;
 
@@ -19,6 +21,8 @@ import java.util.List;
 public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailyScheduleListAdapter.detailsViewHolder> {
 
     public List<DailySchedule> schedule;
+
+    public static final String TAG = "DailySchedule";
 
     public DailyScheduleListAdapter(List<DailySchedule> schedule) {
         this.schedule = schedule;
@@ -51,8 +55,10 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
         holder.time.setText(schedulelist.getTime());
         holder.subject.setText(schedulelist.getSubject());
         holder.room.setText(schedulelist.getRoom());
-        //Theme based fields
-//        holder.dotColor.setImageResource(R.drawable.green_circle);
+        if(UserProfile.themeColor == 101)   {
+            Log.d(TAG, "onBindViewHolder: THEME CHANGED ");
+            holder.dotColor.setImageResource(R.drawable.orange_circle);
+        }
     }
 
 

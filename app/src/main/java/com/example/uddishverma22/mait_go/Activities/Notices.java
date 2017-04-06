@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,9 @@ public class Notices extends AppCompatActivity {
     public RecyclerView recyclerView;
     public NoticeAdapter noticeAdapter;
     TextView noticeHeading;
+    RelativeLayout relativeLayout;
+    View view;
+    ImageView iconNotice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,10 @@ public class Notices extends AppCompatActivity {
         pd.setMessage("Please Wait...");
         pd.show();
         recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
+
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativelayout);
+        view = findViewById(R.id.view);
+        iconNotice = (ImageView) findViewById(R.id.img_notice_icon);
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener()    {
@@ -120,5 +129,17 @@ public class Notices extends AppCompatActivity {
 //                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 //                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(UserProfile.themeColor == 101)   {
+            relativeLayout.setBackgroundResource(R.drawable.yellow_gradient);
+            view.setBackgroundResource(R.drawable.yellow_gradient);
+            iconNotice.setImageResource(R.drawable.ic_notice_yel);
+            iconNotice.setBackgroundResource(R.drawable.circular_yellow);
+            recyclerView.setAdapter(noticeAdapter);
+        }
     }
 }

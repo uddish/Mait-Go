@@ -2,15 +2,20 @@ package com.example.uddishverma22.mait_go.Adapters;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
 
 import java.util.List;
+
+import static com.example.uddishverma22.mait_go.Activities.NoticeWebView.TAG;
 
 /**
  * Created by uddishverma22 on 05/04/17.
@@ -27,10 +32,12 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.detailsVie
     public class detailsViewHolder extends RecyclerView.ViewHolder  {
 
         private TextView notice;
+        ImageView bulletColor;
 
         public detailsViewHolder(View itemView) {
             super(itemView);
             notice = (TextView) itemView.findViewById(R.id.notice);
+            bulletColor = (ImageView) itemView.findViewById(R.id.bullets);
             Typeface tf = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Raleway-Regular.ttf");
             notice.setTypeface(tf);
         }
@@ -49,6 +56,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.detailsVie
 
         Notice noticeObj = noticeList.get(position);
         holder.notice.setText(noticeObj.notice);
+        if(UserProfile.themeColor == 101)   {
+            Log.d(TAG, "onBindViewHolder: THEME CHANGED ");
+            holder.bulletColor.setImageResource(R.drawable.yellow_circle_notice);
+        }
 
     }
 
