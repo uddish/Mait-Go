@@ -12,102 +12,207 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/diagonal_view"
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:background="@drawable/diagonal_background_blue" >
+        <RelativeLayout
+            android:id="@+id/diagonal_view"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:background="@drawable/diagonal_background_blue">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/circleImageView"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginLeft="38dp"
-            android:layout_marginStart="38dp"
-            android:src="@drawable/profile"
-            app:civ_border_width="5dp"
-            app:civ_border_color="#25305C"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="30dp" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageView"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="38dp"
+                android:layout_marginStart="38dp"
+                android:src="@drawable/profile"
+                app:civ_border_color="#25305C"
+                app:civ_border_width="5dp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            <View
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_height="2dp"
-                android:background="#25305C"/>
-            <TextView
-                android:layout_weight="2"
-                android:id="@+id/name_tv"
-                android:layout_width="0dp"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Uddish Verma"
-                android:textColor="#25305C"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#25305C" />
+
+                <TextView
+                    android:id="@+id/name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="Uddish Verma"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="#25305C"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="#25305C" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/enrollment_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                android:textAppearance="?android:textAppearanceLarge"/>
-            <View
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:layout_width="0dp"
-                android:layout_height="2dp"
-                android:background="#25305C"/>
+                android:text="40514803115"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="#25305C" />
+
+            <LinearLayout
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/branch_selector"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/branch_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="IT"
+                            android:padding="5dp"
+                            android:textSize="30sp"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:gravity="center"/>
+                        <TextView
+                            android:id="@+id/branch_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Branch"
+                            android:gravity="center"
+                            android:textAppearance="?android:textAppearanceSmall"/>
+                    </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#25305C"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"/>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/semester_tv"
+                            android:padding="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="IV"
+                            android:textSize="30sp"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:gravity="center"/>
+                        <TextView
+                            android:id="@+id/semester_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Semester"
+                            android:gravity="center"
+                            android:textAppearance="?android:textAppearanceSmall"/>
+
+                    </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#25305C"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"/>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:padding="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="I-4"
+                            android:textSize="30sp"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:gravity="center"/>
+                        <TextView
+                            android:id="@+id/class_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Class"
+                            android:gravity="center"
+                            android:textAppearance="?android:textAppearanceSmall"/>
+                    </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
-
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:id="@+id/enrollment_tv"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="40514803115"
-            android:textColor="#25305C"
-            android:textAppearance="?android:textAppearanceMedium"/>
-
-
-    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/orange_theme"
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/orange_circle"/>
+                android:layout_weight="1"
+                android:src="@drawable/orange_circle" />
+
             <ImageView
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/purple_circle"/>
+                android:layout_weight="1"
+                android:src="@drawable/purple_circle" />
+
             <ImageView
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/green_circle"/>
+                android:layout_weight="1"
+                android:src="@drawable/green_circle" />
+
             <ImageView
-                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/orange_circle"/>
+                android:layout_weight="1"
+                android:src="@drawable/orange_circle" />
         </LinearLayout>
+
 
     </LinearLayout>
 
