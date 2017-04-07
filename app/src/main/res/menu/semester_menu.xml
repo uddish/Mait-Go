@@ -3,25 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/cse"
-        android:title="Computer Science"
+        android:id="@+id/first"
+        android:title="I"
         android:icon="@drawable/arrow"
         app:showAsAction="always"
         android:actionLayout="@layout/temp"/>
     <item
-        android:id="@+id/it"
+        android:id="@+id/second"
         android:icon="@drawable/arrow"
-        android:title="Information Technology" />
+        android:title="II" />
     <item
-        android:id="@+id/ece"
-        android:icon="@drawable/arrow"
-        android:title="Electronics and Communications" />
+        android:id="@+id/third"
+        android:title="III"
+        android:icon="@drawable/arrow"/>
     <item
-        android:id="@+id/eee"
+        android:id="@+id/fourth"
         android:icon="@drawable/arrow"
-        android:title="Electrical" />
+        android:title="IV" />
     <item
-        android:id="@+id/mae"
+        android:id="@+id/fifth"
+        android:title="V"
+        android:icon="@drawable/arrow"/>
+    <item
+        android:id="@+id/sixth"
         android:icon="@drawable/arrow"
-        android:title="Mechanical and Automation" />
+        android:title="VI" />
+    <item
+        android:id="@+id/seventh"
+        android:title="VII"
+        android:icon="@drawable/arrow"/>
+    <item
+        android:id="@+id/eighth"
+        android:icon="@drawable/arrow"
+        android:title="VIII" />
 </menu>
