@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/cse"
+        android:title="Computer Science"
+        android:icon="@drawable/arrow"
+        app:showAsAction="always"
+        android:actionLayout="@layout/temp"/>
+    <item
+        android:id="@+id/it"
+        android:icon="@drawable/arrow"
+        android:title="Information Technology" />
+    <item
+        android:id="@+id/ece"
+        android:icon="@drawable/arrow"
+        android:title="Electronics and Communications" />
+    <item
+        android:id="@+id/eee"
+        android:icon="@drawable/arrow"
+        android:title="Electrical" />
+    <item
+        android:id="@+id/mae"
+        android:icon="@drawable/arrow"
+        android:title="Mechanical and Automation" />
+</menu>
