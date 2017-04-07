@@ -1,21 +1,17 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.graphics.Typeface;
-import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.R;
-
-import rebus.bottomdialog.BottomDialog;
 
 
 public class UserProfile extends AppCompatActivity {
@@ -25,8 +21,11 @@ public class UserProfile extends AppCompatActivity {
     public static int themeColor = 0;
     RelativeLayout relativeLayout;
     LinearLayout branchSelector, semesterSelector;
-    BottomDialog dialog;
     Typeface tf;
+
+    AlertDialog.Builder alert;
+    View alertLayout;
+    TextView alertCs, alertIt, alertEce, alertEee, alertMae;
 
     /**
      * ORANGE -> 101
@@ -57,17 +56,20 @@ public class UserProfile extends AppCompatActivity {
         classHeading.setTypeface(tf);
         semesterHeading.setTypeface(tf);
 
+        //Custom alert dialog to pick the branch
+        alert = new AlertDialog.Builder(UserProfile.this);
+
 
         branchSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branchSelectorClicked();
+                alertBranchDialog();
+
             }
         });
         semesterSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                semesterSelectorClicked();
             }
         });
 
@@ -89,98 +91,59 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
-    private void branchSelectorClicked()    {
+    private void alertBranchDialog()    {
 
-        dialog = new BottomDialog(UserProfile.this);
-        dialog.title("Select your branch...");
-        dialog.canceledOnTouchOutside(true);
-        dialog.cancelable(true);
-        dialog.inflateMenu(R.menu.branch_menu);
-        dialog.setOnItemSelectedListener(new BottomDialog.OnItemSelectedListener() {
+        LayoutInflater inflater = getLayoutInflater();
+        alertLayout = inflater.inflate(R.layout.branch_selector_layout, null);
+        alert.setView(alertLayout);
+
+        alertCs = (TextView) alertLayout.findViewById(R.id.alert_cs);
+        alertIt = (TextView) alertLayout.findViewById(R.id.alert_it);
+        alertEce = (TextView) alertLayout.findViewById(R.id.alert_ece);
+        alertEee = (TextView) alertLayout.findViewById(R.id.alert_eee);
+        alertMae = (TextView) alertLayout.findViewById(R.id.alert_mae);
+
+        final AlertDialog dialog = alert.create();
+        dialog.show();
+
+        alertCs.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemSelected(int id) {
-                switch (id) {
-                    case R.id.cse:
-                        branch.setText("CSE");
-                        branch.setTypeface(tf);
-                        return true;
-                    case R.id.it:
-                        branch.setText("IT");
-                        branch.setTypeface(tf);
-                        return true;
-                    case R.id.ece:
-                        branch.setText("ECE");
-                        branch.setTypeface(tf);
-                        return true;
-                    case R.id.eee:
-                        branch.setText("EEE");
-                        branch.setTypeface(tf);
-                        return true;
-                    case R.id.mae:
-                        branch.setText("MAE");
-                        branch.setTypeface(tf);
-                        return true;
-                    case 100:
-                        return false;
-                    default:
-                        return false;
-                }
+            public void onClick(View view) {
+                branch.setText(alertCs.getText().toString());
+                dialog.dismiss();
             }
         });
-        dialog.show();
-    }
-
-    private void semesterSelectorClicked()  {
-        dialog = new BottomDialog(UserProfile.this);
-        dialog.title("Select your semester...");
-        dialog.canceledOnTouchOutside(true);
-        dialog.cancelable(true);
-        dialog.inflateMenu(R.menu.semester_menu);
-        dialog.setOnItemSelectedListener(new BottomDialog.OnItemSelectedListener() {
+        alertIt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemSelected(int id) {
-                switch (id) {
-                    case R.id.first:
-                        semester.setText("I");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.second:
-                        semester.setText("II");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.third:
-                        semester.setText("III");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.fourth:
-                        semester.setText("IV");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.fifth:
-                        semester.setText("V");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.sixth:
-                        semester.setText("VI");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.seventh:
-                        semester.setText("VII");
-                        semester.setTypeface(tf);
-                        return true;
-                    case R.id.eighth:
-                        semester.setText("VIII");
-                        semester.setTypeface(tf);
-                        return true;
-                    case 100:
-                        return false;
-                    default:
-                        return false;
-                }
+            public void onClick(View view) {
+                branch.setText(alertIt.getText().toString());
+                dialog.dismiss();
             }
         });
-        dialog.show();
+        alertEce.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                branch.setText(alertEce.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        alertEee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                branch.setText(alertEee.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        alertMae.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                branch.setText(alertMae.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
     }
+
 
 }
 
