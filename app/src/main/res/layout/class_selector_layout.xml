@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="Enter your class"
         android:gravity="center"
-        android:textSize="30dp"/>
+        android:textSize="25dp"/>
     <EditText
         android:id="@+id/alert_class"
         android:padding="10dp"
