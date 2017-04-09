@@ -33,11 +33,14 @@ public class UserProfile extends AppCompatActivity{
     ImageView orangeThemeButton;
     public static int themeColor = 0;
     RelativeLayout diagonalLayout;
-    ScrollView backgroundLayout;
     LinearLayout branchSelector, semesterSelector, classSelector, outlineBox;
     Typeface tf;
 
-    ImageView barcodeImg;
+    //barcode ticket components
+    ImageView leftCircle, rightCircle, barcodeImg;
+    ScrollView backgroundLayout;
+    RelativeLayout barcodeBackground;
+
 
 
     private static final int WHITE = 0xFFFFFFFF;
@@ -65,13 +68,6 @@ public class UserProfile extends AppCompatActivity{
         name = (TextView) findViewById(R.id.name_tv);
         roll = (TextView) findViewById(R.id.enrollment_tv);
 
-        //Theme selectors
-        orangeThemeButton = (ImageView) findViewById(R.id.orange_theme);
-        diagonalLayout = (RelativeLayout) findViewById(R.id.diagonal_view);
-        backgroundLayout = (ScrollView) findViewById(R.id.background_layout);
-        outlineBox = (LinearLayout) findViewById(R.id.outline_box);
-
-
 
         branch = (TextView) findViewById(R.id.branch_tv);
         semester = (TextView) findViewById(R.id.semester_tv);
@@ -85,8 +81,18 @@ public class UserProfile extends AppCompatActivity{
         semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
         classSelector = (LinearLayout) findViewById(R.id.class_selector);
 
+
+        //Theme selectors
+        orangeThemeButton = (ImageView) findViewById(R.id.orange_theme);
+        diagonalLayout = (RelativeLayout) findViewById(R.id.diagonal_view);
+        backgroundLayout = (ScrollView) findViewById(R.id.background_layout);
+        outlineBox = (LinearLayout) findViewById(R.id.outline_box);
+        barcodeBackground = (RelativeLayout) findViewById(R.id.barcode_background);
+
         //Barcode generation function
         barcodeImg = (ImageView) findViewById(R.id.barcode_img);
+        leftCircle = (ImageView) findViewById(R.id.left_ticket_circle);
+        rightCircle = (ImageView) findViewById(R.id.right_ticket_circle);
         String barcodeData = "123456";
         Bitmap bitmap = null;
         bitmap = encodeAsBitmap(barcodeData, BarcodeFormat.CODE_128, 600, 300);
@@ -139,7 +145,9 @@ public class UserProfile extends AppCompatActivity{
                 diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
                 backgroundLayout.setBackgroundResource(R.color.darkYellow);
                 outlineBox.setBackgroundResource(R.drawable.custom_box_yell);
-
+                leftCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
+                rightCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
+                barcodeBackground.setBackgroundResource(R.color.darkYellow);
 
             }
         });
