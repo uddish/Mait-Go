@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.example.uddishverma22.mait_go.Activities.Notices;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
+import com.example.uddishverma22.mait_go.BarcodeGenerator.Generation;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 
 import java.text.DateFormat;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
@@ -219,7 +221,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, UserProfile.class));
 
         } else if (id == R.id.nav_slideshow) {
-
+            startActivity(new Intent(this, Generation.class));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

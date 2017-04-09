@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_gradient"
     android:orientation="vertical"
+    android:padding="20dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.uddishverma22.mait_go.MainActivity">
 
-    <TextView
-        android:padding="20dp"
+    <ImageView
+        android:id="@+id/barcode_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CSE"/>
-
+        android:layout_height="100dp" />
 
 </LinearLayout>
