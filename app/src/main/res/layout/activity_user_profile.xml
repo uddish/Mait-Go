@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/background_layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/darkBlue"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.uddishverma22.mait_go.Activities.UserProfile">
@@ -29,7 +31,7 @@
                 android:layout_marginLeft="38dp"
                 android:layout_marginStart="38dp"
                 android:src="@drawable/profile"
-                app:civ_border_color="#25305C"
+                app:civ_border_color="#fff"
                 app:civ_border_width="5dp" />
         </RelativeLayout>
 
@@ -50,7 +52,7 @@
                     android:layout_height="2dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="#25305C" />
+                    android:background="#fff" />
 
                 <TextView
                     android:id="@+id/name_tv"
@@ -60,7 +62,7 @@
                     android:gravity="center"
                     android:text="Uddish Verma"
                     android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="#25305C"
+                    android:textColor="#fff"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -69,7 +71,7 @@
                     android:layout_height="2dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:background="#25305C" />
+                    android:background="#fff" />
             </LinearLayout>
 
             <TextView
@@ -80,14 +82,15 @@
                 android:gravity="center"
                 android:text="40514803115"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="#25305C" />
+                android:textColor="#fff" />
 
             <LinearLayout
+                android:id="@+id/outline_box"
                 android:layout_marginTop="5dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:layout_width="match_parent"
-                android:background="@drawable/custom_button_blue"
+                android:background="@drawable/custom_box_blue"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -102,6 +105,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="IT"
+                            android:textColor="#fff"
                             android:padding="5dp"
                             android:textSize="30sp"
                             android:textAppearance="?android:textAppearanceLarge"
@@ -111,6 +115,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Branch"
+                            android:textColor="#fff"
                             android:gravity="center"
                             android:textAppearance="?android:textAppearanceSmall"/>
                     </LinearLayout>
@@ -118,7 +123,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#25305C"
+                    android:background="#fff"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center"/>
@@ -135,6 +140,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="IV"
+                            android:textColor="#fff"
                             android:textSize="30sp"
                             android:textAppearance="?android:textAppearanceLarge"
                             android:gravity="center"/>
@@ -143,6 +149,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Semester"
+                            android:textColor="#fff"
                             android:gravity="center"
                             android:textAppearance="?android:textAppearanceSmall"/>
 
@@ -151,7 +158,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#25305C"
+                    android:background="#fff"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center"/>
@@ -167,9 +174,9 @@
                             android:id="@+id/class_tv"
                             android:padding="5dp"
                             android:layout_width="match_parent"
+                            android:textColor="#fff"
                             android:layout_height="wrap_content"
                             android:text="I-4"
-                            android:textColor="#000"
                             android:textSize="30sp"
                             android:gravity="center"/>
                         <TextView
@@ -177,6 +184,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Class"
+                            android:textColor="#fff"
                             android:gravity="center"
                             android:textAppearance="?android:textAppearanceSmall"/>
                     </LinearLayout>
@@ -220,7 +228,49 @@
                 android:src="@drawable/blue_theme_selector" />
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/barcode_rl"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="10dp"
+            android:background="@color/darkBlue">
 
-    </LinearLayout>
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="30dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="#fff"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:padding="20dp"
+                    android:id="@+id/barcode_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v7.widget.CardView>
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/ticket_circle_blue"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="75dp"
+                android:elevation="2dp"/>
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="fitXY"
+                android:background="@drawable/ticket_circle_blue"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="75dp"
+                android:elevation="2dp"/>
+        </RelativeLayout>
+
+        </LinearLayout>
 
 </ScrollView>

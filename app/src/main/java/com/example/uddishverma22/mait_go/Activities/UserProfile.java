@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,19 +13,36 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.uddishverma22.mait_go.R;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 
 public class UserProfile extends AppCompatActivity{
 
     TextView name, roll, branch, semester,className, branchHeading, classHeading, semesterHeading;
-    ImageView orangeTheme;
+    ImageView orangeThemeButton;
     public static int themeColor = 0;
-    RelativeLayout relativeLayout;
-    LinearLayout branchSelector, semesterSelector, classSelector;
+    RelativeLayout diagonalLayout;
+    ScrollView backgroundLayout;
+    LinearLayout branchSelector, semesterSelector, classSelector, outlineBox;
     Typeface tf;
+
+    ImageView barcodeImg;
+
+
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int BLACK = 0xFF000000;
+
 
     AlertDialog.Builder alert;
     View alertLayout;
@@ -34,7 +52,7 @@ public class UserProfile extends AppCompatActivity{
 
 
     /**
-     * ORANGE -> 101
+     * YELLOW -> 101
      */
 
     @Override
@@ -46,8 +64,13 @@ public class UserProfile extends AppCompatActivity{
 
         name = (TextView) findViewById(R.id.name_tv);
         roll = (TextView) findViewById(R.id.enrollment_tv);
-        orangeTheme = (ImageView) findViewById(R.id.orange_theme);
-        relativeLayout = (RelativeLayout) findViewById(R.id.diagonal_view);
+
+        //Theme selectors
+        orangeThemeButton = (ImageView) findViewById(R.id.orange_theme);
+        diagonalLayout = (RelativeLayout) findViewById(R.id.diagonal_view);
+        backgroundLayout = (ScrollView) findViewById(R.id.background_layout);
+        outlineBox = (LinearLayout) findViewById(R.id.outline_box);
+
 
 
         branch = (TextView) findViewById(R.id.branch_tv);
@@ -61,6 +84,13 @@ public class UserProfile extends AppCompatActivity{
         branchSelector = (LinearLayout) findViewById(R.id.branch_selector);
         semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
         classSelector = (LinearLayout) findViewById(R.id.class_selector);
+
+        //Barcode generation function
+        barcodeImg = (ImageView) findViewById(R.id.barcode_img);
+        String barcodeData = "123456";
+        Bitmap bitmap = null;
+        bitmap = encodeAsBitmap(barcodeData, BarcodeFormat.CODE_128, 600, 300);
+        barcodeImg.setImageBitmap(bitmap);
 
 
         branchHeading = (TextView) findViewById(R.id.branch_heading);
@@ -96,17 +126,20 @@ public class UserProfile extends AppCompatActivity{
 
         //Checking for theme
         if(themeColor == 101)   {
-            relativeLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
+            diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
         }
 
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Regular.ttf");
         name.setTypeface(tf);
 
-        orangeTheme.setOnClickListener(new View.OnClickListener() {
+        orangeThemeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 themeColor = 101;
-                relativeLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
+                diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
+                backgroundLayout.setBackgroundResource(R.color.darkYellow);
+                outlineBox.setBackgroundResource(R.drawable.custom_box_yell);
+
 
             }
         });
@@ -262,6 +295,54 @@ public class UserProfile extends AppCompatActivity{
             }
         });
 
+    }
+
+    Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) {
+        String contentsToEncode = contents;
+        if(contentsToEncode == null)    {
+            return null;
+        }
+
+        Map<EncodeHintType, Object> hints = null;
+        String encoding = guessAppropriateEncoding(contentsToEncode);
+        if (encoding != null) {
+            hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+            hints.put(EncodeHintType.CHARACTER_SET, encoding);
+        }
+        MultiFormatWriter writer = new MultiFormatWriter();
+        BitMatrix result = null;
+        try {
+            result = writer.encode(contentsToEncode, format, img_width, img_height, hints);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        int width = result.getWidth();
+        int height = result.getHeight();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height,
+                Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
+
+    private static String guessAppropriateEncoding(CharSequence contents) {
+        // Very crude at the moment
+        for (int i = 0; i < contents.length(); i++) {
+            if (contents.charAt(i) > 0xFF) {
+                return "UTF-8";
+            }
+        }
+        return null;
     }
 
 }

@@ -21,7 +21,7 @@
             <shape
                 android:shape="rectangle">
                 <solid
-                    android:color="?android:colorBackground"/>
+                    android:color="@color/darkYellow"/>
             </shape>
         </rotate>
     </item>
