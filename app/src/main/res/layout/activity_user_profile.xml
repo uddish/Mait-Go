@@ -83,9 +83,11 @@
                 android:textColor="#25305C" />
 
             <LinearLayout
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:layout_width="match_parent"
+                android:background="@drawable/custom_button_blue"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -184,34 +186,40 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:padding="7dp"
                 android:id="@+id/orange_theme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/orange_circle" />
+                android:src="@drawable/yellow_theme_selector" />
 
             <ImageView
+                android:padding="7dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/purple_circle" />
+                android:src="@drawable/green_theme_selector" />
 
             <ImageView
+                android:padding="7dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/green_circle" />
+                android:src="@drawable/purple_theme_selector" />
 
             <ImageView
+                android:padding="7dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/orange_circle" />
+                android:src="@drawable/blue_theme_selector" />
         </LinearLayout>
+
 
     </LinearLayout>
 
