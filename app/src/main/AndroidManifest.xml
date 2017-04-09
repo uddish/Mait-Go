@@ -24,6 +24,7 @@
         <activity android:name=".Activities.Notices" />
         <activity android:name=".Activities.NoticeWebView" />
         <activity android:name=".Activities.UserProfile"></activity>
+        <activity android:name=".BarcodeGenerator.Generation" />
     </application>
 
 </manifest>
