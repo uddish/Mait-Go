@@ -65,7 +65,6 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
         holder.totMarks.setText(obj.totMarks + "/100");
         holder.progressBar.setProgress(Integer.parseInt(obj.totMarks));
 
-        Log.d(TAG, "onBindViewHolder: " + list);
     }
 
     @Override

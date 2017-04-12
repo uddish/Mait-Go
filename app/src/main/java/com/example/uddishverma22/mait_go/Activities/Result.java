@@ -9,16 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,12 +30,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.grabner.circleprogress.CircleProgressView;
+
 public class Result extends AppCompatActivity {
 
     String url = "https://agile-hamlet-82527.herokuapp.com/scrape/result/40514803115";
     JSONObject jsonObject;
+    public static String percentage = null;
 
     public static final String TAG = "Result";
+
+    CircleProgressView mCircleView;
+
+    AVLoadingIndicatorView avi;
 
     public List<ResultModel> resultList = new ArrayList<>();
     RecyclerView recyclerView;
@@ -47,15 +57,27 @@ public class Result extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.result_list);
 
-        JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
+
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+
+        avi.show();
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
 
                         try {
-                            for (int i = 0; i < response.length(); i++) {
+                            avi.hide();
+                            JSONArray jsonArray = response.getJSONArray("marks");
+                            percentage = (String) response.get("percentage");
+                            //Setting the percentage in the circleView
+                            mCircleView.setValueAnimated(Float.parseFloat(percentage));
+                            for (int i = 0; i < jsonArray.length(); i++) {
 
-                                jsonObject = response.getJSONObject(i);
+                                jsonObject = jsonArray.getJSONObject(i);
                                 ResultModel resultObj = new ResultModel();
                                 resultObj.subName = jsonObject.getString("subjectName");
                                 resultObj.intMarks = jsonObject.getString("internal");
@@ -64,8 +86,6 @@ public class Result extends AppCompatActivity {
                                 resultObj.totMarks = jsonObject.getString("total");
                                 resultList.add(resultObj);
                             }
-                            Log.d(TAG, "onResponse: " + resultList);
-
                             resultAdapter = new ResultAdapter(resultList);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
                             recyclerView.setLayoutManager(mLayoutManager);
@@ -74,6 +94,7 @@ public class Result extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -81,7 +102,7 @@ public class Result extends AppCompatActivity {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
             }
         });
-        requestQueue.add(jsonArrayReq);
+        requestQueue.add(request);
 
     }
 }
