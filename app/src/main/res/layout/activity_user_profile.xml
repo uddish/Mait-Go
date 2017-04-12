@@ -228,29 +228,22 @@
                 android:src="@drawable/blue_theme_selector" />
         </LinearLayout>
 
+
+        <!--<ImageView-->
+            <!--android:padding="30dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:id="@+id/barcode_img"-->
+            <!--android:layout_margin="30dp"-->
+            <!--android:layout_width="350dp"-->
+            <!--android:layout_height="200dp"-->
+            <!--android:background="@drawable/temp_drawable"/>-->
+
         <RelativeLayout
             android:id="@+id/barcode_background"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             android:background="@color/darkBlue">
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_margin="30dp"
-                android:layout_gravity="center"
-                app:cardBackgroundColor="#fff"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="2dp">
-
-                <ImageView
-                    android:padding="20dp"
-                    android:id="@+id/barcode_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </android.support.v7.widget.CardView>
 
             <ImageView
                 android:id="@+id/left_ticket_circle"
@@ -261,7 +254,7 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="75dp"
-                android:elevation="2dp"/>
+                android:elevation="3dp"/>
             <ImageView
                 android:id="@+id/right_ticket_circle"
                 android:layout_width="60dp"
@@ -271,7 +264,23 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="75dp"
-                android:elevation="2dp"/>
+                android:elevation="3dp"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_margin="30dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="#fff"
+                app:cardCornerRadius="4dp">
+
+                <ImageView
+                    android:padding="20dp"
+                    android:id="@+id/barcode_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v7.widget.CardView>
         </RelativeLayout>
 
         </LinearLayout>

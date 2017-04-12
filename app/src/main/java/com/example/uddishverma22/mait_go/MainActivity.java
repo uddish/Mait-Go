@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.uddishverma22.mait_go.Activities.Notices;
+import com.example.uddishverma22.mait_go.Activities.Result;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.BarcodeGenerator.Generation;
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, UserProfile.class));
 
         } else if (id == R.id.nav_slideshow) {
-            startActivity(new Intent(this, Generation.class));
+            startActivity(new Intent(this, Result.class));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

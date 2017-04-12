@@ -2,9 +2,11 @@ package com.example.uddishverma22.mait_go.Activities;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,17 +19,23 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.ImageLoader;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import java.io.ByteArrayOutputStream;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 
 public class UserProfile extends AppCompatActivity{
+
+    public static final String TAG = "UserProfile";
+
 
     TextView name, roll, branch, semester,className, branchHeading, classHeading, semesterHeading;
     ImageView orangeThemeButton;
@@ -40,7 +48,6 @@ public class UserProfile extends AppCompatActivity{
     ImageView leftCircle, rightCircle, barcodeImg;
     ScrollView backgroundLayout;
     RelativeLayout barcodeBackground;
-
 
 
     private static final int WHITE = 0xFFFFFFFF;
@@ -93,11 +100,24 @@ public class UserProfile extends AppCompatActivity{
         barcodeImg = (ImageView) findViewById(R.id.barcode_img);
         leftCircle = (ImageView) findViewById(R.id.left_ticket_circle);
         rightCircle = (ImageView) findViewById(R.id.right_ticket_circle);
-        String barcodeData = "123456";
+
+        //************************ LOADING IMAGE VIA ASYNCTASK INTO TICKET ***************************************
+        String barcodeData = "2CS131";
         Bitmap bitmap = null;
-        bitmap = encodeAsBitmap(barcodeData, BarcodeFormat.CODE_128, 600, 300);
+
+        bitmap = encodeAsBitmap(barcodeData, BarcodeFormat.CODE_39, 300, 100);
+
+//        try {
+//            Bitmap asyncBitmap  = new ImageLoader(barcodeData, 3, getApplicationContext()).execute().get();
+//                barcodeImg.setImageBitmap(asyncBitmap);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
         barcodeImg.setImageBitmap(bitmap);
 
+        //*********************************************************************************************************
 
         branchHeading = (TextView) findViewById(R.id.branch_heading);
         classHeading = (TextView) findViewById(R.id.class_heading);
@@ -145,9 +165,9 @@ public class UserProfile extends AppCompatActivity{
                 diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
                 backgroundLayout.setBackgroundResource(R.color.darkYellow);
                 outlineBox.setBackgroundResource(R.drawable.custom_box_yell);
-                leftCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
-                rightCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
-                barcodeBackground.setBackgroundResource(R.color.darkYellow);
+//                leftCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
+//                rightCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
+//                barcodeBackground.setBackgroundResource(R.color.darkYellow);
 
             }
         });
@@ -323,6 +343,7 @@ public class UserProfile extends AppCompatActivity{
             result = writer.encode(contentsToEncode, format, img_width, img_height, hints);
         } catch (IllegalArgumentException iae) {
             // Unsupported format
+            iae.printStackTrace();
             return null;
         } catch (WriterException e) {
             e.printStackTrace();
