@@ -8,12 +8,11 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <ProgressBar
-        android:layout_margin="30dp"
-        android:id="@+id/prog_bar"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/result_list"
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/custom_progressbar"/>
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
