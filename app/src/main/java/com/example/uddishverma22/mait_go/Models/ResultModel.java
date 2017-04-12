@@ -11,13 +11,15 @@ public class ResultModel {
     public String extMarks;
     public String totMarks;
     public String credits;
+    public String percentage;
 
-    public ResultModel(String subName, String intMarks, String extMarks, String totMarks, String credits) {
+    public ResultModel(String subName, String intMarks, String extMarks, String totMarks, String credits, String percentage) {
         this.subName = subName;
         this.intMarks = intMarks;
         this.extMarks = extMarks;
         this.totMarks = totMarks;
         this.credits = credits;
+        this.percentage = percentage;
     }
 
     public ResultModel() {
