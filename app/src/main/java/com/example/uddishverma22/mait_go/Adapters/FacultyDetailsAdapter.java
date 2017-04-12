@@ -2,6 +2,7 @@ package com.example.uddishverma22.mait_go.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 public class FacultyDetailsAdapter extends RecyclerView.Adapter<FacultyDetailsAdapter.FacultyDetailsViewHolder> {
 
+    private static final String TAG = "FacultyAdapterLog";
     ArrayList<Faculty> facultyList;
     Context context;
 
@@ -50,6 +52,26 @@ public class FacultyDetailsAdapter extends RecyclerView.Adapter<FacultyDetailsAd
         holder.experience.setText(facultyList.get(position).getExperience());
         holder.qualification.setText(facultyList.get(position).getQualification());
         holder.designation.setText(facultyList.get(position).getDesignation());
+
+        String initialLetter = "";
+        String facultyName;
+        facultyName = facultyList.get(position).getName();
+
+        // ArrayList<String> characters=new ArrayList<>();
+        String characters[] = new String[facultyName.length()];
+        for (int i = 0; i < facultyName.length(); i++) {
+            characters[i] = String.valueOf(facultyName.charAt(i));
+
+            Log.d(TAG, characters[i]);
+            if (characters[i].equals(" ")) {
+                i++;
+                characters[i] = String.valueOf(facultyName.charAt(i));
+                initialLetter = characters[i];
+                break;
+            }
+        }
+        holder.profileImage.setText(initialLetter);
+        Log.d(TAG, "letter" + initialLetter);
     }
 
     @Override
@@ -60,6 +82,7 @@ public class FacultyDetailsAdapter extends RecyclerView.Adapter<FacultyDetailsAd
     public class FacultyDetailsViewHolder extends RecyclerView.ViewHolder {
 
         TextView name, designation, qualification, experience;
+        TextView profileImage;
 
         public FacultyDetailsViewHolder(View itemView) {
             super(itemView);
@@ -68,6 +91,7 @@ public class FacultyDetailsAdapter extends RecyclerView.Adapter<FacultyDetailsAd
             designation = (TextView) itemView.findViewById(R.id.designation);
             qualification = (TextView) itemView.findViewById(R.id.qualification);
             experience = (TextView) itemView.findViewById(R.id.experience);
+            profileImage = (TextView) itemView.findViewById(R.id.profile_image);
         }
     }
 }
