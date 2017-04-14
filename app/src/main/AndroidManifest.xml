@@ -25,7 +25,8 @@
         <activity android:name=".Activities.NoticeWebView" />
         <activity android:name=".Activities.UserProfile" />
         <activity android:name=".BarcodeGenerator.Generation" />
-        <activity android:name=".Activities.Result"/>
+        <activity android:name=".Activities.Result"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

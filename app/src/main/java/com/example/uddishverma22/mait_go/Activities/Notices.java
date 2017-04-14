@@ -30,6 +30,7 @@ import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,9 +60,11 @@ public class Notices extends AppCompatActivity {
         setContentView(R.layout.activity_notices);
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Please Wait...");
-        pd.show();
+//        final ProgressDialog pd = new ProgressDialog(this);
+//        pd.setMessage("Please Wait...");
+//        pd.show();
+        final AVLoadingIndicatorView indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView.show();
         recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
 
         relativeLayout = (RelativeLayout) findViewById(R.id.relativelayout);
@@ -95,7 +98,8 @@ public class Notices extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
 
-                        pd.dismiss();
+//                        pd.dismiss();
+                        indicatorView.hide();
                         try {
                             for(int n = 0; n < response.length(); n++)
                             {
