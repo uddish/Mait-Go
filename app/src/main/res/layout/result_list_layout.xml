@@ -23,7 +23,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:text="Subject"
-                android:textColor="@color/darkBrown"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:textAppearance="?android:textAppearanceSmall" />
 
             <LinearLayout
@@ -42,6 +43,7 @@
                     android:padding="5dp">
 
                     <TextView
+                        android:id="@+id/int_head"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -70,6 +72,7 @@
                     android:padding="5dp">
 
                     <TextView
+                        android:id="@+id/ext_head"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -97,6 +100,7 @@
                     android:padding="5dp">
 
                     <TextView
+                        android:id="@+id/credits_head"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -123,6 +127,7 @@
                 android:paddingRight="10dp">
 
                 <TextView
+                    android:id="@+id/totalmarks_head"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

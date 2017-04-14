@@ -16,6 +16,8 @@ import com.example.uddishverma22.mait_go.Activities.Result;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
 
     List<ResultModel> list;
     ObjectAnimator mAnimator;
+    static int isProgressAnimated = 101;
 
     public ResultAdapter(List<ResultModel> list) {
         this.list = list;
@@ -36,6 +39,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
     public class detailsViewHolder extends RecyclerView.ViewHolder {
 
         TextView subName, inMarks, extMarks, totMarks, credits;
+        TextView intHead, extHead, credHead, totMarksHead;                            //Headings to change their font
         ProgressBar progressBar;
         Drawable draw;
 
@@ -48,9 +52,27 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
             credits = (TextView) itemView.findViewById(R.id.credits);
             progressBar = (ProgressBar) itemView.findViewById(R.id.prog_bar);
             draw  = itemView.getResources().getDrawable(R.drawable.custom_progressbar);
+
+            intHead = (TextView) itemView.findViewById(R.id.int_head);
+            extHead = (TextView) itemView.findViewById(R.id.ext_head);
+            credHead = (TextView) itemView.findViewById(R.id.credits_head);
+            totMarksHead = (TextView) itemView.findViewById(R.id.totalmarks_head);
+
             progressBar.setProgressDrawable(draw);
-            Typeface tf = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Raleway-Regular.ttf");
+            Typeface tf = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Raleway-Medium.ttf");
+            Typeface tfThin = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Raleway-Thin.ttf");
+            Typeface tfLight = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Raleway-Light.ttf");
+
             subName.setTypeface(tf);
+            inMarks.setTypeface(tfThin);
+            extMarks.setTypeface(tfThin);
+            credits.setTypeface(tfThin);
+            totMarks.setTypeface(tf);
+
+            intHead.setTypeface(tfLight);
+            extHead.setTypeface(tfLight);
+            credHead.setTypeface(tfLight);
+            totMarksHead.setTypeface(tfLight);
         }
     }
 
@@ -69,12 +91,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
         holder.extMarks.setText(obj.extMarks);
         holder.credits.setText(obj.credits);
         holder.totMarks.setText(obj.totMarks + "/100");
-//        holder.progressBar.setProgress(Integer.parseInt(obj.totMarks));
-        mAnimator = ObjectAnimator.ofInt(holder.progressBar, "progress", Integer.parseInt(obj.totMarks));
-        mAnimator.setDuration(1000);     //0.5 sec
-        mAnimator.setInterpolator(new DecelerateInterpolator());
-        mAnimator.start();
-
+            mAnimator = ObjectAnimator.ofInt(holder.progressBar, "progress", Integer.parseInt(obj.totMarks));
+            mAnimator.setDuration(1000);     //0.5 sec
+            mAnimator.setInterpolator(new DecelerateInterpolator());
+            mAnimator.start();
 
     }
 
