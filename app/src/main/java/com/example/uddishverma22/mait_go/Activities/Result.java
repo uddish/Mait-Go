@@ -42,6 +42,8 @@ public class Result extends AppCompatActivity {
 
     CircleProgressView mCircleView;
 
+    CollapsingToolbarLayout collapsingToolbar;
+
     AVLoadingIndicatorView avi;
 
     public List<ResultModel> resultList = new ArrayList<>();
@@ -55,12 +57,14 @@ public class Result extends AppCompatActivity {
 
         RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
 
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Result");
+
         recyclerView = (RecyclerView) findViewById(R.id.result_list);
 
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-
         avi.show();
 
 

@@ -1,11 +1,14 @@
 package com.example.uddishverma22.mait_go.Adapters;
 
+import android.animation.ObjectAnimator;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,6 +27,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
     private static final String TAG = "ResultAdapter";
 
     List<ResultModel> list;
+    ObjectAnimator mAnimator;
 
     public ResultAdapter(List<ResultModel> list) {
         this.list = list;
@@ -45,6 +49,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
             progressBar = (ProgressBar) itemView.findViewById(R.id.prog_bar);
             draw  = itemView.getResources().getDrawable(R.drawable.custom_progressbar);
             progressBar.setProgressDrawable(draw);
+            Typeface tf = Typeface.createFromAsset(itemView.getContext().getAssets(),"fonts/Raleway-Regular.ttf");
+            subName.setTypeface(tf);
         }
     }
 
@@ -63,7 +69,12 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
         holder.extMarks.setText(obj.extMarks);
         holder.credits.setText(obj.credits);
         holder.totMarks.setText(obj.totMarks + "/100");
-        holder.progressBar.setProgress(Integer.parseInt(obj.totMarks));
+//        holder.progressBar.setProgress(Integer.parseInt(obj.totMarks));
+        mAnimator = ObjectAnimator.ofInt(holder.progressBar, "progress", Integer.parseInt(obj.totMarks));
+        mAnimator.setDuration(1000);     //0.5 sec
+        mAnimator.setInterpolator(new DecelerateInterpolator());
+        mAnimator.start();
+
 
     }
 
