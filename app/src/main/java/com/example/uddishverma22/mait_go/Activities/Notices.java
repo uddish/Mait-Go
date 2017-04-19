@@ -49,7 +49,7 @@ public class Notices extends AppCompatActivity {
     JSONObject object;
     Notice noticeObj;
 
-    private static String IS_INTERNET_AVAILABLE = null;
+    private static int IS_INTERNET_AVAILABLE = 2000;
 
     Realm realm;
 
@@ -85,7 +85,7 @@ public class Notices extends AppCompatActivity {
 
                     @Override
                     public void onItemClick(View view, int position) {
-                        if(IS_INTERNET_AVAILABLE != null) {
+                        if(IS_INTERNET_AVAILABLE == 2009) {
                             Notice notice = noticeList.get(position);
                             Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
                             i.putExtra("url", notice.url);
@@ -112,7 +112,7 @@ public class Notices extends AppCompatActivity {
                     @Override
                     public void onResponse(final JSONArray response) {
 
-                        IS_INTERNET_AVAILABLE = "YES";
+                        IS_INTERNET_AVAILABLE = 2009;
 
 //                        pd.dismiss();
                         indicatorView.hide();
@@ -168,7 +168,7 @@ public class Notices extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                IS_INTERNET_AVAILABLE = null;
+                IS_INTERNET_AVAILABLE = 2000;
 
                 Log.d(TAG, "onErrorResponse: " + error.toString());
                 /**If internet connectivity is not available
