@@ -49,6 +49,8 @@ public class Notices extends AppCompatActivity {
     JSONObject object;
     Notice noticeObj;
 
+    private static String IS_INTERNET_AVAILABLE = null;
+
     Realm realm;
 
     public static final String TAG = "Notices";
@@ -83,10 +85,15 @@ public class Notices extends AppCompatActivity {
 
                     @Override
                     public void onItemClick(View view, int position) {
-                        Notice notice = noticeList.get(position);
-                        Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
-                        i.putExtra("url", notice.url);
-                        startActivity(i);
+                        if(IS_INTERNET_AVAILABLE != null) {
+                            Notice notice = noticeList.get(position);
+                            Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
+                            i.putExtra("url", notice.url);
+                            startActivity(i);
+                        }
+                        else    {
+                            Toast.makeText(Notices.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -104,6 +111,8 @@ public class Notices extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(final JSONArray response) {
+
+                        IS_INTERNET_AVAILABLE = "YES";
 
 //                        pd.dismiss();
                         indicatorView.hide();
@@ -158,6 +167,8 @@ public class Notices extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                IS_INTERNET_AVAILABLE = null;
 
                 Log.d(TAG, "onErrorResponse: " + error.toString());
                 /**If internet connectivity is not available
