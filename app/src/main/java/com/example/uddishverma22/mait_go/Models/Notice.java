@@ -6,8 +6,8 @@ package com.example.uddishverma22.mait_go.Models;
 
 public class Notice {
 
-    public String notice;
     public String url;
+    public String notice;
 
 //    public Notice() {
 //    }
@@ -17,19 +17,19 @@ public class Notice {
 //        this.url = url;
 //    }
 //
-//    public String getNotice() {
-//        return notice;
-//    }
-//
-//    public void setNotice(String notice) {
-//        this.notice = notice;
-//    }
-//
-//    public String getUrl() {
-//        return url;
-//    }
-//
-//    public void setUrl(String url) {
-//        this.url = url;
-//    }
+    public String getNotice() {
+        return notice;
+    }
+
+    public void setNotice(String notice) {
+        this.notice = notice;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

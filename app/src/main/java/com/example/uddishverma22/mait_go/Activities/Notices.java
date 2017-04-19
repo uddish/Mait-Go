@@ -41,7 +41,8 @@ import java.util.List;
 
 public class Notices extends AppCompatActivity {
 
-    String url = "http://192.168.0.13:8081/notices";
+//    String url = "http://192.168.0.13:8081/notices";
+    String url = "https://agile-hamlet-82527.herokuapp.com/scrape/notices";
     JSONObject object;
 
     public static final String TAG = "Notices";
@@ -60,9 +61,7 @@ public class Notices extends AppCompatActivity {
         setContentView(R.layout.activity_notices);
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
-//        final ProgressDialog pd = new ProgressDialog(this);
-//        pd.setMessage("Please Wait...");
-//        pd.show();
+
         final AVLoadingIndicatorView indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
         recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
@@ -105,9 +104,9 @@ public class Notices extends AppCompatActivity {
                             {
                                 object = response.getJSONObject(n);
                                 Notice noticeObj = new Notice();
-                                noticeObj.notice = object.getString("name");
+                                noticeObj.notice = object.getString("notice");
                                 noticeObj.url = object.getString("url");
-                                Log.d(TAG, "onResponse: JSON " + object.get("name"));
+                                Log.d(TAG, "onResponse: JSON " + object.get("notice"));
                                 noticeList.add(noticeObj);
                             }
 
