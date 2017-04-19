@@ -39,11 +39,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class Notices extends AppCompatActivity {
 
 //    String url = "http://192.168.0.13:8081/notices";
     String url = "https://agile-hamlet-82527.herokuapp.com/scrape/notices";
     JSONObject object;
+    Notice noticeObj;
+
+    Realm realm;
 
     public static final String TAG = "Notices";
 
@@ -59,6 +65,8 @@ public class Notices extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notices);
+
+        realm = Realm.getDefaultInstance();
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -95,7 +103,7 @@ public class Notices extends AppCompatActivity {
         JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(final JSONArray response) {
 
 //                        pd.dismiss();
                         indicatorView.hide();
@@ -103,12 +111,40 @@ public class Notices extends AppCompatActivity {
                             for(int n = 0; n < response.length(); n++)
                             {
                                 object = response.getJSONObject(n);
-                                Notice noticeObj = new Notice();
+                                noticeObj = new Notice();
                                 noticeObj.notice = object.getString("notice");
                                 noticeObj.url = object.getString("url");
                                 Log.d(TAG, "onResponse: JSON " + object.get("notice"));
                                 noticeList.add(noticeObj);
                             }
+
+                            /**
+                             * ************************** Saving data to Realm **************************
+                             */
+                            if(noticeList.size() != 0) {
+
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        realm.copyToRealmOrUpdate(noticeList);
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(Notices.this, "Info Stored in Realm", Toast.LENGTH_SHORT).show();
+                                        //TODO show this list if internet in not available
+                                    }
+                                }, new Realm.Transaction.OnError() {
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        Log.e(TAG, "onError: " + error.toString());
+                                    }
+                                });
+                            }
+
+                            /**
+                             * ***************************************************************************
+                             */
 
                             noticeAdapter = new NoticeAdapter(noticeList);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
@@ -124,6 +160,19 @@ public class Notices extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
                 Log.d(TAG, "onErrorResponse: " + error.toString());
+                /**If internet connectivity is not available
+                 * Showing data from the realm database
+                 */
+                indicatorView.hide();
+                RealmResults<Notice> results = realm.where(Notice.class).findAll();
+                noticeAdapter = new NoticeAdapter(results);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(noticeAdapter);
+//                for(int i = 0; i < results.size(); i++) {
+//                    Log.d(TAG, "NOTICE -> " + results.get(i).getNotice());
+//                }
+
             }
         });
         queue.add(jsonArrayReq);
