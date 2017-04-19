@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             CircleProgressView:expandedTitleTextAppearance="?android:textAppearanceLarge"
             CircleProgressView:collapsedTitleTextAppearance="?android:textAppearanceMedium"
-            CircleProgressView:contentScrim="?attr/colorPrimary"
+            CircleProgressView:contentScrim="@color/darkYellow"
             CircleProgressView:expandedTitleMarginEnd="64dp"
             CircleProgressView:expandedTitleMarginStart="28dp"
             CircleProgressView:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -62,10 +62,11 @@
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/result_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 CircleProgressView:layout_collapseMode="pin"
+                android:background="@android:color/transparent"
                 CircleProgressView:layout_scrollFlags="scroll|enterAlways"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>

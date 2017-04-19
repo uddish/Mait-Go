@@ -34,7 +34,8 @@ import at.grabner.circleprogress.CircleProgressView;
 
 public class Result extends AppCompatActivity {
 
-    String url = "https://agile-hamlet-82527.herokuapp.com/scrape/result/40514803115";
+    String roll = "40514803115";
+    String url = "https://agile-hamlet-82527.herokuapp.com/scrape/result/" + roll;
     JSONObject jsonObject;
     public static String percentage = null;
 

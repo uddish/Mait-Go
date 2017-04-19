@@ -86,20 +86,29 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.detailsVie
     @Override
     public void onBindViewHolder(ResultAdapter.detailsViewHolder holder, int position) {
         ResultModel obj = list.get(position);
+
+//        holder.setIsRecyclable(false);
+
         holder.subName.setText(obj.subName);
         holder.inMarks.setText(obj.intMarks);
         holder.extMarks.setText(obj.extMarks);
         holder.credits.setText(obj.credits);
         holder.totMarks.setText(obj.totMarks + "/100");
-            mAnimator = ObjectAnimator.ofInt(holder.progressBar, "progress", Integer.parseInt(obj.totMarks));
-            mAnimator.setDuration(1000);     //0.5 sec
-            mAnimator.setInterpolator(new DecelerateInterpolator());
-            mAnimator.start();
+        //Animation for progress bar
+        mAnimator = ObjectAnimator.ofInt(holder.progressBar, "progress", Integer.parseInt(obj.totMarks));
+        mAnimator.setDuration(1000);     //0.5 sec
+        mAnimator.setInterpolator(new DecelerateInterpolator());
+        mAnimator.start();
 
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 }
