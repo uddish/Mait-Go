@@ -30,7 +30,7 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
 
     public class detailsViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView time, subject, room;
+        private TextView time, subject, room, teacher;
         private ImageView dotColor;
 
         public detailsViewHolder(View itemView) {
@@ -38,6 +38,7 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
             time = (TextView) itemView.findViewById(R.id.time);
             subject = (TextView) itemView.findViewById(R.id.subject);
             room = (TextView) itemView.findViewById(R.id.room);
+            teacher = (TextView) itemView.findViewById(R.id.teacher);
             dotColor = (ImageView) itemView.findViewById(R.id.dot_design);
         }
     }
@@ -55,12 +56,12 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
         holder.time.setText(schedulelist.getTime());
         holder.subject.setText(schedulelist.getSubject());
         holder.room.setText(schedulelist.getRoom());
+        holder.teacher.setText(schedulelist.getTeacher());
         if(UserProfile.themeColor == 101)   {
             Log.d(TAG, "onBindViewHolder: THEME CHANGED ");
             holder.dotColor.setImageResource(R.drawable.orange_circle);
         }
     }
-
 
     @Override
     public int getItemCount() {

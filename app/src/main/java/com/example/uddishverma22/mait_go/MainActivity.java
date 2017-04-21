@@ -28,15 +28,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Activities.Notices;
 import com.example.uddishverma22.mait_go.Activities.Result;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.BarcodeGenerator.Generation;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
+import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,10 +60,29 @@ public class MainActivity extends AppCompatActivity
 
     public static final String TAG = "MainActivity";
 
+    String url = "https://agile-hamlet-82527.herokuapp.com/timetable/4I4";
+
     LinearLayout linearLayout;
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
+
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
+    JSONArray mondayScheduleArray = null;
+    JSONObject mondayScheduleObject = null;
+    public List<DailySchedule> tuesdaySchedule = new ArrayList<>();
+    JSONArray tuesdayScheduleArray = null;
+    JSONObject tuesdayScheduleObject = null;
+    public List<DailySchedule> wednesdaySchedule = new ArrayList<>();
+    JSONArray wednesdayScheduleArray = null;
+    JSONObject wednesdayScheduleObject = null;
+    public List<DailySchedule> thursdaySchedule = new ArrayList<>();
+    JSONArray thursdayScheduleArray = null;
+    JSONObject thursdayScheduleObject = null;
+    public List<DailySchedule> fridaySchedule = new ArrayList<>();
+    JSONArray fridayScheduleArray = null;
+    JSONObject fridayScheduleObject = null;
+
+
     public RecyclerView recyclerView;
     public DailyScheduleListAdapter scheduleListAdapter;
     String currentDate, currentDay, currentYear, currentMonth;
@@ -63,7 +94,7 @@ public class MainActivity extends AppCompatActivity
     static int wedSelected = 0;
     static int thuSelected = 0;
     static int friSelected = 0;
-
+    Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +104,44 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+
+        //TODO complete this request
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            mondayScheduleArray = response.getJSONArray("monday");
+                            tuesdayScheduleArray = response.getJSONArray("tuesday");
+                            wednesdayScheduleArray = response.getJSONArray("wednesday");
+                            thursdayScheduleArray = response.getJSONArray("thursday");
+                            fridayScheduleArray = response.getJSONArray("friday");
+                            mondayScheduleObject =  mondayScheduleArray.getJSONObject(0);
+                            tuesdayScheduleObject =  tuesdayScheduleArray.getJSONObject(0);
+                            wednesdayScheduleObject =  wednesdayScheduleArray.getJSONObject(0);
+                            thursdayScheduleObject =  thursdayScheduleArray.getJSONObject(0);
+                            fridayScheduleObject =  fridayScheduleArray.getJSONObject(0);
+                            mondayScheduleFunction();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "onErrorResponse: " + error.toString());
+            }
+        });
+        queue.add(request);
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        //Sending the list to the adapter
         scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(scheduleListAdapter);
-        mondayScheduleFunction();
 
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
@@ -93,6 +156,9 @@ public class MainActivity extends AppCompatActivity
         day.setText(currentDay);
         month.setText(currentMonth.substring(0,3) + " " + currentYear);
 
+        //Setting the actual details in all the fields
+        attachDateToDays();
+
 //        if(UserProfile.themeColor == 101) {
 //            Log.d(TAG, "onCreate: Theme " + UserProfile.themeColor);
 //            linearLayout.setBackgroundResource(R.drawable.orange_gradient);
@@ -104,6 +170,10 @@ public class MainActivity extends AppCompatActivity
         mon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mondaySchedule = new ArrayList<DailySchedule>();
+                mondayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
                 monSelected = 1;
                 tueSelected = 0;
                 wedSelected = 0;
@@ -115,6 +185,10 @@ public class MainActivity extends AppCompatActivity
         tue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tuesdaySchedule = new ArrayList<DailySchedule>();
+                tuesdayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
                 monSelected = 0;
                 tueSelected = 1;
                 wedSelected = 0;
@@ -126,6 +200,10 @@ public class MainActivity extends AppCompatActivity
         wed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                wednesdaySchedule = new ArrayList<DailySchedule>();
+                wednesdayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
                 monSelected = 0;
                 tueSelected = 0;
                 wedSelected = 1;
@@ -137,6 +215,10 @@ public class MainActivity extends AppCompatActivity
         thu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                thursdaySchedule = new ArrayList<DailySchedule>();
+                thursdayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
                 monSelected = 0;
                 tueSelected = 0;
                 wedSelected = 0;
@@ -148,6 +230,10 @@ public class MainActivity extends AppCompatActivity
         fri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fridaySchedule = new ArrayList<DailySchedule>();
+                fridayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
                 monSelected = 0;
                 tueSelected = 0;
                 wedSelected = 0;
@@ -176,7 +262,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -248,7 +333,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private String getCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = mdformat.format(calendar.getTime());
         String date = strDate.substring(0,2);
@@ -260,6 +345,131 @@ public class MainActivity extends AppCompatActivity
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
         return dayOfTheWeek;
+    }
+
+    private void attachDateToDays() {
+        String dt = currentDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        calendar = Calendar.getInstance();
+
+        if(currentDay.equals("Monday"))   {
+            mon.setText(currentDate);
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, 1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            tue.setText(dt.substring(0,2));
+            //setting date for wed
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            wed.setText(dt.substring(0,2));
+            //setting date for thu
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            thu.setText(dt.substring(0,2));
+            //setting date for fri
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            fri.setText(dt.substring(0,2));
+        }
+
+        if(currentDay.equals("Tuesday"))   {
+            tue.setText(currentDate);
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            mon.setText(dt.substring(0,2));
+            //setting date for wed
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            wed.setText(dt.substring(0,2));
+            //setting date for thu
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            thu.setText(dt.substring(0,2));
+            //setting date for fri
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            fri.setText(dt.substring(0,2));
+        }
+
+        if(currentDay.equals("Wednesday"))   {
+            wed.setText(currentDate);
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, 1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            thu.setText(dt.substring(0,2));
+            //setting date for fri
+            calendar.add(Calendar.DATE, 1);
+            dt = sdf.format(calendar.getTime());
+            fri.setText(dt.substring(0,2));
+            //setting date for tue
+            calendar.add(Calendar.DATE, -3);
+            dt = sdf.format(calendar.getTime());
+            tue.setText(dt.substring(0,2));
+            //setting date for mon
+            calendar.add(Calendar.DATE, -1);
+            dt = sdf.format(calendar.getTime());
+            mon.setText(dt.substring(0,2));
+        }
+        if(currentDay.equals("Thursday"))   {
+            thu.setText(currentDate);
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, 1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            fri.setText(dt.substring(0,2));
+            //setting date for wed
+            calendar.add(Calendar.DATE, -2);
+            dt = sdf.format(calendar.getTime());
+            wed.setText(dt.substring(0,2));
+            //setting date for tue
+            calendar.add(Calendar.DATE, -1);
+            dt = sdf.format(calendar.getTime());
+            tue.setText(dt.substring(0,2));
+            //setting date for mon
+            calendar.add(Calendar.DATE, -1);
+            dt = sdf.format(calendar.getTime());
+            mon.setText(dt.substring(0,2));
+        }
+        if(currentDay.equals("Friday"))   {
+            fri.setText(currentDate);
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            thu.setText(dt.substring(0,2));
+            //setting date for wed
+            calendar.add(Calendar.DATE, -2);
+            dt = sdf.format(calendar.getTime());
+            wed.setText(dt.substring(0,2));
+            //setting date for tue
+            calendar.add(Calendar.DATE, -3);
+            dt = sdf.format(calendar.getTime());
+            tue.setText(dt.substring(0,2));
+            //setting date for mon
+            calendar.add(Calendar.DATE, -4);
+            dt = sdf.format(calendar.getTime());
+            mon.setText(dt.substring(0,2));
+        }
+
     }
 
     private String getCurrentYear() {
@@ -303,21 +513,120 @@ public class MainActivity extends AppCompatActivity
         return currMonth;
     }
 
+    //Adding the monday Schedule in the list
     private void mondayScheduleFunction() {
-        DailySchedule movie = new DailySchedule("8:15 - 9:15", "Theory of Computation", "841");
-        mondaySchedule.add(movie);
-        movie = new DailySchedule("8:15 - 10:15", "Control System", "841");
-        mondaySchedule.add(movie);
-        movie = new DailySchedule("10:15 - 11:15", "Maths", "843");
-        mondaySchedule.add(movie);
-        movie = new DailySchedule("11:15 - 12:15", "COA", "841");
-        mondaySchedule.add(movie);
-        movie = new DailySchedule("12:15 - 1:15", "OOPS", "842");
-        mondaySchedule.add(movie);
-        movie = new DailySchedule("1:15 - 2:15", "DBMS", "841");
-        mondaySchedule.add(movie);
-
-        scheduleListAdapter.notifyDataSetChanged();
+        try {
+            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            movie = new DailySchedule("9:15 - 10:15", (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            movie = new DailySchedule("10:15 - 11:15", (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            movie = new DailySchedule("11:45 - 12:45", (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            movie = new DailySchedule("12:45 - 1:45", (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            movie = new DailySchedule("1:45 - 2:45", (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            movie = new DailySchedule("2:45 - 3:45", (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+            mondaySchedule.add(movie);
+            scheduleListAdapter.notifyDataSetChanged();
+        }
+        catch (Exception e) {
+            Log.d(TAG, "mondayScheduleFunction: " + e.toString());
+        }
+    }
+    //Adding the tuesday Schedule in the list
+    private void tuesdayScheduleFunction()  {
+        try {
+            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            movie = new DailySchedule("9:15 - 10:15", (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            movie = new DailySchedule("10:15 - 11:15", (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            movie = new DailySchedule("11:45 - 12:45", (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            movie = new DailySchedule("12:45 - 1:45", (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            movie = new DailySchedule("1:45 - 2:45", (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            movie = new DailySchedule("2:45 - 3:45", (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+            tuesdaySchedule.add(movie);
+            scheduleListAdapter.notifyDataSetChanged();
+        }
+        catch (Exception e) {
+            Log.d(TAG, "mondayScheduleFunction: " + e.toString());
+        }
+    }
+    //Adding the wednesday Schedule in the list
+    private void wednesdayScheduleFunction()  {
+        try {
+            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            movie = new DailySchedule("9:15 - 10:15", (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            movie = new DailySchedule("10:15 - 11:15", (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            movie = new DailySchedule("11:45 - 12:45", (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            movie = new DailySchedule("12:45 - 1:45", (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            movie = new DailySchedule("1:45 - 2:45", (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            movie = new DailySchedule("2:45 - 3:45", (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+            wednesdaySchedule.add(movie);
+            scheduleListAdapter.notifyDataSetChanged();
+        }
+        catch (Exception e) {
+            Log.d(TAG, "mondayScheduleFunction: " + e.toString());
+        }
+    }
+    //Adding the thursday Schedule in the list
+    private void thursdayScheduleFunction()  {
+        try {
+            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            movie = new DailySchedule("9:15 - 10:15", (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            movie = new DailySchedule("10:15 - 11:15", (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            movie = new DailySchedule("11:45 - 12:45", (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            movie = new DailySchedule("12:45 - 1:45", (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            movie = new DailySchedule("1:45 - 2:45", (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            movie = new DailySchedule("2:45 - 3:45", (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+            thursdaySchedule.add(movie);
+            scheduleListAdapter.notifyDataSetChanged();
+        }
+        catch (Exception e) {
+            Log.d(TAG, "mondayScheduleFunction: " + e.toString());
+        }
+    }
+    //Adding the friday Schedule in the list
+    private void fridayScheduleFunction()  {
+        try {
+            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            movie = new DailySchedule("9:15 - 10:15", (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            movie = new DailySchedule("10:15 - 11:15", (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            movie = new DailySchedule("11:45 - 12:45", (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            movie = new DailySchedule("12:45 - 1:45", (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            movie = new DailySchedule("1:45 - 2:45", (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            movie = new DailySchedule("2:45 - 3:45", (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+            fridaySchedule.add(movie);
+            scheduleListAdapter.notifyDataSetChanged();
+        }
+        catch (Exception e) {
+            Log.d(TAG, "mondayScheduleFunction: " + e.toString());
+        }
     }
 
     private void changeDayCircleColor()   {
