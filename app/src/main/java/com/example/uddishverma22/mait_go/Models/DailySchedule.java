@@ -10,11 +10,25 @@ public class DailySchedule {
     String time;
     String subject;
     String room;
+    String teacher;
 
-    public DailySchedule(String time, String subject, String room) {
+    public DailySchedule()  {
+
+    }
+
+    public DailySchedule(String time, String subject, String room, String teacher) {
         this.time = time;
         this.subject = subject;
         this.room = room;
+        this.teacher = teacher;
+    }
+
+    public String getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 
     public String getTime() {

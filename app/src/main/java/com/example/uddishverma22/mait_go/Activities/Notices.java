@@ -141,7 +141,6 @@ public class Notices extends AppCompatActivity {
                                     @Override
                                     public void onSuccess() {
                                         Toast.makeText(Notices.this, "Info Stored in Realm", Toast.LENGTH_SHORT).show();
-                                        //TODO show this list if internet in not available
                                     }
                                 }, new Realm.Transaction.OnError() {
                                     @Override
