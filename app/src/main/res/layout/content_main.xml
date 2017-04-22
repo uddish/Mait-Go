@@ -193,6 +193,17 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
 
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_marginTop="50dp"
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        app:indicatorColor="@color/purple"
+        app:indicatorName="BallPulseIndicator" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

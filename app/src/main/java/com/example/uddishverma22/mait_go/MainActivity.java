@@ -42,6 +42,7 @@ import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.BarcodeGenerator.Generation;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity
     JSONArray fridayScheduleArray = null;
     JSONObject fridayScheduleObject = null;
 
+    AVLoadingIndicatorView mAvi;
+
 
     public RecyclerView recyclerView;
     public DailyScheduleListAdapter scheduleListAdapter;
@@ -103,6 +106,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        mAvi.show();
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -112,6 +117,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            mAvi.hide();
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
                             wednesdayScheduleArray = response.getJSONArray("wednesday");
@@ -468,6 +474,50 @@ public class MainActivity extends AppCompatActivity
             calendar.add(Calendar.DATE, -4);
             dt = sdf.format(calendar.getTime());
             mon.setText(dt.substring(0,2));
+        }
+        if(currentDay.equals("Saturday"))   {
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            fri.setText(dt.substring(0,2));      //setting date for fri
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            thu.setText(dt.substring(0,2));      //setting date for thu
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            wed.setText(dt.substring(0,2));      //setting date for wed
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            tue.setText(dt.substring(0,2));      //setting date for tue
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            mon.setText(dt.substring(0,2));      //setting date for mon
+        }
+        if(currentDay.equals("Sunday"))   {
+            try {
+                calendar.setTime(sdf.parse(dt));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            calendar.add(Calendar.DATE, -2);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            fri.setText(dt.substring(0,2));      //setting date for fri
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            thu.setText(dt.substring(0,2));      //setting date for thu
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            wed.setText(dt.substring(0,2));      //setting date for wed
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            tue.setText(dt.substring(0,2));      //setting date for tue
+            calendar.add(Calendar.DATE, -1);  // number of days to add
+            dt = sdf.format(calendar.getTime());
+            mon.setText(dt.substring(0,2));      //setting date for mon
         }
 
     }

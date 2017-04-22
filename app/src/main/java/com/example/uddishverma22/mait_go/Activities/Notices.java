@@ -114,7 +114,6 @@ public class Notices extends AppCompatActivity {
 
                         IS_INTERNET_AVAILABLE = 2009;
 
-//                        pd.dismiss();
                         indicatorView.hide();
                         try {
                             for(int n = 0; n < response.length(); n++)
@@ -179,9 +178,6 @@ public class Notices extends AppCompatActivity {
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setAdapter(noticeAdapter);
-//                for(int i = 0; i < results.size(); i++) {
-//                    Log.d(TAG, "NOTICE -> " + results.get(i).getNotice());
-//                }
 
             }
         });
