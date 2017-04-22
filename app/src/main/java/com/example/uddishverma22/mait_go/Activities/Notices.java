@@ -51,7 +51,7 @@ public class Notices extends AppCompatActivity {
 
     private static int IS_INTERNET_AVAILABLE = 2000;
 
-    Realm realm;
+    Realm realm = null;
 
     public static final String TAG = "Notices";
 
@@ -62,6 +62,8 @@ public class Notices extends AppCompatActivity {
     RelativeLayout relativeLayout;
     View view;
     ImageView iconNotice;
+
+    RealmResults<Notice> results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,7 @@ public class Notices extends AppCompatActivity {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
+                                        realm.where(Notice.class).findAll().deleteAllFromRealm();
                                         realm.copyToRealmOrUpdate(noticeList);
                                     }
                                 }, new Realm.Transaction.OnSuccess() {
@@ -173,7 +176,8 @@ public class Notices extends AppCompatActivity {
                  * Showing data from the realm database
                  */
                 indicatorView.hide();
-                RealmResults<Notice> results = realm.where(Notice.class).findAll();
+                results = realm.where(Notice.class).findAll();
+                Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size());
                 noticeAdapter = new NoticeAdapter(results);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
                 recyclerView.setLayoutManager(mLayoutManager);

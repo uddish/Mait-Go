@@ -1,11 +1,13 @@
 package com.example.uddishverma22.mait_go.Models;
 
+import io.realm.RealmObject;
+
 /**
  * Created by uddishverma22 on 04/04/17.
  * Contains the daily schedule of the student
  */
 
-public class DailySchedule {
+public class DailySchedule extends RealmObject{
 
     String time;
     String subject;

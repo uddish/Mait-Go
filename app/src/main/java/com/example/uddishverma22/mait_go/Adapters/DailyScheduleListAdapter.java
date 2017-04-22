@@ -39,7 +39,6 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
         private TextView time, subject, room, teacher;
         private ImageView dotColor;
         private LinearLayout mContainer;
-        private Animation nextAnim;
 
         public detailsViewHolder(View itemView) {
             super(itemView);
@@ -49,7 +48,6 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
             teacher = (TextView) itemView.findViewById(R.id.teacher);
             dotColor = (ImageView) itemView.findViewById(R.id.dot_design);
             mContainer = (LinearLayout) itemView.findViewById(R.id.container);
-            nextAnim = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.translate_next);
         }
     }
 
