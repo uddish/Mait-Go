@@ -41,6 +41,7 @@ import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.BarcodeGenerator.Generation;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
+import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -56,6 +57,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -63,9 +67,13 @@ public class MainActivity extends AppCompatActivity
 
     String url = "https://agile-hamlet-82527.herokuapp.com/timetable/4I4";
 
+    private static int IS_NET_AVAIL = 2000;
+
     LinearLayout linearLayout;
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
+
+    Realm realm;
 
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
     JSONArray mondayScheduleArray = null;
@@ -106,6 +114,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        realm = Realm.getDefaultInstance();
+
         mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mAvi.show();
 
@@ -117,18 +127,20 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+                            IS_NET_AVAIL = 2001;
                             mAvi.hide();
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
                             wednesdayScheduleArray = response.getJSONArray("wednesday");
                             thursdayScheduleArray = response.getJSONArray("thursday");
                             fridayScheduleArray = response.getJSONArray("friday");
-                            mondayScheduleObject =  mondayScheduleArray.getJSONObject(0);
-                            tuesdayScheduleObject =  tuesdayScheduleArray.getJSONObject(0);
-                            wednesdayScheduleObject =  wednesdayScheduleArray.getJSONObject(0);
-                            thursdayScheduleObject =  thursdayScheduleArray.getJSONObject(0);
-                            fridayScheduleObject =  fridayScheduleArray.getJSONObject(0);
+                            mondayScheduleObject = mondayScheduleArray.getJSONObject(0);
+                            tuesdayScheduleObject = tuesdayScheduleArray.getJSONObject(0);
+                            wednesdayScheduleObject = wednesdayScheduleArray.getJSONObject(0);
+                            thursdayScheduleObject = thursdayScheduleArray.getJSONObject(0);
+                            fridayScheduleObject = fridayScheduleArray.getJSONObject(0);
                             mondayScheduleFunction();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -137,7 +149,10 @@ public class MainActivity extends AppCompatActivity
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse: " + error.toString());
+//                mAvi.hide();
+//                IS_NET_AVAIL = 2000;
+                Log.d(TAG, "onErrorResponse: " + error.toString() + " NET_CODE " + IS_NET_AVAIL);
+
             }
         });
         queue.add(request);
@@ -160,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         currentMonth = getCurrentMonth();
         date.setText(currentDate);
         day.setText(currentDay);
-        month.setText(currentMonth.substring(0,3) + " " + currentYear);
+        month.setText(currentMonth.substring(0, 3) + " " + currentYear);
 
         //Setting the actual details in all the fields
         attachDateToDays();
@@ -191,6 +206,7 @@ public class MainActivity extends AppCompatActivity
         tue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 tuesdaySchedule = new ArrayList<DailySchedule>();
                 tuesdayScheduleFunction();
                 scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
@@ -327,7 +343,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void attachFields()  {
+    private void attachFields() {
         date = (TextView) findViewById(R.id.date_tv);
         day = (TextView) findViewById(R.id.day_tv);
         month = (TextView) findViewById(R.id.month_tv);
@@ -342,11 +358,11 @@ public class MainActivity extends AppCompatActivity
         calendar = Calendar.getInstance();
         SimpleDateFormat mdformat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = mdformat.format(calendar.getTime());
-        String date = strDate.substring(0,2);
+        String date = strDate.substring(0, 2);
         return date;
     }
 
-    private String getCurrentDay()    {
+    private String getCurrentDay() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
@@ -358,7 +374,7 @@ public class MainActivity extends AppCompatActivity
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         calendar = Calendar.getInstance();
 
-        if(currentDay.equals("Monday"))   {
+        if (currentDay.equals("Monday")) {
             mon.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -367,22 +383,22 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, 1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0,2));
+            tue.setText(dt.substring(0, 2));
             //setting date for wed
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0,2));
+            wed.setText(dt.substring(0, 2));
             //setting date for thu
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0,2));
+            thu.setText(dt.substring(0, 2));
             //setting date for fri
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0,2));
+            fri.setText(dt.substring(0, 2));
         }
 
-        if(currentDay.equals("Tuesday"))   {
+        if (currentDay.equals("Tuesday")) {
             tue.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -391,22 +407,22 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0,2));
+            mon.setText(dt.substring(0, 2));
             //setting date for wed
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0,2));
+            wed.setText(dt.substring(0, 2));
             //setting date for thu
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0,2));
+            thu.setText(dt.substring(0, 2));
             //setting date for fri
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0,2));
+            fri.setText(dt.substring(0, 2));
         }
 
-        if(currentDay.equals("Wednesday"))   {
+        if (currentDay.equals("Wednesday")) {
             wed.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -415,21 +431,21 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, 1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0,2));
+            thu.setText(dt.substring(0, 2));
             //setting date for fri
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0,2));
+            fri.setText(dt.substring(0, 2));
             //setting date for tue
             calendar.add(Calendar.DATE, -3);
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0,2));
+            tue.setText(dt.substring(0, 2));
             //setting date for mon
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0,2));
+            mon.setText(dt.substring(0, 2));
         }
-        if(currentDay.equals("Thursday"))   {
+        if (currentDay.equals("Thursday")) {
             thu.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -438,21 +454,21 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, 1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0,2));
+            fri.setText(dt.substring(0, 2));
             //setting date for wed
             calendar.add(Calendar.DATE, -2);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0,2));
+            wed.setText(dt.substring(0, 2));
             //setting date for tue
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0,2));
+            tue.setText(dt.substring(0, 2));
             //setting date for mon
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0,2));
+            mon.setText(dt.substring(0, 2));
         }
-        if(currentDay.equals("Friday"))   {
+        if (currentDay.equals("Friday")) {
             fri.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -461,21 +477,21 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0,2));
+            thu.setText(dt.substring(0, 2));
             //setting date for wed
             calendar.add(Calendar.DATE, -2);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0,2));
+            wed.setText(dt.substring(0, 2));
             //setting date for tue
             calendar.add(Calendar.DATE, -3);
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0,2));
+            tue.setText(dt.substring(0, 2));
             //setting date for mon
             calendar.add(Calendar.DATE, -4);
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0,2));
+            mon.setText(dt.substring(0, 2));
         }
-        if(currentDay.equals("Saturday"))   {
+        if (currentDay.equals("Saturday")) {
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -483,21 +499,21 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0,2));      //setting date for fri
+            fri.setText(dt.substring(0, 2));      //setting date for fri
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0,2));      //setting date for thu
+            thu.setText(dt.substring(0, 2));      //setting date for thu
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0,2));      //setting date for wed
+            wed.setText(dt.substring(0, 2));      //setting date for wed
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0,2));      //setting date for tue
+            tue.setText(dt.substring(0, 2));      //setting date for tue
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0,2));      //setting date for mon
+            mon.setText(dt.substring(0, 2));      //setting date for mon
         }
-        if(currentDay.equals("Sunday"))   {
+        if (currentDay.equals("Sunday")) {
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -505,19 +521,19 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -2);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0,2));      //setting date for fri
+            fri.setText(dt.substring(0, 2));      //setting date for fri
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0,2));      //setting date for thu
+            thu.setText(dt.substring(0, 2));      //setting date for thu
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0,2));      //setting date for wed
+            wed.setText(dt.substring(0, 2));      //setting date for wed
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0,2));      //setting date for tue
+            tue.setText(dt.substring(0, 2));      //setting date for tue
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0,2));      //setting date for mon
+            mon.setText(dt.substring(0, 2));      //setting date for mon
         }
 
     }
@@ -526,38 +542,38 @@ public class MainActivity extends AppCompatActivity
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat mdformat = new SimpleDateFormat("yyyy/MM/dd");
         String strDate = mdformat.format(calendar.getTime());
-        String year = strDate.substring(0,4);
+        String year = strDate.substring(0, 4);
         return year;
     }
 
-    private String getCurrentMonth()    {
+    private String getCurrentMonth() {
         DateFormat dateFormat = new SimpleDateFormat("MM");
         Date date = new Date();
         String month = (dateFormat.format(date));
         String currMonth = null;
-        if(month.equals("01")) {
+        if (month.equals("01")) {
             currMonth = "January";
-        }else if(month.equals("02")) {
+        } else if (month.equals("02")) {
             currMonth = "February";
-        }else if(month.equals("03")) {
+        } else if (month.equals("03")) {
             currMonth = "March";
-        }else if(month.equals("04")) {
+        } else if (month.equals("04")) {
             currMonth = "April";
-        }else if(month.equals("05")) {
+        } else if (month.equals("05")) {
             currMonth = "May";
-        }else if(month.equals("06")) {
+        } else if (month.equals("06")) {
             currMonth = "June";
-        }else if(month.equals("07")) {
+        } else if (month.equals("07")) {
             currMonth = "July";
-        }else if(month.equals("08")) {
+        } else if (month.equals("08")) {
             currMonth = "August";
-        }else if(month.equals("09")) {
+        } else if (month.equals("09")) {
             currMonth = "September";
-        }else if(month.equals("10")) {
+        } else if (month.equals("10")) {
             currMonth = "October";
-        }else if(month.equals("11")) {
+        } else if (month.equals("11")) {
             currMonth = "November";
-        }else if(month.equals("12")) {
+        } else if (month.equals("12")) {
             currMonth = "December";
         }
         return currMonth;
@@ -580,14 +596,33 @@ public class MainActivity extends AppCompatActivity
             mondaySchedule.add(movie);
             movie = new DailySchedule("2:45 - 3:45", (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
             mondaySchedule.add(movie);
+
+//            if (mondaySchedule.size() != 0) {
+//                realm.executeTransactionAsync(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//                        realm.copyToRealmOrUpdate(mondaySchedule);
+//                    }
+//                }, new Realm.Transaction.OnSuccess() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Toast.makeText(MainActivity.this, "Info stored in realm", Toast.LENGTH_SHORT).show();
+//                    }
+//                }, new Realm.Transaction.OnError() {
+//                    @Override
+//                    public void onError(Throwable error) {
+//                        Log.d(TAG, "onError: " + error.toString());
+//                    }
+//                });
+//            }
             scheduleListAdapter.notifyDataSetChanged();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
         }
     }
+
     //Adding the tuesday Schedule in the list
-    private void tuesdayScheduleFunction()  {
+    private void tuesdayScheduleFunction() {
         try {
             DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
             tuesdaySchedule.add(movie);
@@ -604,13 +639,13 @@ public class MainActivity extends AppCompatActivity
             movie = new DailySchedule("2:45 - 3:45", (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
             tuesdaySchedule.add(movie);
             scheduleListAdapter.notifyDataSetChanged();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
         }
     }
+
     //Adding the wednesday Schedule in the list
-    private void wednesdayScheduleFunction()  {
+    private void wednesdayScheduleFunction() {
         try {
             DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
             wednesdaySchedule.add(movie);
@@ -627,13 +662,13 @@ public class MainActivity extends AppCompatActivity
             movie = new DailySchedule("2:45 - 3:45", (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
             wednesdaySchedule.add(movie);
             scheduleListAdapter.notifyDataSetChanged();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
         }
     }
+
     //Adding the thursday Schedule in the list
-    private void thursdayScheduleFunction()  {
+    private void thursdayScheduleFunction() {
         try {
             DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
             thursdaySchedule.add(movie);
@@ -650,13 +685,13 @@ public class MainActivity extends AppCompatActivity
             movie = new DailySchedule("2:45 - 3:45", (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
             thursdaySchedule.add(movie);
             scheduleListAdapter.notifyDataSetChanged();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
         }
     }
+
     //Adding the friday Schedule in the list
-    private void fridayScheduleFunction()  {
+    private void fridayScheduleFunction() {
         try {
             DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
             fridaySchedule.add(movie);
@@ -673,14 +708,13 @@ public class MainActivity extends AppCompatActivity
             movie = new DailySchedule("2:45 - 3:45", (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
             fridaySchedule.add(movie);
             scheduleListAdapter.notifyDataSetChanged();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
         }
     }
 
-    private void changeDayCircleColor()   {
-        if(monSelected == 1)    {
+    private void changeDayCircleColor() {
+        if (monSelected == 1) {
             mon.setBackgroundResource(R.drawable.circular_image);
             mon.setTextColor(Color.BLACK);
 
@@ -692,8 +726,7 @@ public class MainActivity extends AppCompatActivity
             thu.setTextColor(Color.WHITE);
             fri.setBackgroundResource(0);
             fri.setTextColor(Color.WHITE);
-        }
-        else if(tueSelected == 1)    {
+        } else if (tueSelected == 1) {
             tue.setBackgroundResource(R.drawable.circular_image);
             tue.setTextColor(Color.BLACK);
 
@@ -705,8 +738,7 @@ public class MainActivity extends AppCompatActivity
             thu.setTextColor(Color.WHITE);
             fri.setBackgroundResource(0);
             fri.setTextColor(Color.WHITE);
-        }
-        else if(wedSelected == 1)   {
+        } else if (wedSelected == 1) {
             wed.setBackgroundResource(R.drawable.circular_image);
             wed.setTextColor(Color.BLACK);
 
@@ -718,8 +750,7 @@ public class MainActivity extends AppCompatActivity
             thu.setTextColor(Color.WHITE);
             fri.setBackgroundResource(0);
             fri.setTextColor(Color.WHITE);
-        }
-        else if(thuSelected == 1)   {
+        } else if (thuSelected == 1) {
             thu.setBackgroundResource(R.drawable.circular_image);
             thu.setTextColor(Color.BLACK);
 
@@ -731,8 +762,7 @@ public class MainActivity extends AppCompatActivity
             wed.setTextColor(Color.WHITE);
             fri.setBackgroundResource(0);
             fri.setTextColor(Color.WHITE);
-        }
-        else if(friSelected == 1)   {
+        } else if (friSelected == 1) {
             fri.setBackgroundResource(R.drawable.circular_image);
             fri.setTextColor(Color.BLACK);
 
@@ -752,7 +782,7 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 //        if (gradAnim != null && !gradAnim.isRunning())
 //            gradAnim.start();
-        if(UserProfile.themeColor == 101) {
+        if (UserProfile.themeColor == 101) {
             Log.d(TAG, "onCreate: Theme " + UserProfile.themeColor);
             linearLayout.setBackgroundResource(R.drawable.orange_gradient);
             toolbar.setBackgroundResource(R.drawable.orange_gradient);
