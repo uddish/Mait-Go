@@ -12,4 +12,9 @@
     <color name="black">#000</color>
     <color name="darkBrown">#4C4112</color>
     <color name="purple">#A11ED2</color>
+    <color name="lightGrey">#999C9F</color>
+    <color name="darkGrey">#364346</color>
+    <color name="green">#04C582</color>
+    <color name="darkGreen">#07A870</color>
+
 </resources>
