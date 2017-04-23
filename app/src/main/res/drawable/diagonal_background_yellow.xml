@@ -7,7 +7,7 @@
         <bitmap
             android:src="@drawable/profile"
             android:gravity="center"
-            android:alpha="0.1"/>
+            android:alpha="0.15"/>
     </item>
 
     <item android:top="200dp"
