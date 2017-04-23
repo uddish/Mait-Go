@@ -35,6 +35,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.uddishverma22.mait_go.Activities.Login;
 import com.example.uddishverma22.mait_go.Activities.Notices;
 import com.example.uddishverma22.mait_go.Activities.Result;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
@@ -331,6 +332,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
             startActivity(new Intent(this, Result.class));
         } else if (id == R.id.nav_manage) {
+            startActivity(new Intent(this, Login.class));
 
         } else if (id == R.id.nav_share) {
 

@@ -44,7 +44,6 @@ import io.realm.RealmResults;
 
 public class Notices extends AppCompatActivity {
 
-//    String url = "http://192.168.0.13:8081/notices";
     String url = "https://agile-hamlet-82527.herokuapp.com/scrape/notices";
     JSONObject object;
     Notice noticeObj;
@@ -136,7 +135,9 @@ public class Notices extends AppCompatActivity {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
+                                        //Deleting the previous result to remove repeatity
                                         realm.where(Notice.class).findAll().deleteAllFromRealm();
+                                        //Adding the results in the realm database
                                         realm.copyToRealmOrUpdate(noticeList);
                                     }
                                 }, new Realm.Transaction.OnSuccess() {
