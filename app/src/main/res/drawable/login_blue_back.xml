@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="#fff" />
+    <item android:drawable="@color/white" />
 <!--Layer 1-->
     <item
-        android:bottom="300dp"
+        android:bottom="20dp"
         android:left="-280dp"
         android:right="-160dp"
         android:top="-100dp">
@@ -13,7 +13,7 @@
         </shape>
     </item>
     <item
-        android:bottom="300dp"
+        android:bottom="20dp"
         android:left="-180dp"
         android:right="-210dp"
         android:top="-100dp">
@@ -24,7 +24,7 @@
 
     <!--Layer2-->
     <item
-        android:bottom="300dp"
+        android:bottom="20dp"
         android:left="-390dp"
         android:right="-100dp"
         android:top="-100dp">
@@ -33,7 +33,7 @@
         </shape>
     </item>
     <item
-        android:bottom="300dp"
+        android:bottom="20dp"
         android:left="-180dp"
         android:right="-390dp"
         android:top="-100dp">
@@ -45,7 +45,7 @@
 
     <!--Background-->
     <item
-        android:bottom="450dp"
+        android:bottom="140dp"
         android:left="0dp"
         android:right="0dp"
         android:top="-100dp">
@@ -54,7 +54,7 @@
         </shape>
     </item>
     <item
-        android:bottom="300dp"
+        android:bottom="30dp"
         android:left="-140dp"
         android:right="-140dp"
         android:top="-100dp">

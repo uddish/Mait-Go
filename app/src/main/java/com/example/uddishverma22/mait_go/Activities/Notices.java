@@ -123,7 +123,7 @@ public class Notices extends AppCompatActivity {
                                 noticeObj = new Notice();
                                 noticeObj.notice = object.getString("notice");
                                 noticeObj.url = object.getString("url");
-                                Log.d(TAG, "onResponse: JSON " + object.get("notice"));
+                                Log.d(TAG, "onResponse: DJSON " + object.get("notice"));
                                 noticeList.add(noticeObj);
                             }
 
