@@ -1,134 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:background="@color/green"
-    android:padding="20dp"
     tools:context="com.example.uddishverma22.mait_go.Activities.Login">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+    <LinearLayout
+        android:id="@+id/student_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="60dp"
-        app:cardBackgroundColor="@color/darkGrey"
-        app:cardCornerRadius="30dp">
+        android:background="@drawable/login_blue_back"
+        android:layout_weight="1.2"
+        android:padding="5dp"
+        android:layout_height="0dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/name"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:background="@drawable/login_et_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:hint="Name"
+            android:textSize="15dp"
+            android:textColorHint="@color/white"/>
+        <EditText
+            android:id="@+id/roll"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:padding="10dp"
+            android:background="@drawable/login_et_white"
+            android:layout_width="match_parent"
+            android:textSize="15dp"
+            android:layout_height="wrap_content"
+            android:hint="Enrollment Number"
+            android:textColorHint="@color/white"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/sign_in"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Sign In"
+            android:textColor="@color/darkBlue"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:background="@drawable/button_white"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Student"
-                    android:textColor="#fff"
-                    android:textAppearance="?android:textAppearanceLarge" />
+        <TextView
+            android:id="@+id/student_trigger"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:text="STUDENT"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Teacher"
-                    android:textColor="@color/lightGrey"
-                    android:textAppearance="?android:textAppearanceLarge" />
-            </LinearLayout>
+    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="#fff"
-                    android:gravity="center" />
+        <TextView
+            android:id="@+id/teacher_trigger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TEACHER"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceLarge"/>
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/lightGrey"
-                    android:gravity="center" />
-            </LinearLayout>
+    </LinearLayout>
 
-            <TextView
-                android:padding="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textColor="@color/lightGrey"/>
 
-            <EditText
-                android:padding="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_grey"/>
 
-            <TextView
-                android:padding="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Enrollment Number"
-                android:textColor="@color/lightGrey"/>
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/card_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--android:layout_marginTop="60dp"-->
+        <!--app:cardBackgroundColor="@color/darkGrey"-->
+        <!--app:cardCornerRadius="30dp">-->
 
-            <EditText
-                android:padding="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_grey"/>
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
 
-            <Button
-                android:layout_margin="20dp"
-                android:background="@drawable/button_green"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="#fff"
-                android:text="SUBMIT"/>
-        </LinearLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="70dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="30dp"-->
+                <!--android:orientation="horizontal">-->
 
-    </android.support.v7.widget.CardView>
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="Student"-->
+                    <!--android:textColor="#fff"-->
+                    <!--android:textAppearance="?android:textAppearanceLarge" />-->
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:background="@drawable/login_circle"
-        android:elevation="2dp"
-        android:scaleType="fitXY"
-        app:layout_anchorGravity="top|center_horizontal" />
+                <!--<TextView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="Teacher"-->
+                    <!--android:textColor="@color/lightGrey"-->
+                    <!--android:textAppearance="?android:textAppearanceLarge" />-->
+            <!--</LinearLayout>-->
 
-</RelativeLayout>
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="30dp">-->
+
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="2dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="#fff"-->
+                    <!--android:gravity="center" />-->
+
+                <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="2dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:background="@color/lightGrey"-->
+                    <!--android:gravity="center" />-->
+            <!--</LinearLayout>-->
+
+            <!--<TextView-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="30dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Name"-->
+                <!--android:textColor="@color/lightGrey"/>-->
+
+            <!--<EditText-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="30dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/edittext_grey"/>-->
+
+            <!--<TextView-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="30dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Enrollment Number"-->
+                <!--android:textColor="@color/lightGrey"/>-->
+
+            <!--<EditText-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginRight="30dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/edittext_grey"/>-->
+
+            <!--<Button-->
+                <!--android:layout_margin="20dp"-->
+                <!--android:background="@drawable/button_white"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:textColor="#fff"-->
+                <!--android:text="SUBMIT"/>-->
+        <!--</LinearLayout>-->
+
+    <!--</android.support.v7.widget.CardView>-->
+
+    <!--<ImageView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_gravity="center_vertical|center_horizontal"-->
+        <!--android:background="@drawable/login_circle"-->
+        <!--android:elevation="2dp"-->
+        <!--android:scaleType="fitXY"-->
+        <!--app:layout_anchorGravity="top|center_horizontal" />-->
+
+</LinearLayout>
