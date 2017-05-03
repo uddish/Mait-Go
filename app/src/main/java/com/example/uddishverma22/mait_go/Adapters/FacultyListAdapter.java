@@ -1,17 +1,22 @@
 package com.example.uddishverma22.mait_go.Adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by uddishverma22 on 02/05/17.
@@ -20,6 +25,9 @@ import java.util.List;
 public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.detailsViewHolder>{
 
     List<Faculty> facultyList;
+    String imageUrl = "https://agile-hamlet-82527.herokuapp.com/";
+
+    public static final String TAG = "FacultyListAdapter";
 
     public FacultyListAdapter(List<Faculty> facultyList) {
         this.facultyList = facultyList;
@@ -28,6 +36,7 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
     public class detailsViewHolder extends RecyclerView.ViewHolder {
 
         TextView name, designation, qual, exp;
+        CircleImageView image;
 
         public detailsViewHolder(View itemView) {
             super(itemView);
@@ -35,6 +44,7 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
             designation = (TextView) itemView.findViewById(R.id.fac_desig);
             qual = (TextView) itemView.findViewById(R.id.fac_qual);
             exp = (TextView) itemView.findViewById(R.id.fac_exp);
+            image = (CircleImageView) itemView.findViewById(R.id.image);
         }
     }
 
@@ -53,6 +63,9 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
         holder.designation.setText(facultyObj.designation);
         holder.qual.setText(facultyObj.qualification);
         holder.exp.setText(facultyObj.experience);
+
+        Picasso.with(holder.image.getContext()).load(imageUrl + facultyObj.imageUrl).into(holder.image);
+        Log.d(TAG, "onBindViewHolder: " + facultyObj.imageUrl);
 
     }
 

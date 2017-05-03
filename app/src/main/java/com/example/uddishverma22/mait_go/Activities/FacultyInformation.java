@@ -145,6 +145,7 @@ public class FacultyInformation extends AppCompatActivity {
                                 itFacultyobj.designation = itFacObj.getString("designation");
                                 itFacultyobj.qualification = itFacObj.getString("qualification");
                                 itFacultyobj.experience = itFacObj.getString("exp");
+                                itFacultyobj.imageUrl = itFacObj.getString("img");
                                 itFacList.add(itFacultyobj);
                             }
                             for (int i = 0; i < cseFaculty.length(); i++) {
@@ -154,6 +155,7 @@ public class FacultyInformation extends AppCompatActivity {
                                 cseFacultyobj.designation = cseFacObj.getString("designation");
                                 cseFacultyobj.qualification = cseFacObj.getString("qualification");
                                 cseFacultyobj.experience = cseFacObj.getString("exp");
+                                cseFacultyobj.imageUrl = cseFacObj.getString("img");
                                 cseFacList.add(cseFacultyobj);
                             }
 //                            Log.d(TAG, "onResponse: " + response.getJSONArray("IT"));

@@ -1,5 +1,9 @@
 package com.example.uddishverma22.mait_go.Models;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import io.realm.RealmObject;
 
 /**
