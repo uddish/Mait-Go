@@ -22,31 +22,75 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/fac_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Faculty Name" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:padding="10dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="105dp"
+                    android:src="@drawable/profile"/>
 
-                <TextView
-                    android:id="@+id/fac_desig"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="Assistant Professor" />
+                <LinearLayout
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/fac_qual"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:text="B.Tech, M.Tech" />
+                    <TextView
+                        android:id="@+id/fac_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Faculty Name" />
+
+                    <TextView
+                        android:id="@+id/fac_desig"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="Assistant Professor" />
+
+                    <TextView
+                        android:id="@+id/fac_qual"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="B.Tech, M.Tech" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical"-->
+                <!--android:padding="10dp">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/fac_name"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:text="Faculty Name" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/fac_desig"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:text="Assistant Professor" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/fac_qual"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:text="B.Tech, M.Tech" />-->
+
+            <!--</LinearLayout>-->
 
         </android.support.v7.widget.CardView>
 

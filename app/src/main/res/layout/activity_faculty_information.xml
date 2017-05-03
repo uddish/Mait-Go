@@ -29,6 +29,7 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
             <View
+                android:id="@+id/cse_line"
                 android:visibility="invisible"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
@@ -51,6 +52,7 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
             <View
+                android:id="@+id/it_line"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
@@ -72,6 +74,7 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
             <View
+                android:id="@+id/ece_line"
                 android:visibility="invisible"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
@@ -94,6 +97,7 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
             <View
+                android:id="@+id/eee_line"
                 android:visibility="invisible"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
@@ -116,6 +120,7 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white" />
             <View
+                android:id="@+id/mae_line"
                 android:visibility="invisible"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
