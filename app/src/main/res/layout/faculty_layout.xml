@@ -25,11 +25,11 @@
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image"
                     android:padding="10dp"
                     android:layout_weight="1"
                     android:layout_width="0dp"
-                    android:layout_height="105dp"
-                    android:src="@drawable/profile"/>
+                    android:layout_height="105dp"/>
 
                 <LinearLayout
                     android:layout_weight="3"

@@ -12,6 +12,7 @@ public class Faculty extends RealmObject {
     public String designation;
     public String qualification;
     public String experience;
+    public String imageUrl;
 
     public String getName() {
         return name;

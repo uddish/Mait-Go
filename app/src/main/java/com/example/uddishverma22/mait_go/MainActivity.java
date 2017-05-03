@@ -1,15 +1,9 @@
 package com.example.uddishverma22.mait_go;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.TransitionDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.transition.Transition;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,13 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.TranslateAnimation;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -41,9 +30,7 @@ import com.example.uddishverma22.mait_go.Activities.Notices;
 import com.example.uddishverma22.mait_go.Activities.Result;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
-import com.example.uddishverma22.mait_go.BarcodeGenerator.Generation;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
-import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -60,7 +47,6 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,7 +61,10 @@ public class MainActivity extends AppCompatActivity
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
 
-    Realm realm;
+    Realm realm = null;
+
+    //List to add all the week's list
+    DailySchedule mSchedule;
 
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
     JSONArray mondayScheduleArray = null;
@@ -141,7 +130,18 @@ public class MainActivity extends AppCompatActivity
                             wednesdayScheduleObject = wednesdayScheduleArray.getJSONObject(0);
                             thursdayScheduleObject = thursdayScheduleArray.getJSONObject(0);
                             fridayScheduleObject = fridayScheduleArray.getJSONObject(0);
+
+                            //Copying the objects into local list so that it can be used by realm
+//                            ArrayList<JSONObject> list = new ArrayList<>();
+//                            list.add(mondayScheduleObject);
+//                            list.add(tuesdayScheduleObject);
+//                            list.add(wednesdayScheduleObject);
+//                            list.add(thursdayScheduleObject);
+//                            list.add(fridayScheduleObject);
+//                            mSchedule = new DailySchedule();
+//                            mSchedule.scheduleList = list;
                             mondayScheduleFunction();
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -601,24 +601,6 @@ public class MainActivity extends AppCompatActivity
             movie = new DailySchedule("2:45 - 3:45", (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
             mondaySchedule.add(movie);
 
-//            if (mondaySchedule.size() != 0) {
-//                realm.executeTransactionAsync(new Realm.Transaction() {
-//                    @Override
-//                    public void execute(Realm realm) {
-//                        realm.copyToRealmOrUpdate(mondaySchedule);
-//                    }
-//                }, new Realm.Transaction.OnSuccess() {
-//                    @Override
-//                    public void onSuccess() {
-//                        Toast.makeText(MainActivity.this, "Info stored in realm", Toast.LENGTH_SHORT).show();
-//                    }
-//                }, new Realm.Transaction.OnError() {
-//                    @Override
-//                    public void onError(Throwable error) {
-//                        Log.d(TAG, "onError: " + error.toString());
-//                    }
-//                });
-//            }
             scheduleListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
