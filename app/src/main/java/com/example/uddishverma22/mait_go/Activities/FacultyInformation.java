@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -27,6 +28,7 @@ public class FacultyInformation extends AppCompatActivity {
 
     public static final String TAG = "FacultyInformation";
     TextView cse, it, eee, ece, mae;
+    View cseLine, itLine, eceLine, eeeLine ,maeLine;
 
     RecyclerView mRecyclerView;
     FacultyListAdapter listAdapter;
@@ -51,6 +53,51 @@ public class FacultyInformation extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.fac_recycler);
 
+        cseLine = findViewById(R.id.cse_line);
+        itLine = findViewById(R.id.it_line);
+        eceLine = findViewById(R.id.ece_line);
+        eeeLine = findViewById(R.id.eee_line);
+        maeLine = findViewById(R.id.mae_line);
+
+        it = (TextView) findViewById(R.id.it);
+        cse = (TextView) findViewById(R.id.cse);
+
+
+        it.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (itFacList != null) {
+                    listAdapter = new FacultyListAdapter(itFacList);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FacultyInformation.this);
+                    mRecyclerView.setLayoutManager(layoutManager);
+                    mRecyclerView.setAdapter(listAdapter);
+                    itLine.setVisibility(View.VISIBLE);
+                    cseLine.setVisibility(View.INVISIBLE);
+                    eceLine.setVisibility(View.INVISIBLE);
+                    eeeLine.setVisibility(View.INVISIBLE);
+                    maeLine.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        cse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cseFacList != null) {
+                    listAdapter = new FacultyListAdapter(cseFacList);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FacultyInformation.this);
+                    mRecyclerView.setLayoutManager(layoutManager);
+                    mRecyclerView.setAdapter(listAdapter);
+                    cseLine.setVisibility(View.VISIBLE);
+                    itLine.setVisibility(View.INVISIBLE);
+                    eceLine.setVisibility(View.INVISIBLE);
+                    eeeLine.setVisibility(View.INVISIBLE);
+                    maeLine.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -60,7 +107,7 @@ public class FacultyInformation extends AppCompatActivity {
                         try {
                             itFaculty = response.getJSONArray("IT");
                             cseFaculty = response.getJSONArray("CSE");
-                            for(int i = 0; i < itFaculty.length(); i++) {
+                            for (int i = 0; i < itFaculty.length(); i++) {
                                 itFacObj = itFaculty.getJSONObject(i);
                                 itFacultyobj = new Faculty();
                                 itFacultyobj.name = itFacObj.getString("name");
@@ -69,7 +116,7 @@ public class FacultyInformation extends AppCompatActivity {
                                 itFacultyobj.experience = itFacObj.getString("exp");
                                 itFacList.add(itFacultyobj);
                             }
-                            for(int i = 0; i < cseFaculty.length(); i++) {
+                            for (int i = 0; i < cseFaculty.length(); i++) {
                                 cseFacObj = cseFaculty.getJSONObject(i);
                                 cseFacultyobj = new Faculty();
                                 cseFacultyobj.name = cseFacObj.getString("name");
