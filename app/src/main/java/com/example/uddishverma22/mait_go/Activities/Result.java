@@ -10,6 +10,7 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.grabner.circleprogress.CircleProgressView;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class Result extends AppCompatActivity {
 
@@ -51,10 +54,15 @@ public class Result extends AppCompatActivity {
     RecyclerView recyclerView;
     ResultAdapter resultAdapter;
 
+    Realm realm = null;
+    RealmResults<ResultModel> results;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
+
+        realm = Realm.getDefaultInstance();
 
         RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -89,8 +97,37 @@ public class Result extends AppCompatActivity {
                                 resultObj.extMarks = jsonObject.getString("external");
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
+                                resultObj.percentage = (String) response.get("percentage");
                                 resultList.add(resultObj);
                             }
+
+                            /**
+                             * Saving data to realm
+                             */
+                            if(resultList.size() != 0)   {
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        //Deleting the previous result to remove repeatity
+                                        realm.where(ResultModel.class).findAll().deleteAllFromRealm();
+                                        //Adding the results in the realm database
+                                        realm.copyToRealmOrUpdate(resultList);
+                                    }
+                                }, new Realm.Transaction.OnSuccess() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(Result.this, "Info stored in realm", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }, new Realm.Transaction.OnError() {
+                                    @Override
+                                    public void onError(Throwable error) {
+                                        Log.e(TAG, "onError: " + error.toString());
+                                    }
+                                });
+
+                            }
+
                             resultAdapter = new ResultAdapter(resultList);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
                             recyclerView.setLayoutManager(mLayoutManager);
@@ -105,6 +142,19 @@ public class Result extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
+                avi.hide();
+                results = realm.where(ResultModel.class).findAll();
+                //setting percentage in the CircleView
+                mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
+                Log.d(TAG, "onErrorResponse: percentage " + results.get(1).percentage);
+                Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size() +  "\n" + results);
+                resultAdapter = new ResultAdapter(results);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(resultAdapter);
+                //If internet connectivity is not available
+                // Showing data from the realm database
+
             }
         });
         requestQueue.add(request);

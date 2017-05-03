@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +18,7 @@ import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +41,8 @@ public class FacultyInformation extends AppCompatActivity {
     JSONObject itFacObj, cseFacObj;
     Faculty itFacultyobj, cseFacultyobj;
 
+    AVLoadingIndicatorView mAvi;
+
     ArrayList<Faculty> itFacList = new ArrayList<>();
     ArrayList<Faculty> cseFacList = new ArrayList<>();
 
@@ -53,6 +57,9 @@ public class FacultyInformation extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.fac_recycler);
 
+        mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        mAvi.show();
+
         cseLine = findViewById(R.id.cse_line);
         itLine = findViewById(R.id.it_line);
         eceLine = findViewById(R.id.ece_line);
@@ -61,6 +68,9 @@ public class FacultyInformation extends AppCompatActivity {
 
         it = (TextView) findViewById(R.id.it);
         cse = (TextView) findViewById(R.id.cse);
+        eee = (TextView) findViewById(R.id.eee);
+        ece = (TextView) findViewById(R.id.ece);
+        mae = (TextView) findViewById(R.id.mae);
 
 
         it.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +108,32 @@ public class FacultyInformation extends AppCompatActivity {
             }
         });
 
+        eee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FacultyInformation.this, "Updating Soon...", Toast.LENGTH_SHORT).show();
+            }
+        });
+        ece.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FacultyInformation.this, "Updating Soon...", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mae.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FacultyInformation.this, "Updating Soon...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        mAvi.hide();
 
                         try {
                             itFaculty = response.getJSONArray("IT");
