@@ -130,6 +130,18 @@
 
     </LinearLayout>
 
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_below="@id/branch"
+        android:layout_marginTop="100dp"
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:indicatorColor="@color/white"
+        android:layout_centerHorizontal="true"
+        app:indicatorName="LineScaleIndicator" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fac_recycler"
         android:layout_width="match_parent"
