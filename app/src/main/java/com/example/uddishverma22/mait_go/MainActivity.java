@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.uddishverma22.mait_go.Activities.Announcements;
 import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Activities.Login;
 import com.example.uddishverma22.mait_go.Activities.Notices;
@@ -339,6 +340,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, FacultyInformation.class));
 
         } else if (id == R.id.nav_send) {
+            startActivity(new Intent(this, Announcements.class));
 
         }
 
