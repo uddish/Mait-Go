@@ -375,6 +375,7 @@ public class MainActivity extends AppCompatActivity
         return dayOfTheWeek;
     }
 
+    //TODO still not working properly
     private void attachDateToDays() {
         String dt = currentDate;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -485,15 +486,15 @@ public class MainActivity extends AppCompatActivity
             dt = sdf.format(calendar.getTime());
             thu.setText(dt.substring(0, 2));
             //setting date for wed
-            calendar.add(Calendar.DATE, -2);
+            calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
             wed.setText(dt.substring(0, 2));
             //setting date for tue
-            calendar.add(Calendar.DATE, -3);
+            calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
             tue.setText(dt.substring(0, 2));
             //setting date for mon
-            calendar.add(Calendar.DATE, -4);
+            calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
             mon.setText(dt.substring(0, 2));
         }
