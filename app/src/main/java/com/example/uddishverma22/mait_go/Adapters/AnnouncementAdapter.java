@@ -51,6 +51,8 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         holder.teacherName.setText(model.teacherName);
         holder.announ.setText(model.announcement);
         holder.imageLetter.setText(model.teacherName.substring(0,1));
+        holder.date.setText(model.msgDate.substring(0, 10));
+        holder.time.setText(model.msgDate.substring(11, 16));
     }
 
     @Override
