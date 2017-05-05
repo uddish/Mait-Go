@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,12 +19,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.uddishverma22.mait_go.Activities.Announcements;
 import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Activities.Login;
@@ -32,7 +35,10 @@ import com.example.uddishverma22.mait_go.Activities.Result;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
+import com.example.uddishverma22.mait_go.Models.Notice;
+import com.example.uddishverma22.mait_go.Models.TempModel;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -48,6 +54,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -66,6 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     //List to add all the week's list
     DailySchedule mSchedule;
+    RealmResults<TempModel> result;
 
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
     JSONArray mondayScheduleArray = null;
@@ -117,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(final JSONObject response) {
                         try {
                             IS_NET_AVAIL = 2001;
                             mAvi.hide();
@@ -132,15 +140,25 @@ public class MainActivity extends AppCompatActivity
                             thursdayScheduleObject = thursdayScheduleArray.getJSONObject(0);
                             fridayScheduleObject = fridayScheduleArray.getJSONObject(0);
 
-                            //Copying the objects into local list so that it can be used by realm
-//                            ArrayList<JSONObject> list = new ArrayList<>();
-//                            list.add(mondayScheduleObject);
-//                            list.add(tuesdayScheduleObject);
-//                            list.add(wednesdayScheduleObject);
-//                            list.add(thursdayScheduleObject);
-//                            list.add(fridayScheduleObject);
-//                            mSchedule = new DailySchedule();
-//                            mSchedule.scheduleList = list;
+//***************************************************************************************************************************
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    realm.where(TempModel.class).findAll().deleteAllFromRealm();
+                                    realm.createObjectFromJson(TempModel.class, response);
+                                }
+                            }, new Realm.Transaction.OnSuccess() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(MainActivity.this, "Object saved", Toast.LENGTH_SHORT).show();
+                                }
+                            }, new Realm.Transaction.OnError() {
+                                @Override
+                                public void onError(Throwable error) {
+                                    Log.d(TAG, "onError: " + error.toString());
+                                }
+                            });
+//***************************************************************************************************************************
                             mondayScheduleFunction();
 
 
@@ -152,8 +170,38 @@ public class MainActivity extends AppCompatActivity
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                mAvi.hide();
-//                IS_NET_AVAIL = 2000;
+                mAvi.hide();
+                IS_NET_AVAIL = 2000;
+                //Showing data from Realm
+
+                result = realm.where(TempModel.class).findAll();
+                ArrayList<TempModel> list = new ArrayList<>(result);        //converting realm list into arraylist
+
+                //Offline JSONArray
+                JSONArray monArray = null;
+                JSONArray tuesArray = null;
+                JSONArray wedArray = null;
+                JSONArray thursArray = null;
+                JSONArray friArray = null;
+                try {
+                    monArray = new JSONArray(list.get(0).getMonday());
+                    tuesArray = new JSONArray(list.get(0).getTuesday());
+                    wedArray = new JSONArray(list.get(0).getWednesday());
+                    thursArray = new JSONArray(list.get(0).getThursday());
+                    friArray = new JSONArray(list.get(0).getFriday());
+
+                    //Saving offline data to JSONObject
+                    mondayScheduleObject = monArray.getJSONObject(0);
+                    tuesdayScheduleObject = tuesArray.getJSONObject(0);
+                    wednesdayScheduleObject = wedArray.getJSONObject(0);
+                    thursdayScheduleObject = thursArray.getJSONObject(0);
+                    fridayScheduleObject = friArray.getJSONObject(0);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mondayScheduleFunction();
+
                 Log.d(TAG, "onErrorResponse: " + error.toString() + " NET_CODE " + IS_NET_AVAIL);
 
             }
