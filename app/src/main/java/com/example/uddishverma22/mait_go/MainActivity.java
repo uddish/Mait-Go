@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.crashlytics.android.Crashlytics;
 import com.example.uddishverma22.mait_go.Activities.Announcements;
 import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Activities.Login;
@@ -51,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -112,6 +114,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Fabric.with(this, new Crashlytics());
+
         realm = Realm.getDefaultInstance();
 
         mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
@@ -170,8 +174,7 @@ public class MainActivity extends AppCompatActivity
             public void onErrorResponse(VolleyError error) {
                 mAvi.hide();
                 IS_NET_AVAIL = 2000;
-                //Showing data from Realm
-
+                //Showing data from Realm)
                 result = realm.where(TempModel.class).findAll();
                 ArrayList<TempModel> list = new ArrayList<>(result);        //converting realm list into arraylist
                 Log.d(TAG, "onErrorResponse: List Size " + list.size() + "\n" + list);
@@ -182,24 +185,29 @@ public class MainActivity extends AppCompatActivity
                 JSONArray wedArray = null;
                 JSONArray thursArray = null;
                 JSONArray friArray = null;
-                try {
-                    monArray = new JSONArray(list.get(0).getMonday());
-                    tuesArray = new JSONArray(list.get(0).getTuesday());
-                    wedArray = new JSONArray(list.get(0).getWednesday());
-                    thursArray = new JSONArray(list.get(0).getThursday());
-                    friArray = new JSONArray(list.get(0).getFriday());
+                if(list.size() != 0) {
+                    try {
+                        monArray = new JSONArray(list.get(0).getMonday());
+                        tuesArray = new JSONArray(list.get(0).getTuesday());
+                        wedArray = new JSONArray(list.get(0).getWednesday());
+                        thursArray = new JSONArray(list.get(0).getThursday());
+                        friArray = new JSONArray(list.get(0).getFriday());
 
-                    //Saving offline data to JSONObject
-                    mondayScheduleObject = monArray.getJSONObject(0);
-                    tuesdayScheduleObject = tuesArray.getJSONObject(0);
-                    wednesdayScheduleObject = wedArray.getJSONObject(0);
-                    thursdayScheduleObject = thursArray.getJSONObject(0);
-                    fridayScheduleObject = friArray.getJSONObject(0);
+                        //Saving offline data to JSONObject
+                        mondayScheduleObject = monArray.getJSONObject(0);
+                        tuesdayScheduleObject = tuesArray.getJSONObject(0);
+                        wednesdayScheduleObject = wedArray.getJSONObject(0);
+                        thursdayScheduleObject = thursArray.getJSONObject(0);
+                        fridayScheduleObject = friArray.getJSONObject(0);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    mondayScheduleFunction();
                 }
-                mondayScheduleFunction();
+                else    {
+                    Toast.makeText(MainActivity.this, "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
+                }
 
                 Log.d(TAG, "onErrorResponse: " + error.toString() + " NET_CODE " + IS_NET_AVAIL);
 
