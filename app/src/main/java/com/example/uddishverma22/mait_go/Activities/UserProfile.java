@@ -50,7 +50,7 @@ public class UserProfile extends AppCompatActivity {
     //Components to change image in the profile page
     CircleImageView profileImage;
     public static final int IMAGE_CODE = 2990;
-    public static final int KITKAT_VALUE = 1002;
+//    public static final int KITKAT_VALUE = 1002;
     private static Uri profilePicUri;
     Drawable profilePicDrawable;
     ImageView dpImage, blurredBackImage;
@@ -103,6 +103,8 @@ public class UserProfile extends AppCompatActivity {
         branchSelector = (LinearLayout) findViewById(R.id.branch_selector);
         semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
         classSelector = (LinearLayout) findViewById(R.id.class_selector);
+
+        setNameAndRoll();
 
         //TODO Store the profile pic in shared preference
         //Setting the profile pic
@@ -224,6 +226,13 @@ public class UserProfile extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setNameAndRoll() {
+        if(Login.NAME != null && Login.ENROLL_NO != null)  {
+            name.setText(Login.NAME);
+            roll.setText(Login.ENROLL_NO);
+        }
     }
 
     @Override
