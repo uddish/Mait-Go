@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Crashlytics support
         Fabric.with(this, new Crashlytics());
 
         realm = Realm.getDefaultInstance();
