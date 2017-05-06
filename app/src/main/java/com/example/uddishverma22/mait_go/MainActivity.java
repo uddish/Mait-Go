@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,7 +37,6 @@ import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.Models.TempModel;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
-import com.google.gson.Gson;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -140,7 +138,7 @@ public class MainActivity extends AppCompatActivity
                             thursdayScheduleObject = thursdayScheduleArray.getJSONObject(0);
                             fridayScheduleObject = fridayScheduleArray.getJSONObject(0);
 
-//***************************************************************************************************************************
+//*************************************         Saving data to realm           ***********************************************
                             realm.executeTransactionAsync(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -176,6 +174,7 @@ public class MainActivity extends AppCompatActivity
 
                 result = realm.where(TempModel.class).findAll();
                 ArrayList<TempModel> list = new ArrayList<>(result);        //converting realm list into arraylist
+                Log.d(TAG, "onErrorResponse: List Size " + list.size() + "\n" + list);
 
                 //Offline JSONArray
                 JSONArray monArray = null;

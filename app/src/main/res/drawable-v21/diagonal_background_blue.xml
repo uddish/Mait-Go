@@ -1,16 +1,18 @@
-<layer-list
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/colorPrimary"/>
+    <item
+        android:drawable="@color/colorPrimary"/>
 
-    <item>
+    <item
+        android:id="@+id/diagonal_profile_image">
         <bitmap
             android:src="@drawable/profile"
             android:gravity="center"
             android:alpha="0.1"/>
     </item>
 
-    <item android:top="200dp"
+    <item
+        android:top="200dp"
         android:bottom="-100dp"
         android:left="0dp"
         android:right="-200dp">

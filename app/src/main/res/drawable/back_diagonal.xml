@@ -1,17 +1,11 @@
-<layer-list xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/colorPrimary"/>
-
     <item
-        android:id="@+id/diagonal_profile_image">
-
-        <bitmap android:src="@drawable/profile"
-            android:gravity="center"
-            android:alpha="0.1"/>
-    </item>
-
-    <item android:top="200dp"
+        android:drawable="@color/colorPrimaryTrans"/>
+    <item
+        android:top="200dp"
         android:bottom="-100dp"
         android:left="0dp"
         android:right="-200dp">
@@ -22,8 +16,7 @@
             <shape
                 android:shape="rectangle">
                 <solid
-                    android:color="?android:colorBackground"
-                    tools:targetApi="lollipop" />
+                    android:color="@color/darkBlue"/>
             </shape>
         </rotate>
     </item>
