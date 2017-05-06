@@ -7,9 +7,8 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="190dp"
-        android:layout_margin="5dp"
-        app:contentPadding="5dp">
+        android:layout_height="170dp"
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,19 +47,22 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/sub_tv"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
-                        android:text="Subject" />
+                        android:text="Subject"
+                        android:textColor="@color/darkBlue"/>
 
                     <TextView
-                        android:id="@+id/subject"
+                        android:id="@+id/assign_subject"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="COA" />
+                        android:text="COA"
+                        android:textColor="@color/resolutionBlue"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -70,19 +72,22 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/marks_tv"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
-                        android:text="Marks" />
+                        android:text="Marks"
+                        android:textColor="@color/darkBlue"/>
 
                     <TextView
-                        android:id="@+id/marks"
+                        android:id="@+id/assign_marks"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="10" />
+                        android:text="10"
+                        android:textColor="@color/resolutionBlue"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,19 +97,22 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/teacher_tv"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
-                        android:text="Teacher" />
+                        android:text="Teacher"
+                        android:textColor="@color/darkBlue"/>
 
                     <TextView
-                        android:id="@+id/teacher"
+                        android:id="@+id/assign_teacher"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Mr. Uddish" />
+                        android:text="Mr. Uddish"
+                        android:textColor="@color/resolutionBlue"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,19 +122,22 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lastdate_tv"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
-                        android:text="Last Date" />
+                        android:text="Last Date"
+                        android:textColor="@color/darkBlue"/>
 
                     <TextView
-                        android:id="@+id/lastdate"
+                        android:id="@+id/assign_lastdate"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="20/05/17" />
+                        android:text="20/05/17"
+                        android:textColor="@color/resolutionBlue"/>
                 </LinearLayout>
 
             </LinearLayout>

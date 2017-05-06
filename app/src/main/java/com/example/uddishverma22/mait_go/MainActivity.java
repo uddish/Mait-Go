@@ -28,6 +28,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
 import com.example.uddishverma22.mait_go.Activities.Announcements;
+import com.example.uddishverma22.mait_go.Activities.Assignments;
 import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Activities.Login;
 import com.example.uddishverma22.mait_go.Activities.Notices;
@@ -397,7 +398,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             startActivity(new Intent(this, Announcements.class));
-
+        } else if(id == R.id.assignment)    {
+            startActivity(new Intent(this, Assignments.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
