@@ -254,7 +254,7 @@ public class UserProfile extends AppCompatActivity {
                 //Bitmap layer2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), profilePicUri);
 //                Drawable layer1 = getResources().getDrawable( R.drawable.layer_one);
 //                Drawable layer2 = getResources().getDrawable( R.drawable.profile);
-//                Drawable layer3 = getResources().getDrawable( R.drawable.back_diagonal);
+//                Drawable layer3 = getResources().getDrawable( R.drawable.diagonal_background);
 //                Drawable[] layers = {layer1, layer2, layer3};
 //                LayerDrawable splash_test = new LayerDrawable(layers);
 //                diagonalLayout.setBackground(splash_test);
