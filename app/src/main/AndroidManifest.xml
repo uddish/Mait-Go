@@ -3,8 +3,8 @@
     package="com.example.uddishverma22.mait_go">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
 
     <application
         android:name=".Utils.RealmStarter"
@@ -24,6 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="56844c04f3322c63da5e3cde103324db6365f674" />
+
         <activity android:name=".Activities.Notices" />
         <activity android:name=".Activities.NoticeWebView" />
         <activity android:name=".Activities.UserProfile" />

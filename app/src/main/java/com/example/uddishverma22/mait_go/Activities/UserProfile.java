@@ -1,19 +1,14 @@
 package com.example.uddishverma22.mait_go.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,10 +75,6 @@ public class UserProfile extends AppCompatActivity {
     TextView classAlertHeading;
     ImageView classImg;                            //tv and et for the popup class menu
 
-
-    /**
-     * YELLOW -> 101
-     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,19 +162,23 @@ public class UserProfile extends AppCompatActivity {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-
-                if (Build.VERSION.SDK_INT < 19) {
-                    intent = new Intent();
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    intent.setType("*/*");
-                    startActivityForResult(intent, KITKAT_VALUE);
-                } else {
-                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    startActivityForResult(intent, KITKAT_VALUE);
-                }
+//                Intent intent;
+//
+//                if (Build.VERSION.SDK_INT < 19) {
+//                    intent = new Intent();
+//                    intent.setAction(Intent.ACTION_GET_CONTENT);
+//                    intent.setType("*/*");
+//                    startActivityForResult(intent, KITKAT_VALUE);
+//                } else {
+//                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                    intent.setType("*/*");
+//                    startActivityForResult(intent, KITKAT_VALUE);
+//                }
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_CODE);
 
             }
         });
@@ -235,32 +230,19 @@ public class UserProfile extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == KITKAT_VALUE) {
-            if (resultCode == Activity.RESULT_OK) {
-                profilePicUri = data.getData();
-                Picasso.with(this).load(profilePicUri).into(profileImage);
-                //Getting screen's width and height
-                display.getSize(size);
-                int width = size.x;
-                int height = size.y;
-
-                Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
-
-//                Drawable img = getDrawableFromUri();
-//                Resources res = getApplicationContext().getResources();
-//                LayerDrawable mDrawable = (LayerDrawable) res.getDrawable(R.drawable.diagonal_background_blue);
-//                mDrawable.setDrawableByLayerId(R.id.diagonal_profile_image, img);
-//                diagonalLayout.setBackground(mDrawable);
-                //Bitmap layer2 = MediaStore.Images.Media.getBitmap(this.getContentResolver(), profilePicUri);
-//                Drawable layer1 = getResources().getDrawable( R.drawable.layer_one);
-//                Drawable layer2 = getResources().getDrawable( R.drawable.profile);
-//                Drawable layer3 = getResources().getDrawable( R.drawable.diagonal_background);
-//                Drawable[] layers = {layer1, layer2, layer3};
-//                LayerDrawable splash_test = new LayerDrawable(layers);
-//                diagonalLayout.setBackground(splash_test);
-
-            }
-        }
+//        if (requestCode == KITKAT_VALUE) {
+//            if (resultCode == Activity.RESULT_OK) {
+//                profilePicUri = data.getData();
+//                Picasso.with(this).load(profilePicUri).into(profileImage);
+//
+//                //Getting screen's width and height
+//                display.getSize(size);
+//                int width = size.x;
+//                int height = size.y;
+//                Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
+//
+//            }
+//        }
         if (requestCode == IMAGE_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             profilePicUri = data.getData();
             Picasso.with(this).load(profilePicUri).into(profileImage);
@@ -273,6 +255,7 @@ public class UserProfile extends AppCompatActivity {
         }
     }
 
+    //Creating a drawable from the image's Uri
     private Drawable getDrawableFromUri() {
         try {
             InputStream stream = getContentResolver().openInputStream(profilePicUri);
