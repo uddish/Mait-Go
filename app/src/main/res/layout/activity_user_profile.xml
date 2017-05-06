@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/background_layout"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background_layout"
     android:layout_width="match_parent"
-    android:background="@color/darkBlue"
     android:layout_height="match_parent"
+    android:background="@color/darkBlue"
     android:orientation="vertical"
     tools:context="com.example.uddishverma22.mait_go.Activities.UserProfile">
 
@@ -17,8 +17,17 @@
         <RelativeLayout
             android:id="@+id/diagonal_view"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:background="@drawable/diagonal_background_blue">
+            android:layout_height="260dp">
+            <ImageView
+                android:id="@+id/profile_blur_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/profile"
+                android:scaleType="center"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/back_diagonal"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleImageView"
@@ -86,157 +95,162 @@
 
             <LinearLayout
                 android:id="@+id/outline_box"
-                android:layout_marginTop="5dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
                 android:layout_width="match_parent"
-                android:background="@drawable/custom_box_blue"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="15dp"
+                android:background="@drawable/custom_box_blue"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
 
-                    <LinearLayout
-                        android:id="@+id/branch_selector"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/branch_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="IT"
-                            android:textColor="#fff"
-                            android:padding="5dp"
-                            android:textSize="30sp"
-                            android:textAppearance="?android:textAppearanceLarge"
-                            android:gravity="center"/>
-                        <TextView
-                            android:id="@+id/branch_heading"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Branch"
-                            android:textColor="#fff"
-                            android:gravity="center"
-                            android:textAppearance="?android:textAppearanceSmall"/>
-                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/branch_selector"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/branch_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="IT"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textColor="#fff"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/branch_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Branch"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="#fff" />
+                </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#fff"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
-                    android:layout_gravity="center"/>
+                    android:layout_marginTop="10dp"
+                    android:background="#fff" />
 
-                    <LinearLayout
-                        android:id="@+id/semester_selector"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/semester_tv"
-                            android:padding="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="IV"
-                            android:textColor="#fff"
-                            android:textSize="30sp"
-                            android:textAppearance="?android:textAppearanceLarge"
-                            android:gravity="center"/>
-                        <TextView
-                            android:id="@+id/semester_heading"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Semester"
-                            android:textColor="#fff"
-                            android:gravity="center"
-                            android:textAppearance="?android:textAppearanceSmall"/>
+                <LinearLayout
+                    android:id="@+id/semester_selector"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/semester_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="IV"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textColor="#fff"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/semester_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Semester"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="#fff" />
+
+                </LinearLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="#fff"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
-                    android:layout_gravity="center"/>
+                    android:layout_marginTop="10dp"
+                    android:background="#fff" />
 
-                    <LinearLayout
-                        android:id="@+id/class_selector"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/class_selector"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/class_tv"
-                            android:padding="5dp"
-                            android:layout_width="match_parent"
-                            android:textColor="#fff"
-                            android:layout_height="wrap_content"
-                            android:text="I-4"
-                            android:textSize="30sp"
-                            android:gravity="center"/>
-                        <TextView
-                            android:id="@+id/class_heading"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Class"
-                            android:textColor="#fff"
-                            android:gravity="center"
-                            android:textAppearance="?android:textAppearanceSmall"/>
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/class_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="I-4"
+                        android:textColor="#fff"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/class_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Class"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="#fff" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
             <ImageView
-                android:padding="7dp"
                 android:id="@+id/orange_theme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="7dp"
                 android:src="@drawable/yellow_theme_selector" />
 
             <ImageView
-                android:padding="7dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="7dp"
                 android:src="@drawable/green_theme_selector" />
 
             <ImageView
-                android:padding="7dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="7dp"
                 android:src="@drawable/purple_theme_selector" />
 
             <ImageView
-                android:padding="7dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="7dp"
                 android:src="@drawable/blue_theme_selector" />
         </LinearLayout>
 
 
         <!--<ImageView-->
-            <!--android:padding="30dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:id="@+id/barcode_img"-->
-            <!--android:layout_margin="30dp"-->
-            <!--android:layout_width="350dp"-->
-            <!--android:layout_height="200dp"-->
-            <!--android:background="@drawable/temp_drawable"/>-->
+        <!--android:padding="30dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:id="@+id/barcode_img"-->
+        <!--android:layout_margin="30dp"-->
+        <!--android:layout_width="350dp"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:background="@drawable/temp_drawable"/>-->
 
         <RelativeLayout
             android:id="@+id/barcode_background"
@@ -249,40 +263,41 @@
                 android:id="@+id/left_ticket_circle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:scaleType="fitXY"
-                android:background="@drawable/ticket_circle_blue"
-                android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_alignParentLeft="true"
+                android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginTop="75dp"
-                android:elevation="3dp"/>
+                android:background="@drawable/ticket_circle_blue"
+                android:elevation="3dp"
+                android:scaleType="fitXY" />
+
             <ImageView
                 android:id="@+id/right_ticket_circle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:scaleType="fitXY"
-                android:background="@drawable/ticket_circle_blue"
-                android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginTop="75dp"
-                android:elevation="3dp"/>
+                android:background="@drawable/ticket_circle_blue"
+                android:elevation="3dp"
+                android:scaleType="fitXY" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_margin="30dp"
                 android:layout_gravity="center"
+                android:layout_margin="30dp"
                 app:cardBackgroundColor="#fff"
                 app:cardCornerRadius="4dp">
 
                 <ImageView
-                    android:padding="20dp"
                     android:id="@+id/barcode_img"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:padding="20dp" />
 
             </android.support.v7.widget.CardView>
         </RelativeLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </ScrollView>

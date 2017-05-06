@@ -3,7 +3,7 @@
 
     <item android:drawable="@color/yellow"/>
 
-    <item>
+    <item android:id="@+id/profile_img">
         <bitmap
             android:src="@drawable/profile"
             android:gravity="center"
