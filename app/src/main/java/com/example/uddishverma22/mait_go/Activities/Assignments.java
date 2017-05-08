@@ -16,6 +16,7 @@ import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,8 @@ public class Assignments extends AppCompatActivity {
     JSONObject object;
     AssignmentModel assignmentObj;
 
+    AVLoadingIndicatorView indicatorView;
+
     public List<AssignmentModel> assignmentList = new ArrayList<>();
     public RecyclerView recyclerView;
     public AssignmentAdapter assignmentAdapter;
@@ -43,12 +46,16 @@ public class Assignments extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView.show();
+
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        indicatorView.hide();
                         Log.d(TAG, "onResponse: " + response);
                         try {
                             for (int i = 0; i < response.length(); i++) {
