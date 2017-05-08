@@ -18,6 +18,7 @@ import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.Models.UpcomingEventsModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,8 @@ public class UpcomingEvents extends AppCompatActivity {
     JSONObject object;
     UpcomingEventsModel eventsModel;
 
+    AVLoadingIndicatorView indicatorView;
+
     private List<UpcomingEventsModel> eventsList = new ArrayList<>();
     private RecyclerView recyclerView;
     private UpcomingEventsAdapter eventsAdapter;
@@ -43,6 +46,8 @@ public class UpcomingEvents extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.event_recycler_view);
 
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView.show();
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -50,6 +55,7 @@ public class UpcomingEvents extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        indicatorView.hide();
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 object = response.getJSONObject(i);
