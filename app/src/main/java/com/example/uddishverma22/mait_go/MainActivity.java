@@ -33,6 +33,7 @@ import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Activities.Login;
 import com.example.uddishverma22.mait_go.Activities.Notices;
 import com.example.uddishverma22.mait_go.Activities.Result;
+import com.example.uddishverma22.mait_go.Activities.UpcomingEvents;
 import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
@@ -400,6 +401,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, Announcements.class));
         } else if(id == R.id.assignment)    {
             startActivity(new Intent(this, Assignments.class));
+        } else if(id == R.id.events)    {
+            startActivity(new Intent(this, UpcomingEvents.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

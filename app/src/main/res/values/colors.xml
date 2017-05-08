@@ -22,5 +22,7 @@
     <color name="white">#ffffff</color>
     <color name="toryBlue">#3D5392</color>
     <color name="resolutionBlue">#2B386F</color>
+    <color name="whiteTrans">#25ffffff</color>
+    <color name="blackTrans">#90000000</color>
 
 </resources>
