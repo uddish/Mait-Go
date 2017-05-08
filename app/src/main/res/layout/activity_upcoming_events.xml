@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/toryBlue"
     android:layout_height="match_parent"
-    tools:context="com.example.uddishverma22.mait_go.Activities.Assignments">
-
-
+    android:background="@color/darkBlue"
+    tools:context="com.example.uddishverma22.mait_go.Activities.UpcomingEvents">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/event_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"/>
 
-</RelativeLayout>
+</LinearLayout>

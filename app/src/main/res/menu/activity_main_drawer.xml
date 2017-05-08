@@ -30,6 +30,10 @@
             android:id="@+id/assignment"
             android:icon="@drawable/ic_menu_send"
             android:title="Assignments" />
+        <item
+            android:id="@+id/events"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Events" />
     </group>
 
     <!--<item android:title="Communicate">-->

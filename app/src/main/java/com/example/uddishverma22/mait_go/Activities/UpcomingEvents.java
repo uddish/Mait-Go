@@ -13,7 +13,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.uddishverma22.mait_go.Adapters.AssignmentAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
+import com.example.uddishverma22.mait_go.Adapters.UpcomingEventsAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
+import com.example.uddishverma22.mait_go.Models.UpcomingEventsModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 
@@ -24,24 +26,23 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Assignments extends AppCompatActivity {
+public class UpcomingEvents extends AppCompatActivity {
 
-    public static final String TAG = "Assignment";
-
-    String url = "https://agile-hamlet-82527.herokuapp.com/assignment/4I4";
+    String url = "https://agile-hamlet-82527.herokuapp.com/upcoming";
     JSONObject object;
-    AssignmentModel assignmentObj;
+    UpcomingEventsModel eventsModel;
 
-    public List<AssignmentModel> assignmentList = new ArrayList<>();
-    public RecyclerView recyclerView;
-    public AssignmentAdapter assignmentAdapter;
+    private List<UpcomingEventsModel> eventsList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private UpcomingEventsAdapter eventsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assignments);
+        setContentView(R.layout.activity_upcoming_events);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) findViewById(R.id.event_recycler_view);
+
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -49,34 +50,37 @@ public class Assignments extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, "onResponse: " + response);
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 object = response.getJSONObject(i);
-                                assignmentObj = new AssignmentModel();
-                                assignmentObj.teacher = object.getString("name");
-                                assignmentObj.subject = object.getString("subject");
-                                assignmentObj.imageUrl = object.getString("files");
-                                assignmentObj.marks = object.getString("marks");
-                                assignmentObj.lastdate = object.getString("last");
-                                assignmentList.add(assignmentObj);
+                                eventsModel = new UpcomingEventsModel();
+                                eventsModel.eventName = object.getString("eventName");
+                                eventsModel.eventDate = object.getString("eventDate");
+                                eventsModel.organiserEmail = object.getString("organiserEmail");
+                                eventsModel.organiser = object.getString("organiser");
+                                eventsModel.organiserNumber = object.getString("organiserNumber");
+                                eventsModel.regisFee = object.getString("regisFee");
+                                eventsModel.society = object.getString("society");
+                                eventsModel.imageUrl = object.getString("imageUrl");
+                                eventsList.add(eventsModel);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        assignmentAdapter = new AssignmentAdapter(assignmentList);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Assignments.this);
+                        eventsAdapter = new UpcomingEventsAdapter(eventsList);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(UpcomingEvents.this, LinearLayoutManager.HORIZONTAL, false);
                         recyclerView.setLayoutManager(mLayoutManager);
-                        recyclerView.setAdapter(assignmentAdapter);
+                        recyclerView.setAdapter(eventsAdapter);
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "onErrorResponse: " + error.toString());
             }
         });
         queue.add(request);
+
 
     }
 }
