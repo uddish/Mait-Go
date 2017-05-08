@@ -41,7 +41,8 @@
         <activity android:name=".Activities.Announcements" />
         <activity android:name=".Activities.Assignments" />
         <activity android:name=".Activities.UpcomingEvents" />
-        <activity android:name=".Activities.AssignmentImageViewer"></activity>
+        <activity android:name=".Activities.AssignmentImageViewer" />
+        <activity android:name=".Activities.EventsDetailsPage"></activity>
     </application>
 
 </manifest>

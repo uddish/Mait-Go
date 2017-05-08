@@ -1,10 +1,12 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +19,7 @@ import com.example.uddishverma22.mait_go.Adapters.UpcomingEventsAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.Models.UpcomingEventsModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -48,6 +51,30 @@ public class UpcomingEvents extends AppCompatActivity {
 
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        UpcomingEventsModel eventsModel = eventsList.get(position);
+                        Intent i = new Intent(getApplicationContext(), EventsDetailsPage.class);
+                        i.putExtra("imageUrl", eventsModel.imageUrl);
+                        i.putExtra("eventName", eventsModel.eventName);
+                        i.putExtra("organiser", eventsModel.organiser);
+                        i.putExtra("email", eventsModel.organiserEmail);
+                        i.putExtra("number", eventsModel.organiserNumber);
+                        i.putExtra("fee", eventsModel.regisFee);
+                        i.putExtra("society", eventsModel.society);
+                        i.putExtra("date", eventsModel.eventDate);
+                        startActivity(i);
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                }));
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
