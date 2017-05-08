@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.R;
 
-//TODO Handle all the broken links
 public class NoticeWebView extends AppCompatActivity {
 
     WebView webView;

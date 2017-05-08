@@ -40,7 +40,8 @@
         <activity android:name=".Activities.FacultyInformation" />
         <activity android:name=".Activities.Announcements" />
         <activity android:name=".Activities.Assignments" />
-        <activity android:name=".Activities.UpcomingEvents"></activity>
+        <activity android:name=".Activities.UpcomingEvents" />
+        <activity android:name=".Activities.AssignmentImageViewer"></activity>
     </application>
 
 </manifest>

@@ -1,10 +1,12 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +17,7 @@ import com.example.uddishverma22.mait_go.Adapters.AssignmentAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -49,6 +52,23 @@ public class Assignments extends AppCompatActivity {
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        AssignmentModel assignment = assignmentList.get(position);
+                        Intent i = new Intent(getApplicationContext(), AssignmentImageViewer.class);
+                        i.putExtra("imageUrl", assignment.imageUrl);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+                })
+        );
+
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -66,6 +86,8 @@ public class Assignments extends AppCompatActivity {
                                 assignmentObj.imageUrl = object.getString("files");
                                 assignmentObj.marks = object.getString("marks");
                                 assignmentObj.lastdate = object.getString("last");
+                                assignmentObj.imageUrl = object.getJSONArray("files").getString(0);
+                                Log.d(TAG, "onResponse: Image Url " + assignmentObj.imageUrl);
                                 assignmentList.add(assignmentObj);
                             }
                         } catch (JSONException e) {
