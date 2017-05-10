@@ -145,13 +145,15 @@ public class Result extends AppCompatActivity {
                 avi.hide();
                 results = realm.where(ResultModel.class).findAll();
                 //setting percentage in the CircleView
-                mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
-                Log.d(TAG, "onErrorResponse: percentage " + results.get(1).percentage);
-                Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size() +  "\n" + results);
-                resultAdapter = new ResultAdapter(results);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
-                recyclerView.setLayoutManager(mLayoutManager);
-                recyclerView.setAdapter(resultAdapter);
+                if(results.size() != 0) {
+                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
+                    Log.d(TAG, "onErrorResponse: percentage " + results.get(1).percentage);
+                    Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size() + "\n" + results);
+                    resultAdapter = new ResultAdapter(results);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setAdapter(resultAdapter);
+                }
                 //If internet connectivity is not available
                 // Showing data from the realm database
 
