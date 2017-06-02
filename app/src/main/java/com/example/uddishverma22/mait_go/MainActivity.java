@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final String TAG = "MainActivity";
 
-    String url = "https://agile-hamlet-82527.herokuapp.com/timetable/4I4";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/timetable/4I4";
 
     private static int IS_NET_AVAIL = 2000;
 

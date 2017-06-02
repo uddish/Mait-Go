@@ -46,7 +46,8 @@ public class FacultyInformation extends AppCompatActivity {
     ArrayList<Faculty> itFacList = new ArrayList<>();
     ArrayList<Faculty> cseFacList = new ArrayList<>();
 
-    String url = "https://agile-hamlet-82527.herokuapp.com/faculty";
+    //TODO endpoint is wrong
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/faculty";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

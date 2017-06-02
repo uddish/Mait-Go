@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,6 +33,7 @@ import java.util.List;
 
 public class UpcomingEvents extends AppCompatActivity {
 
+    //TODO change endpoint
     String url = "https://agile-hamlet-82527.herokuapp.com/upcoming";
     JSONObject object;
     UpcomingEventsModel eventsModel;
@@ -83,6 +85,7 @@ public class UpcomingEvents extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         indicatorView.hide();
+                        Toast.makeText(UpcomingEvents.this, "Click to expand", Toast.LENGTH_SHORT).show();
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 object = response.getJSONObject(i);
