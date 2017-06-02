@@ -32,7 +32,7 @@ public class Assignments extends AppCompatActivity {
 
     public static final String TAG = "Assignment";
 
-    String url = "https://agile-hamlet-82527.herokuapp.com/assignment/4I4";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/assignment/4I4";
     JSONObject object;
     AssignmentModel assignmentObj;
 

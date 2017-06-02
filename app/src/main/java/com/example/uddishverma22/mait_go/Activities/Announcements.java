@@ -28,7 +28,7 @@ public class Announcements extends AppCompatActivity {
 
     public static final String TAG = "Announcements";
 
-    String url = "https://agile-hamlet-82527.herokuapp.com/announcement/4I4";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/announcement/4I4";
     JSONObject object;
     ClassAnnouncementsModel announcement;
     public ArrayList<ClassAnnouncementsModel> list = new ArrayList<>();
