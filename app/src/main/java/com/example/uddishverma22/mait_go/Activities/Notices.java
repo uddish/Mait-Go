@@ -44,7 +44,7 @@ import io.realm.RealmResults;
 
 public class Notices extends AppCompatActivity {
 
-    String url = "https://agile-hamlet-82527.herokuapp.com/scrape/notices";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/noticesi";
     JSONObject object;
     Notice noticeObj;
 
