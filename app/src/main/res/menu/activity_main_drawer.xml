@@ -1,52 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_notices"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Notices" />
+            android:title="Notices"/>
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_gallery"
             android:title="Profile" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
             android:title="Result" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
             android:title="Login" />
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_share"
             android:title="Faculty" />
         <item
             android:id="@+id/nav_send"
-            android:icon="@drawable/ic_menu_send"
             android:title="Announcements" />
         <item
             android:id="@+id/assignment"
-            android:icon="@drawable/ic_menu_send"
             android:title="Assignments" />
         <item
             android:id="@+id/events"
-            android:icon="@drawable/ic_menu_send"
             android:title="Events" />
     </group>
-
-    <!--<item android:title="Communicate">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_share"-->
-                <!--android:icon="@drawable/ic_menu_share"-->
-                <!--android:title="Faculty" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Announcements" />-->
-        <!--</menu>-->
-    <!--</item>-->
 
 </menu>
