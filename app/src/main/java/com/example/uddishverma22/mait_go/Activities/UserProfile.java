@@ -213,19 +213,19 @@ public class UserProfile extends AppCompatActivity {
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
         name.setTypeface(tf);
 
-        orangeThemeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                themeColor = 101;
-                diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
-                backgroundLayout.setBackgroundResource(R.color.darkYellow);
-                outlineBox.setBackgroundResource(R.drawable.custom_box_yell);
-//                leftCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
-//                rightCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
-//                barcodeBackground.setBackgroundResource(R.color.darkYellow);
-
-            }
-        });
+//        orangeThemeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                themeColor = 101;
+//                diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
+//                backgroundLayout.setBackgroundResource(R.color.darkYellow);
+//                outlineBox.setBackgroundResource(R.drawable.custom_box_yell);
+////                leftCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
+////                rightCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
+////                barcodeBackground.setBackgroundResource(R.color.darkYellow);
+//
+//            }
+//        });
     }
 
     private void setNameAndRoll() {

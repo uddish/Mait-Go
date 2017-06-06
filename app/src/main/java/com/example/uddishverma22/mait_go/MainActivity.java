@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
-        //TODO complete this request
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -436,7 +435,6 @@ public class MainActivity extends AppCompatActivity
         return dayOfTheWeek;
     }
 
-    //TODO still not working properly
     private void attachDateToDays() {
         String dt = currentDate;
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");

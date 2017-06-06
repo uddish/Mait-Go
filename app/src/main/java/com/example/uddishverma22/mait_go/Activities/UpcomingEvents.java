@@ -34,7 +34,7 @@ import java.util.List;
 public class UpcomingEvents extends AppCompatActivity {
 
     //TODO change endpoint
-    String url = "https://agile-hamlet-82527.herokuapp.com/upcoming";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/upcoming";
     JSONObject object;
     UpcomingEventsModel eventsModel;
 
