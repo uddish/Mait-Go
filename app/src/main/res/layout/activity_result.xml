@@ -9,7 +9,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_result"
-        android:background="@drawable/orange_gradient"
+        android:background="@drawable/blue_gradient"
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:fitsSystemWindows="true"
@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             CircleProgressView:expandedTitleTextAppearance="?android:textAppearanceLarge"
             CircleProgressView:collapsedTitleTextAppearance="?android:textAppearanceMedium"
-            CircleProgressView:contentScrim="@color/darkYellow"
+            CircleProgressView:contentScrim="@color/toryBlue"
             CircleProgressView:expandedTitleMarginEnd="64dp"
             CircleProgressView:expandedTitleMarginStart="28dp"
             CircleProgressView:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -59,6 +59,7 @@
                 CircleProgressView:cpv_value="0"
                 CircleProgressView:layout_collapseMode="parallax"
                 android:fitsSystemWindows="true"/>
+
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
@@ -80,7 +81,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:visibility="visible"
-    CircleProgressView:indicatorColor="@color/darkYellow"
+    CircleProgressView:indicatorColor="@color/resolutionBlue"
     CircleProgressView:indicatorName="BallClipRotatePulseIndicator" />
 
 
