@@ -30,7 +30,6 @@ public class UpcomingEventsAdapter extends RecyclerView.Adapter<UpcomingEventsAd
 
         ImageView image;
         TextView name, date, society, organiser, organiserTitle, societyTitle;
-//        FloatingActionButton nextFab;
 
         public detailsViewHolder(View itemView) {
             super(itemView);
@@ -38,7 +37,6 @@ public class UpcomingEventsAdapter extends RecyclerView.Adapter<UpcomingEventsAd
             name = (TextView) itemView.findViewById(R.id.event_name);
             society = (TextView) itemView.findViewById(R.id.society);
             date = (TextView) itemView.findViewById(R.id.event_date);
-//            nextFab = (FloatingActionButton) itemView.findViewById(R.id.next_fab);
             organiser = (TextView) itemView.findViewById(R.id.organiser);
             organiserTitle = (TextView) itemView.findViewById(R.id.oraniser_head);
             societyTitle = (TextView) itemView.findViewById(R.id.society_head);

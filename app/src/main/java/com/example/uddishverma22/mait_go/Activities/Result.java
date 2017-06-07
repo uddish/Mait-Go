@@ -1,11 +1,13 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.graphics.Typeface;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +42,8 @@ public class Result extends AppCompatActivity {
 
     CircleProgressView mCircleView;
 
+    TextView cgpaTv, creditPercTv, cgpaTitle, creditPercTitle;
+
     CollapsingToolbarLayout collapsingToolbar;
 
     AVLoadingIndicatorView avi;
@@ -67,6 +71,19 @@ public class Result extends AppCompatActivity {
 
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
 
+        cgpaTv = (TextView) findViewById(R.id.cgpa);
+        cgpaTitle = (TextView) findViewById(R.id.cgpa_heading);
+        creditPercTv = (TextView) findViewById(R.id.credit_perc);
+        creditPercTitle = (TextView) findViewById(R.id.creditp_heading);
+
+        Typeface tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Thin.ttf");
+        Typeface tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Light.ttf");
+
+        cgpaTv.setTypeface(tfThin);
+        cgpaTitle.setTypeface(tfLight);
+        creditPercTv.setTypeface(tfThin);
+        creditPercTitle.setTypeface(tfLight);
+
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
 
@@ -80,8 +97,20 @@ public class Result extends AppCompatActivity {
                             avi.hide();
                             JSONArray jsonArray = response.getJSONArray("marks");
                             percentage = String.valueOf((int) response.get("percentage"));
-                            //Setting the percentage in the circleView
+
+                            //converting perc and gpa upto 2 decimal places
+                            double creditp = (double) response.get("creditp");
+                            double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
+                            double gpa = (double) response.get("gpa");
+                            double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
+
+                            cgpaTv.setText(String.valueOf(roundOffGpa));
+                            creditPercTv.setText(String.valueOf(roundOffPerc) + "%");
+
+                            //Setting the percentage in the circleView and the cgpa and creditPercentage
                             mCircleView.setValueAnimated(Float.parseFloat(percentage));
+
+
                             for (int i = 0; i < jsonArray.length(); i++) {
 
                                 jsonObject = jsonArray.getJSONObject(i);
