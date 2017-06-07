@@ -55,6 +55,13 @@ public class EventsDetailsPage extends AppCompatActivity {
             society.setText(i.getStringExtra("society"));
         }
 
+        eventImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
         bottomSheet = (NestedScrollView) findViewById(R.id.bottom_sheet);
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
