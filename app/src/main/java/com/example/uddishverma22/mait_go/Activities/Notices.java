@@ -44,7 +44,7 @@ import io.realm.RealmResults;
 
 public class Notices extends AppCompatActivity {
 
-    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/noticesi";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/notices";
     JSONObject object;
     Notice noticeObj;
 
@@ -86,6 +86,7 @@ public class Notices extends AppCompatActivity {
 
                     @Override
                     public void onItemClick(View view, int position) {
+                        Toast.makeText(Notices.this, "" + IS_INTERNET_AVAILABLE, Toast.LENGTH_SHORT).show();
                         if(IS_INTERNET_AVAILABLE == 2009) {
                             Notice notice = noticeList.get(position);
                             Intent i = new Intent(getApplicationContext(), NoticeWebView.class);

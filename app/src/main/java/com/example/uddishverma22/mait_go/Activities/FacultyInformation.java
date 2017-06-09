@@ -46,8 +46,7 @@ public class FacultyInformation extends AppCompatActivity {
     ArrayList<Faculty> itFacList = new ArrayList<>();
     ArrayList<Faculty> cseFacList = new ArrayList<>();
 
-    //TODO endpoint is wrong
-    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/faculty";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/faculty";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
