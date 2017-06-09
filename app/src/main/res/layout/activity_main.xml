@@ -28,10 +28,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:backgroundTint="@color/darkBlue"
+        android:background="@drawable/blue_gradient"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"
         app:itemTextColor="@color/white"
-        app:itemTextAppearance="?android:textAppearanceMedium"/>
+        app:itemTextAppearance="?android:textAppearanceMedium"
+        app:itemIconTint="@color/white"/>
 
 </android.support.v4.widget.DrawerLayout>

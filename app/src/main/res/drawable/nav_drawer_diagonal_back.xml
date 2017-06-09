@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/toryBlue"/>
+        android:drawable="@color/darkBlue"/>
     <item
         android:top="200dp"
         android:bottom="-100dp"
@@ -16,7 +16,7 @@
             <shape
                 android:shape="rectangle">
                 <solid
-                    android:color="@color/white"/>
+                    android:color="@color/toryBlue"/>
             </shape>
         </rotate>
     </item>

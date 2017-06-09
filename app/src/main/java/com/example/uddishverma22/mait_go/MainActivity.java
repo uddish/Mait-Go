@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                             }, new Realm.Transaction.OnSuccess() {
                                 @Override
                                 public void onSuccess() {
-                                    Toast.makeText(MainActivity.this, "Object saved", Toast.LENGTH_SHORT).show();
+                                    Log.d(TAG, "onSuccess: Realm Object Saved");
                                 }
                             }, new Realm.Transaction.OnError() {
                                 @Override
@@ -339,16 +339,22 @@ public class MainActivity extends AppCompatActivity
 //        gradAnim.setExitFadeDuration(2000);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         toggle.setDrawerIndicatorEnabled(false);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
 
         ColorStateList csl = AppCompatResources.getColorStateList(this, R.color.white);
-        Drawable drawableone = getResources().getDrawable(R.drawable.navicon);
+        Drawable drawableone = getResources().getDrawable(R.drawable.hamburger_icon);
         DrawableCompat.setTintList(drawableone, csl);
         toolbar.setNavigationIcon(drawableone);
 
