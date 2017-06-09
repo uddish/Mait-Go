@@ -39,7 +39,7 @@ public class CustomNavDrawer extends Fragment {
         assignLayout = (LinearLayout) view.findViewById(R.id.assignment_ll);
         eventsLayout = (LinearLayout) view.findViewById(R.id.events_ll);
         facultyLayout = (LinearLayout) view.findViewById(R.id.faculty_ll);
-        logoutBtn = (CircleImageView) view.findViewById(R.id.logout);
+//        logoutBtn = (CircleImageView) view.findViewById(R.id.logout);
 
         return view;
     }
