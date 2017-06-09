@@ -1,9 +1,14 @@
 package com.example.uddishverma22.mait_go;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -187,7 +192,7 @@ public class MainActivity extends AppCompatActivity
                 JSONArray wedArray = null;
                 JSONArray thursArray = null;
                 JSONArray friArray = null;
-                if(list.size() != 0) {
+                if (list.size() != 0) {
                     try {
                         monArray = new JSONArray(list.get(0).getMonday());
                         tuesArray = new JSONArray(list.get(0).getTuesday());
@@ -206,8 +211,7 @@ public class MainActivity extends AppCompatActivity
                         e.printStackTrace();
                     }
                     mondayScheduleFunction();
-                }
-                else    {
+                } else {
                     Toast.makeText(MainActivity.this, "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
                 }
 
@@ -336,10 +340,23 @@ public class MainActivity extends AppCompatActivity
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        toggle.setDrawerIndicatorEnabled(false);
+
+        ColorStateList csl = AppCompatResources.getColorStateList(this, R.color.white);
+        Drawable drawableone = getResources().getDrawable(R.drawable.navicon);
+        DrawableCompat.setTintList(drawableone, csl);
+        toolbar.setNavigationIcon(drawableone);
+
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -398,9 +415,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             startActivity(new Intent(this, Announcements.class));
-        } else if(id == R.id.assignment)    {
+        } else if (id == R.id.assignment) {
             startActivity(new Intent(this, Assignments.class));
-        } else if(id == R.id.events)    {
+        } else if (id == R.id.events) {
             startActivity(new Intent(this, UpcomingEvents.class));
         }
 
