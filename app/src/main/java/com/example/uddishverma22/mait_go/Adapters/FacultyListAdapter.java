@@ -25,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.detailsViewHolder>{
 
     List<Faculty> facultyList;
-    String imageUrl = "https://agile-hamlet-82527.herokuapp.com/";
+    String imageUrl = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/";
 
     public static final String TAG = "FacultyListAdapter";
 
