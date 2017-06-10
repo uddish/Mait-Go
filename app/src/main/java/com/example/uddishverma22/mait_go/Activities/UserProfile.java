@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -50,12 +53,13 @@ public class UserProfile extends AppCompatActivity {
     //Components to change image in the profile page
     CircleImageView profileImage;
     public static final int IMAGE_CODE = 2990;
-//    public static final int KITKAT_VALUE = 1002;
+    //    public static final int KITKAT_VALUE = 1002;
     private static Uri profilePicUri;
     Drawable profilePicDrawable;
     ImageView dpImage, blurredBackImage;
     Display display;
     Point size;
+    String studentPicPath;
 
     //barcode ticket components
     ImageView leftCircle, rightCircle, barcodeImg;
@@ -104,20 +108,20 @@ public class UserProfile extends AppCompatActivity {
         semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
         classSelector = (LinearLayout) findViewById(R.id.class_selector);
 
-        setNameAndRoll();
+        setStudentDetails();
 
-        //TODO Store the profile pic in shared preference
         //Setting the profile pic
-        if (profilePicUri != null) {
-            Picasso.with(this).load(profilePicUri).into(profileImage);
-            Picasso.with(this).load(profilePicUri).into(blurredBackImage);
+        studentPicPath = Preferences.getPrefs("studentImage", getApplicationContext());
+        if (!studentPicPath.equals("notfound")) {
+            Log.d(TAG, "onCreate: Profile Pic inside LOOP " + studentPicPath);
+            Picasso.with(this).load(studentPicPath).into(profileImage);
 
             //Getting screen's width and height
             display.getSize(size);
             int width = size.x;
             int height = size.y;
 
-            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
+            Picasso.with(this).load(studentPicPath).resize(width, 1000).centerCrop().into(blurredBackImage);
 
         }
 
@@ -213,25 +217,16 @@ public class UserProfile extends AppCompatActivity {
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
         name.setTypeface(tf);
 
-//        orangeThemeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                themeColor = 101;
-//                diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
-//                backgroundLayout.setBackgroundResource(R.color.darkYellow);
-//                outlineBox.setBackgroundResource(R.drawable.custom_box_yell);
-////                leftCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
-////                rightCircle.setBackgroundResource(R.drawable.ticket_circle_yell);
-////                barcodeBackground.setBackgroundResource(R.color.darkYellow);
-//
-//            }
-//        });
     }
 
-    private void setNameAndRoll() {
-        if(Login.NAME != null && Login.ENROLL_NO != null)  {
-            name.setText(Login.NAME);
-            roll.setText(Login.ENROLL_NO);
+    private void setStudentDetails() {
+        String studentName = Preferences.getPrefs("studentName", getApplicationContext());
+        String studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
+        String studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
+        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound") && !studentSection.equals("notfound")) {
+            name.setText(studentName);
+            roll.setText(studentRollNo);
+            className.setText(studentSection);
         }
     }
 
@@ -254,6 +249,9 @@ public class UserProfile extends AppCompatActivity {
 //        }
         if (requestCode == IMAGE_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             profilePicUri = data.getData();
+            Log.d(TAG, "onActivityResult: profile pic inside onActivity--------- " + profilePicUri);
+            //setting profile pic in shared prefs
+            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
             Picasso.with(this).load(profilePicUri).into(profileImage);
             //Getting screen's width and height
             display.getSize(size);
