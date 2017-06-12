@@ -80,10 +80,15 @@ public class MainActivity extends AppCompatActivity
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
 
-    CircleImageView navDrawerImage;
+
+    //Navigation header items
+    public static View headerView;
+    public static TextView navHeaderText;
+    public static CircleImageView navHeaderImage;
 
     Realm realm = null;
 
+    public static NavigationView navigationView;
 
     //List to add all the week's list
     DailySchedule mSchedule;
@@ -130,6 +135,17 @@ public class MainActivity extends AppCompatActivity
 
         //Crashlytics support
         Fabric.with(this, new Crashlytics());
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
+        navHeaderText = (TextView) headerView.findViewById(R.id.nav_textview);
+        navHeaderImage = (CircleImageView) headerView.findViewById(R.id.nav_image);
+        if (!Preferences.getPrefs("studentImage", getApplicationContext()).equals("notfound")) {
+            Picasso.with(this).load(Preferences.getPrefs("studentImage", getApplicationContext())).into(navHeaderImage);
+        }
+        if (!Preferences.getPrefs("studentName", getApplicationContext()).equals("notfound")) {
+            navHeaderText.setText(Preferences.getPrefs("studentName", getApplicationContext()));
+        }
 
         realm = Realm.getDefaultInstance();
 
@@ -234,7 +250,6 @@ public class MainActivity extends AppCompatActivity
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(scheduleListAdapter);
-
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
         //Attaching all the fields
@@ -337,18 +352,9 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+        //Setting NavBar items
         getSupportActionBar().setElevation(0);
-
-        //Gradient animation
-//        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
-//        gradAnim = (AnimationDrawable) linearLayout.getBackground();
-//        gradAnim.setEnterFadeDuration(2000);
-//        gradAnim.setExitFadeDuration(2000);
-
-
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -367,11 +373,7 @@ public class MainActivity extends AppCompatActivity
 
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -448,7 +450,6 @@ public class MainActivity extends AppCompatActivity
         wed = (TextView) findViewById(R.id.date_wed);
         thu = (TextView) findViewById(R.id.date_thu);
         fri = (TextView) findViewById(R.id.date_fri);
-        navDrawerImage = (CircleImageView) findViewById(R.id.nav_image);
     }
 
     private String getCurrentDate() {
