@@ -23,6 +23,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.zxing.BarcodeFormat;
@@ -82,7 +83,6 @@ public class UserProfile extends AppCompatActivity {
     TextView classAlertHeading;
     ImageView classImg;                            //tv and et for the popup class menu
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,21 +113,7 @@ public class UserProfile extends AppCompatActivity {
 
         setStudentDetails();
 
-        //TODO COMPLETE IT
-        //Setting the profile pic
-        studentPicPath = Preferences.getPrefs("studentImage", getApplicationContext());
-        if (!studentPicPath.equals("notfound")) {
-            Log.d(TAG, "onCreate: Profile Pic inside LOOP " + studentPicPath);
-            Picasso.with(this).load(studentPicPath).into(profileImage);
-
-            //Getting screen's width and height
-            display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-
-            Picasso.with(this).load(studentPicPath).resize(width, 1000).centerCrop().into(blurredBackImage);
-
-        }
+        setProfilePic();
 
         //Theme selectors
         orangeThemeButton = (ImageView) findViewById(R.id.orange_theme);
@@ -185,10 +171,6 @@ public class UserProfile extends AppCompatActivity {
                     intent.setType("*/*");
                     startActivityForResult(intent, KITKAT_VALUE);
                 }
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_CODE);
 
             }
         });
@@ -217,6 +199,27 @@ public class UserProfile extends AppCompatActivity {
 
     }
 
+    private void setProfilePic() {
+
+        studentPicPath = Preferences.getPrefs("studentImage", getApplicationContext());
+        if (!studentPicPath.equals("notfound")) {
+            Log.d(TAG, "onCreate: Profile Pic inside LOOP " + studentPicPath);
+            Picasso.with(this).load(studentPicPath).into(profileImage);
+
+            //Getting screen's width and height
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+
+            Picasso.with(this).load(studentPicPath).resize(width, 1000).centerCrop().into(blurredBackImage);
+
+        }
+
+//        MainActivity.headerView = MainActivity.navigationView.getHeaderView(0);
+//        MainActivity.navHeaderText = (TextView) MainActivity.headerView.findViewById(R.id.nav_textview);
+//        MainActivity.navHeaderImage = (CircleImageView) MainActivity.headerView.findViewById(R.id.nav_image);
+    }
+
     private void setStudentDetails() {
         String studentName = Preferences.getPrefs("studentName", getApplicationContext());
         String studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
@@ -237,6 +240,9 @@ public class UserProfile extends AppCompatActivity {
                 profilePicUri = data.getData();
                 Picasso.with(this).load(profilePicUri).into(profileImage);
                 Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
+
+                //Updating the image in nav header in navigation drawer
+                Picasso.with(this).load(profilePicUri).into(MainActivity.navHeaderImage);
 
                 //Getting screen's width and height
                 display.getSize(size);
