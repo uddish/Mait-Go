@@ -1,11 +1,13 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserProfile extends AppCompatActivity {
 
     public static final String TAG = "UserProfile";
+    private static final int KITKAT_VALUE = 1789;
 
 
     TextView name, roll, branch, semester, className, branchHeading, classHeading, semesterHeading;
@@ -59,7 +62,7 @@ public class UserProfile extends AppCompatActivity {
     ImageView dpImage, blurredBackImage;
     Display display;
     Point size;
-    String studentPicPath;
+    String studentPicPath = null;
 
     //barcode ticket components
     ImageView leftCircle, rightCircle, barcodeImg;
@@ -110,6 +113,7 @@ public class UserProfile extends AppCompatActivity {
 
         setStudentDetails();
 
+        //TODO COMPLETE IT
         //Setting the profile pic
         studentPicPath = Preferences.getPrefs("studentImage", getApplicationContext());
         if (!studentPicPath.equals("notfound")) {
@@ -168,23 +172,23 @@ public class UserProfile extends AppCompatActivity {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent;
-//
-//                if (Build.VERSION.SDK_INT < 19) {
-//                    intent = new Intent();
-//                    intent.setAction(Intent.ACTION_GET_CONTENT);
-//                    intent.setType("*/*");
-//                    startActivityForResult(intent, KITKAT_VALUE);
-//                } else {
-//                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                    intent.setType("*/*");
-//                    startActivityForResult(intent, KITKAT_VALUE);
-//                }
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_CODE);
+                Intent intent;
+
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("*/*");
+                    startActivityForResult(intent, KITKAT_VALUE);
+                } else {
+                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    startActivityForResult(intent, KITKAT_VALUE);
+                }
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_CODE);
 
             }
         });
@@ -208,12 +212,6 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
-
-        //Checking for theme
-        if (themeColor == 101) {
-            diagonalLayout.setBackgroundResource(R.drawable.diagonal_background_yellow);
-        }
-
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
         name.setTypeface(tf);
 
@@ -234,32 +232,33 @@ public class UserProfile extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        if (requestCode == KITKAT_VALUE) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                profilePicUri = data.getData();
-//                Picasso.with(this).load(profilePicUri).into(profileImage);
-//
-//                //Getting screen's width and height
-//                display.getSize(size);
-//                int width = size.x;
-//                int height = size.y;
-//                Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
-//
-//            }
-//        }
-        if (requestCode == IMAGE_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            profilePicUri = data.getData();
-            Log.d(TAG, "onActivityResult: profile pic inside onActivity--------- " + profilePicUri);
-            //setting profile pic in shared prefs
-            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
-            Picasso.with(this).load(profilePicUri).into(profileImage);
-            //Getting screen's width and height
-            display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-            //Loading the blurred image
-            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
+        if (requestCode == KITKAT_VALUE) {
+            if (resultCode == Activity.RESULT_OK) {
+                profilePicUri = data.getData();
+                Picasso.with(this).load(profilePicUri).into(profileImage);
+                Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
+
+                //Getting screen's width and height
+                display.getSize(size);
+                int width = size.x;
+                int height = size.y;
+                Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
+
+            }
         }
+//        if (requestCode == IiMAGE_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            profilePicUri = data.getData();
+//            Log.d(TAG, "onActivityResult: profile pic inside onActivity--------- " + profilePicUri);
+//            //setting profile pic in shared prefs
+//            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
+//            Picasso.with(this).load(profilePicUri).into(profileImage);
+//            //Getting screen's width and height
+//            display.getSize(size);
+//            int width = size.x;
+//            int height = size.y;
+//            //Loading the blurred image
+//            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
+//        }
     }
 
     //Creating a drawable from the image's Uri
