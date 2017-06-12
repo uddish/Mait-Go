@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -44,7 +45,9 @@ import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.Models.TempModel;
+import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -59,6 +62,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -76,7 +80,10 @@ public class MainActivity extends AppCompatActivity
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
 
+    CircleImageView navDrawerImage;
+
     Realm realm = null;
+
 
     //List to add all the week's list
     DailySchedule mSchedule;
@@ -441,6 +448,7 @@ public class MainActivity extends AppCompatActivity
         wed = (TextView) findViewById(R.id.date_wed);
         thu = (TextView) findViewById(R.id.date_thu);
         fri = (TextView) findViewById(R.id.date_fri);
+        navDrawerImage = (CircleImageView) findViewById(R.id.nav_image);
     }
 
     private String getCurrentDate() {

@@ -34,7 +34,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(Preferences.getPrefs("isLogin", getApplicationContext()).equals("YES"))  {
+        if (Preferences.getPrefs("isLogin", getApplicationContext()).equals("YES")) {
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
@@ -60,10 +60,9 @@ public class Login extends AppCompatActivity {
     }
 
     private void checkForNullValues() {
-        if(name.getText().toString().equals("") || roll.getText().toString().equals("") || section.getText().toString().equals(""))    {
+        if (name.getText().toString().equals("") || roll.getText().toString().equals("") || section.getText().toString().equals("")) {
             Toast.makeText(this, "Fill the details", Toast.LENGTH_SHORT).show();
-        }
-        else    {
+        } else {
             Preferences.setPrefs("studentName", NAME, getApplicationContext());
             Preferences.setPrefs("studentRollNo", ENROLL_NO, getApplicationContext());
             Preferences.setPrefs("studentSection", SECTION, getApplicationContext());
