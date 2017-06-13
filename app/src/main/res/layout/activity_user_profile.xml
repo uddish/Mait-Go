@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background_layout"
@@ -9,295 +9,715 @@
     android:orientation="vertical"
     tools:context="com.example.uddishverma22.mait_go.Activities.UserProfile">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/diagonal_view"
-            android:layout_width="match_parent"
-            android:layout_height="260dp">
-            <ImageView
-                android:id="@+id/profile_blur_img"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/profile"
-                android:scaleType="center"/>
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/diagonal_background"/>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circleImageView"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="30dp"
-                android:layout_marginLeft="38dp"
-                android:layout_marginStart="38dp"
-                android:src="@drawable/profile"
-                app:civ_border_color="#fff"
-                app:civ_border_width="5dp" />
-        </RelativeLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="vertical">
 
+            <RelativeLayout
+                android:id="@+id/diagonal_view"
+                android:layout_width="match_parent"
+                android:layout_height="260dp">
+
+                <ImageView
+                    android:id="@+id/profile_blur_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@drawable/profile" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/diagonal_background" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageView"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginLeft="38dp"
+                    android:layout_marginStart="38dp"
+                    android:src="@drawable/profile"
+                    app:civ_border_color="#fff"
+                    app:civ_border_width="5dp" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#fff" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="#fff" />
+
+                    <TextView
+                        android:id="@+id/name_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="Uddish Verma"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="#fff" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/name_tv"
-                    android:layout_width="0dp"
+                    android:id="@+id/enrollment_tv"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center"
-                    android:text="Uddish Verma"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textColor="#fff"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:text="40514803115"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#fff" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#fff" />
+                <LinearLayout
+                    android:id="@+id/outline_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/custom_box_blue"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/branch_selector"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/branch_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="IT"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:textColor="#fff"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/branch_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Branch"
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:textColor="#fff" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#fff" />
+
+                    <LinearLayout
+                        android:id="@+id/semester_selector"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/semester_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="IV"
+                            android:textAppearance="?android:textAppearanceLarge"
+                            android:textColor="#fff"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/semester_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Semester"
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#fff" />
+
+                    <LinearLayout
+                        android:id="@+id/class_selector"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/class_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="I-4"
+                            android:textColor="#fff"
+                            android:textSize="30sp" />
+
+                        <TextView
+                            android:id="@+id/class_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Class"
+                            android:textAppearance="?android:textAppearanceSmall"
+                            android:textColor="#fff" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/enrollment_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="40514803115"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="#fff" />
 
             <LinearLayout
-                android:id="@+id/outline_box"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/custom_box_blue"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:id="@+id/orange_theme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="7dp"
+                    android:src="@drawable/yellow_theme_selector" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="7dp"
+                    android:src="@drawable/green_theme_selector" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="7dp"
+                    android:src="@drawable/purple_theme_selector" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="7dp"
+                    android:src="@drawable/blue_theme_selector" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/barcode_background"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="20dp"
+                android:background="@color/darkBlue">
+
+                <ImageView
+                    android:id="@+id/left_ticket_circle"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="75dp"
+                    android:background="@drawable/ticket_circle_blue"
+                    android:elevation="3dp"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/right_ticket_circle"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="75dp"
+                    android:background="@drawable/ticket_circle_blue"
+                    android:elevation="3dp"
+                    android:scaleType="fitXY" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="30dp"
+                    app:cardBackgroundColor="#fff"
+                    app:cardCornerRadius="4dp">
+
+                    <ImageView
+                        android:id="@+id/barcode_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="20dp" />
+
+                </android.support.v7.widget.CardView>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/branch_bottomsheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/toryBlue"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:padding="5dp">
 
-                <LinearLayout
-                    android:id="@+id/branch_selector"
+                <android.support.v7.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
 
                     <TextView
-                        android:id="@+id/branch_tv"
+                        android:id="@+id/branch_cs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:gravity="center"
-                        android:padding="5dp"
+                        android:padding="10dp"
+                        android:text="CSE"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/branch_it"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
                         android:text="IT"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textColor="#fff"
-                        android:textSize="30sp" />
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
 
-                    <TextView
-                        android:id="@+id/branch_heading"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Branch"
-                        android:textAppearance="?android:textAppearanceSmall"
-                        android:textColor="#fff" />
-                </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#fff" />
-
-                <LinearLayout
-                    android:id="@+id/semester_selector"
+                <android.support.v7.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
 
                     <TextView
-                        android:id="@+id/semester_tv"
+                        android:id="@+id/branch_ece"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:gravity="center"
-                        android:padding="5dp"
+                        android:padding="10dp"
+                        android:text="ECE"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/branch_eee"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="EEE"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/branch_mae"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="MAE"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/semester_bottomsheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/toryBlue"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/semester_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="I"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/semester_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="II"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/semester_three"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="III"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/semester_four"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
                         android:text="IV"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textColor="#fff"
-                        android:textSize="30sp" />
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
 
-                    <TextView
-                        android:id="@+id/semester_heading"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Semester"
-                        android:textAppearance="?android:textAppearanceSmall"
-                        android:textColor="#fff" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#fff" />
-
-                <LinearLayout
-                    android:id="@+id/class_selector"
+                <android.support.v7.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
 
                     <TextView
-                        android:id="@+id/class_tv"
+                        android:id="@+id/semester_five"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:gravity="center"
-                        android:padding="5dp"
-                        android:text="I-4"
-                        android:textColor="#fff"
-                        android:textSize="30sp" />
+                        android:padding="10dp"
+                        android:text="V"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
 
                     <TextView
-                        android:id="@+id/class_heading"
+                        android:id="@+id/semester_six"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:gravity="center"
-                        android:text="Class"
-                        android:textAppearance="?android:textAppearanceSmall"
-                        android:textColor="#fff" />
-                </LinearLayout>
+                        android:padding="10dp"
+                        android:text="VI"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/semester_seven"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="VII"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/semester_eight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="VIII"
+                        android:textColor="@color/white"
+                        android:textSize="25dp" />
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/darkBlue"
+                    app:cardCornerRadius="4dp">
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/class_bottomsheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:background="@color/toryBlue">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:orientation="vertical"
+            android:padding="15dp">
 
-            <ImageView
-                android:id="@+id/orange_theme"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="7dp"
-                android:src="@drawable/yellow_theme_selector" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter your class"
+            android:layout_gravity="center"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/white"
+            android:padding="10dp"/>
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="7dp"
-                android:src="@drawable/green_theme_selector" />
+        <LinearLayout
+            android:id="@+id/linearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="7dp"
-                android:src="@drawable/purple_theme_selector" />
+            <EditText
+                android:id="@+id/class_char"
+                android:inputType="textCapCharacters"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:maxLength="1"
+                android:background="@drawable/event_card_box"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:gravity="center"/>
 
-            <ImageView
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="7dp"
-                android:src="@drawable/blue_theme_selector" />
+                android:gravity="center"
+                android:text="-"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/class_no"
+                android:inputType="number"
+                android:maxLength="1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/event_card_box"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:gravity="center"/>
         </LinearLayout>
-
-
-        <!--<ImageView-->
-        <!--android:padding="30dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:id="@+id/barcode_img"-->
-        <!--android:layout_margin="30dp"-->
-        <!--android:layout_width="350dp"-->
-        <!--android:layout_height="200dp"-->
-        <!--android:background="@drawable/temp_drawable"/>-->
-
-        <RelativeLayout
-            android:id="@+id/barcode_background"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="20dp"
-            android:background="@color/darkBlue">
-
             <ImageView
-                android:id="@+id/left_ticket_circle"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="75dp"
-                android:background="@drawable/ticket_circle_blue"
-                android:elevation="3dp"
-                android:scaleType="fitXY" />
+                android:id="@+id/class_done"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_done_hollow"
+                android:layout_gravity="center" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-            <ImageView
-                android:id="@+id/right_ticket_circle"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="75dp"
-                android:background="@drawable/ticket_circle_blue"
-                android:elevation="3dp"
-                android:scaleType="fitXY" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_margin="30dp"
-                app:cardBackgroundColor="#fff"
-                app:cardCornerRadius="4dp">
-
-                <ImageView
-                    android:id="@+id/barcode_img"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="20dp" />
-
-            </android.support.v7.widget.CardView>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

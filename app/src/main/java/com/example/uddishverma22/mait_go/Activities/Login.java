@@ -34,10 +34,10 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (Preferences.getPrefs("isLogin", getApplicationContext()).equals("YES")) {
-            finish();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
+//        if (Preferences.getPrefs("isLogin", getApplicationContext()).equals("YES")) {
+//            finish();
+//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//        }
 
         Fabric.with(this, new Crashlytics());
 

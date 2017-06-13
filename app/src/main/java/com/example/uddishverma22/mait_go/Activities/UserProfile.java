@@ -1,6 +1,7 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -8,13 +9,20 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.HideKeyboard;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -48,28 +57,30 @@ public class UserProfile extends AppCompatActivity {
 
 
     TextView name, roll, branch, semester, className, branchHeading, classHeading, semesterHeading;
-    ImageView orangeThemeButton;
     public static int themeColor = 0;
-    RelativeLayout diagonalLayout;
-    LinearLayout branchSelector, semesterSelector, classSelector, outlineBox;
+    LinearLayout branchSelector, semesterSelector, classSelector;
     Typeface tf;
+
+    //SharedPrefs values
+    String studentRollNo;
+    String studentName;
+    String studentSection;
 
     //Components to change image in the profile page
     CircleImageView profileImage;
     public static final int IMAGE_CODE = 2990;
-    //    public static final int KITKAT_VALUE = 1002;
     private static Uri profilePicUri;
     Drawable profilePicDrawable;
-    ImageView dpImage, blurredBackImage;
+    ImageView blurredBackImage;
     Display display;
     Point size;
     String studentPicPath = null;
 
     //barcode ticket components
     ImageView leftCircle, rightCircle, barcodeImg;
-    ScrollView backgroundLayout;
-    RelativeLayout barcodeBackground;
 
+    BottomSheetBehavior branchBottomSheetBehavior, classBottomSheetBehavior;
+    NestedScrollView branchBottomSheet, classBottomSheet;
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
@@ -77,18 +88,19 @@ public class UserProfile extends AppCompatActivity {
 
     AlertDialog.Builder alert;
     View alertLayout;
-    TextView alertCs, alertIt, alertEce, alertEee, alertMae;            //tv for the popup branch menu
-    TextView first, second, third, fourth, fifth, sixth, seventh, eighth;            //tv for the popup semester menu
-    EditText classEditText;
-    TextView classAlertHeading;
-    ImageView classImg;                            //tv and et for the popup class menu
+    TextView branchCs, branchIt, branchEce, branchEee, branchMae;            //tv for the branch bottomsheet
+    TextView first, second, third, fourth, fifth, sixth, seventh, eighth;    //tv for the popup semester menu
+    EditText classCharacter, classNo;                                       //et for the class bottomsheet
+    ImageView classDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
+        //Back Button
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         name = (TextView) findViewById(R.id.name_tv);
         roll = (TextView) findViewById(R.id.enrollment_tv);
@@ -98,7 +110,7 @@ public class UserProfile extends AppCompatActivity {
         display = getWindowManager().getDefaultDisplay();
         size = new Point();
 
-
+        tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
         branch = (TextView) findViewById(R.id.branch_tv);
         semester = (TextView) findViewById(R.id.semester_tv);
         className = (TextView) findViewById(R.id.class_tv);
@@ -113,14 +125,18 @@ public class UserProfile extends AppCompatActivity {
 
         setStudentDetails();
 
+        deriveSemesterFromRoll();
+
         setProfilePic();
 
-        //Theme selectors
-        orangeThemeButton = (ImageView) findViewById(R.id.orange_theme);
-        diagonalLayout = (RelativeLayout) findViewById(R.id.diagonal_view);
-        backgroundLayout = (ScrollView) findViewById(R.id.background_layout);
-        outlineBox = (LinearLayout) findViewById(R.id.outline_box);
-        barcodeBackground = (RelativeLayout) findViewById(R.id.barcode_background);
+        //Bottom sheet action
+        branchBottomSheet = (NestedScrollView) findViewById(R.id.branch_bottomsheet);
+        classBottomSheet = (NestedScrollView) findViewById(R.id.class_bottomsheet);
+        branchBottomSheetBehavior = BottomSheetBehavior.from(branchBottomSheet);
+        classBottomSheetBehavior = BottomSheetBehavior.from(classBottomSheet);
+        branchBottomSheetBehavior.setPeekHeight(0);
+        classBottomSheetBehavior.setPeekHeight(0);
+
 
         //Barcode generation function
         barcodeImg = (ImageView) findViewById(R.id.barcode_img);
@@ -178,7 +194,7 @@ public class UserProfile extends AppCompatActivity {
         branchSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertBranchDialog();
+                branchSelector();
             }
         });
         semesterSelector.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +206,7 @@ public class UserProfile extends AppCompatActivity {
         classSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertClassDialog();
+                classSelector();
             }
         });
 
@@ -214,21 +230,22 @@ public class UserProfile extends AppCompatActivity {
             Picasso.with(this).load(studentPicPath).resize(width, 1000).centerCrop().into(blurredBackImage);
 
         }
-
-//        MainActivity.headerView = MainActivity.navigationView.getHeaderView(0);
-//        MainActivity.navHeaderText = (TextView) MainActivity.headerView.findViewById(R.id.nav_textview);
-//        MainActivity.navHeaderImage = (CircleImageView) MainActivity.headerView.findViewById(R.id.nav_image);
     }
 
     private void setStudentDetails() {
-        String studentName = Preferences.getPrefs("studentName", getApplicationContext());
-        String studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
-        String studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
+        studentName = Preferences.getPrefs("studentName", getApplicationContext());
+        studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
+        studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
         if (!studentName.equals("notfound") && !studentRollNo.equals("notfound") && !studentSection.equals("notfound")) {
             name.setText(studentName);
             roll.setText(studentRollNo);
             className.setText(studentSection);
         }
+    }
+
+    public void deriveSemesterFromRoll() {
+        studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
+        Log.d(TAG, "deriveSemesterFromRoll: " + studentRollNo.substring(studentRollNo.length() - 2, studentRollNo.length()));
     }
 
     @Override
@@ -237,6 +254,7 @@ public class UserProfile extends AppCompatActivity {
 
         if (requestCode == KITKAT_VALUE) {
             if (resultCode == Activity.RESULT_OK) {
+                Log.d(TAG, "onActivityResult: Request code is inside KITKAT");
                 profilePicUri = data.getData();
                 Picasso.with(this).load(profilePicUri).into(profileImage);
                 Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
@@ -251,81 +269,76 @@ public class UserProfile extends AppCompatActivity {
                 Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
 
             }
+        } else {
+            Log.d(TAG, "onActivityResult: Request code is NOT INSIDE KITKAT");
+            profilePicUri = data.getData();
+            //setting profile pic in shared prefs
+            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
+            Picasso.with(this).load(profilePicUri).into(profileImage);
+
+            //Updating the image in nav header in navigation drawer
+            Picasso.with(this).load(profilePicUri).into(MainActivity.navHeaderImage);
+
+            //Getting screen's width and height
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+            //Loading the blurred image
+            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
         }
-//        if (requestCode == IiMAGE_CODE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            profilePicUri = data.getData();
-//            Log.d(TAG, "onActivityResult: profile pic inside onActivity--------- " + profilePicUri);
-//            //setting profile pic in shared prefs
-//            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
-//            Picasso.with(this).load(profilePicUri).into(profileImage);
-//            //Getting screen's width and height
-//            display.getSize(size);
-//            int width = size.x;
-//            int height = size.y;
-//            //Loading the blurred image
-//            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
-//        }
     }
 
-    //Creating a drawable from the image's Uri
-    private Drawable getDrawableFromUri() {
-        try {
-            InputStream stream = getContentResolver().openInputStream(profilePicUri);
-            profilePicDrawable = Drawable.createFromStream(stream, profilePicUri.toString());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return profilePicDrawable;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
+        return true;
     }
 
-    private void alertBranchDialog() {
+    private void branchSelector() {
 
-        LayoutInflater inflater = getLayoutInflater();
-        alertLayout = inflater.inflate(R.layout.branch_selector_layout, null);
-        alert.setView(alertLayout);
+        branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        alertCs = (TextView) alertLayout.findViewById(R.id.alert_cs);
-        alertIt = (TextView) alertLayout.findViewById(R.id.alert_it);
-        alertEce = (TextView) alertLayout.findViewById(R.id.alert_ece);
-        alertEee = (TextView) alertLayout.findViewById(R.id.alert_eee);
-        alertMae = (TextView) alertLayout.findViewById(R.id.alert_mae);
+        branchCs = (TextView) findViewById(R.id.branch_cs);
+        branchIt = (TextView) findViewById(R.id.branch_it);
+        branchEce = (TextView) findViewById(R.id.branch_ece);
+        branchEee = (TextView) findViewById(R.id.branch_eee);
+        branchMae = (TextView) findViewById(R.id.branch_mae);
 
-        final AlertDialog dialog = alert.create();
-        dialog.show();
-
-        alertCs.setOnClickListener(new View.OnClickListener() {
+        branchCs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branch.setText(alertCs.getText().toString());
-                dialog.dismiss();
+                branch.setText(branchCs.getText().toString());
+                branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-        alertIt.setOnClickListener(new View.OnClickListener() {
+        branchIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branch.setText(alertIt.getText().toString());
-                dialog.dismiss();
+                branch.setText(branchIt.getText().toString());
+                branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-        alertEce.setOnClickListener(new View.OnClickListener() {
+        branchEce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branch.setText(alertEce.getText().toString());
-                dialog.dismiss();
+                branch.setText(branchEce.getText().toString());
+                branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-        alertEee.setOnClickListener(new View.OnClickListener() {
+        branchEee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branch.setText(alertEee.getText().toString());
-                dialog.dismiss();
+                branch.setText(branchEee.getText().toString());
+                branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
-        alertMae.setOnClickListener(new View.OnClickListener() {
+        branchMae.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branch.setText(alertMae.getText().toString());
-                dialog.dismiss();
+                branch.setText(branchMae.getText().toString());
+                branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
@@ -408,23 +421,41 @@ public class UserProfile extends AppCompatActivity {
 
     }
 
-    private void alertClassDialog() {
-        LayoutInflater inflater = getLayoutInflater();
-        alertLayout = inflater.inflate(R.layout.class_selector_layout, null);
-        alert.setView(alertLayout);
+    private void classSelector() {
 
-        classAlertHeading = (TextView) alertLayout.findViewById(R.id.alert_class_heading);
-        classEditText = (EditText) alertLayout.findViewById(R.id.alert_class);
-        classImg = (ImageView) alertLayout.findViewById(R.id.class_img);
-
-        final AlertDialog dialog = alert.create();
-        dialog.show();
-
-        classImg.setOnClickListener(new View.OnClickListener() {
+        classBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        classBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                className.setText(classEditText.getText().toString());
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        className.setText(classCharacter.getText().toString() + "-" + classNo.getText().toString());
+                        //hiding the keyboard
+                        InputMethodManager imm = (InputMethodManager) MainActivity.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(classDone.getWindowToken(), 0);
+                        Preferences.setPrefs("studentSection", classCharacter.getText().toString() + "-" + classNo.getText().toString(),
+                                getApplicationContext());
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
+        classCharacter = (EditText) findViewById(R.id.class_char);
+        classNo = (EditText) findViewById(R.id.class_no);
+        classDone = (ImageView) findViewById(R.id.class_done);
+
+        //TODO optimise keyboard hiding when bottomsheet is collapsed
+        classDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(classCharacter.getText().toString())) {
+                    classBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    Toast.makeText(UserProfile.this, "Please enter your class", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
