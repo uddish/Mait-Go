@@ -52,26 +52,27 @@
 
                         <TextView
                             android:id="@+id/society_head"
-                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
+                            android:layout_weight="1"
                             android:padding="5dp"
                             android:text="Society"
                             android:textAppearance="?android:textAppearanceMedium"
                             android:textColor="@color/white" />
 
                         <TextView
-                            android:layout_weight="1"
                             android:id="@+id/society"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
+                            android:layout_weight="1"
                             android:padding="5dp"
                             android:text="SD MAIT"
                             android:textAppearance="?android:textAppearanceMedium"
                             android:textColor="@color/white" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -79,10 +80,10 @@
 
                         <TextView
                             android:id="@+id/oraniser_head"
-                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
+                            android:layout_weight="1"
                             android:padding="5dp"
                             android:text="Organiser"
                             android:textAppearance="?android:textAppearanceMedium"
@@ -90,10 +91,10 @@
 
                         <TextView
                             android:id="@+id/organiser"
-                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
+                            android:layout_weight="1"
                             android:padding="5dp"
                             android:text="Organiser"
                             android:textAppearance="?android:textAppearanceMedium"
@@ -101,14 +102,14 @@
                     </LinearLayout>
 
                     <!--<android.support.design.widget.FloatingActionButton-->
-                        <!--android:id="@+id/next_fab"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:layout_margin="5dp"-->
-                        <!--app:backgroundTint="@color/darkBlue"-->
-                        <!--android:src="@drawable/ic_add_black_36dp"-->
-                        <!--app:fabSize="mini" />-->
+                    <!--android:id="@+id/next_fab"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--app:backgroundTint="@color/darkBlue"-->
+                    <!--android:src="@drawable/ic_add_black_36dp"-->
+                    <!--app:fabSize="mini" />-->
 
 
                 </LinearLayout>

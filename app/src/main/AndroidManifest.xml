@@ -30,7 +30,9 @@
 
         <activity android:name=".Activities.Notices" />
         <activity android:name=".Activities.NoticeWebView" />
-        <activity android:name=".Activities.UserProfile" />
+        <activity
+            android:name=".Activities.UserProfile"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".BarcodeGenerator.Generation" />
         <activity
             android:name=".Activities.Result"

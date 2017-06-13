@@ -1,6 +1,8 @@
 package com.example.uddishverma22.mait_go;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity
     AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
 
+    public static Context context;
 
     //Navigation header items
     public static View headerView;
@@ -133,6 +136,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        context = getApplicationContext();
+
         //Crashlytics support
         Fabric.with(this, new Crashlytics());
 
@@ -143,8 +148,8 @@ public class MainActivity extends AppCompatActivity
         if (!Preferences.getPrefs("studentImage", getApplicationContext()).equals("notfound")) {
             Picasso.with(this).load(Preferences.getPrefs("studentImage", getApplicationContext())).into(navHeaderImage);
         }
-        if (!Preferences.getPrefs("studentName", getApplicationContext()).equals("notfound")) {
-            navHeaderText.setText(Preferences.getPrefs("studentName", getApplicationContext()));
+        if (!Preferences.getPrefs("studentRollNo", getApplicationContext()).equals("notfound")) {
+            navHeaderText.setText(Preferences.getPrefs("studentRollNo", getApplicationContext()));
         }
 
         realm = Realm.getDefaultInstance();
