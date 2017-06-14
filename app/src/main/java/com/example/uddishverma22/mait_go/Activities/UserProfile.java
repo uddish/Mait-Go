@@ -49,7 +49,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
+//TODO image not setting from prefs when phone is restarted
 public class UserProfile extends AppCompatActivity {
 
     public static final String TAG = "UserProfile";
@@ -176,14 +176,19 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent;
 
-                if (Build.VERSION.SDK_INT < 19) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     intent = new Intent();
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setType("*/*");
                     startActivityForResult(intent, KITKAT_VALUE);
                 } else {
-                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setType("*/*");
                     startActivityForResult(intent, KITKAT_VALUE);
                 }
@@ -253,7 +258,7 @@ public class UserProfile extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == KITKAT_VALUE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK && data != null)  {
                 Log.d(TAG, "onActivityResult: Request code is inside KITKAT");
                 profilePicUri = data.getData();
                 Picasso.with(this).load(profilePicUri).into(profileImage);
@@ -269,23 +274,24 @@ public class UserProfile extends AppCompatActivity {
                 Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
 
             }
-        } else {
-            Log.d(TAG, "onActivityResult: Request code is NOT INSIDE KITKAT");
-            profilePicUri = data.getData();
-            //setting profile pic in shared prefs
-            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
-            Picasso.with(this).load(profilePicUri).into(profileImage);
-
-            //Updating the image in nav header in navigation drawer
-            Picasso.with(this).load(profilePicUri).into(MainActivity.navHeaderImage);
-
-            //Getting screen's width and height
-            display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-            //Loading the blurred image
-            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
         }
+//        else {
+//            Log.d(TAG, "onActivityResult: Request code is NOT INSIDE KITKAT");
+//            profilePicUri = data.getData();
+//            //setting profile pic in shared prefs
+//            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
+//            Picasso.with(this).load(profilePicUri).into(profileImage);
+//
+//            //Updating the image in nav header in navigation drawer
+//            Picasso.with(this).load(profilePicUri).into(MainActivity.navHeaderImage);
+//
+//            //Getting screen's width and height
+//            display.getSize(size);
+//            int width = size.x;
+//            int height = size.y;
+//            //Loading the blurred image
+//            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
+//        }
     }
 
     @Override

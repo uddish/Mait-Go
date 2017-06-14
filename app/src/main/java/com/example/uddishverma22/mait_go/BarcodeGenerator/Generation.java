@@ -2,7 +2,6 @@ package com.example.uddishverma22.mait_go.BarcodeGenerator;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.google.zxing.common.BitMatrix;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by uddishverma22 on 09/04/17.
@@ -38,7 +36,7 @@ public class Generation extends Activity {
         layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        setContentView(R.layout.temp);
+        setContentView(R.layout.result_head);
 
         barcodeImg = (ImageView) findViewById(R.id.barcode_img);
 

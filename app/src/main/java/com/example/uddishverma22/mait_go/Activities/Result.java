@@ -7,8 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.RecyclerScroller;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -55,6 +61,8 @@ public class Result extends AppCompatActivity {
     Realm realm = null;
     RealmResults<ResultModel> results;
 
+    LinearLayout cgpaPercLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,22 +79,30 @@ public class Result extends AppCompatActivity {
 
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
 
-        cgpaTv = (TextView) findViewById(R.id.cgpa);
-        cgpaTitle = (TextView) findViewById(R.id.cgpa_heading);
-        creditPercTv = (TextView) findViewById(R.id.credit_perc);
-        creditPercTitle = (TextView) findViewById(R.id.creditp_heading);
+//        cgpaPercLayout = (LinearLayout) findViewById(R.id.perc_cgpa_ll);
 
-        Typeface tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Thin.ttf");
-        Typeface tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Light.ttf");
+//        cgpaTv = (TextView) findViewById(R.id.cgpa);
+//        cgpaTitle = (TextView) findViewById(R.id.cgpa_heading);
+//        creditPercTv = (TextView) findViewById(R.id.credit_perc);
+//        creditPercTitle = (TextView) findViewById(R.id.creditp_heading);
 
-        cgpaTv.setTypeface(tfThin);
-        cgpaTitle.setTypeface(tfLight);
-        creditPercTv.setTypeface(tfThin);
-        creditPercTitle.setTypeface(tfLight);
+        Typeface tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
+        Typeface tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Light.ttf");
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
 
+//        recyclerView.setOnScrollListener(new RecyclerScroller() {
+//            @Override
+//            public void hide() {
+////                cgpaPercLayout.animate().translationY(-cgpaPercLayout.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
+//            }
+//
+//            @Override
+//            public void show() {
+////                cgpaPercLayout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+//            }
+//        });
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -104,9 +120,6 @@ public class Result extends AppCompatActivity {
                             double gpa = (double) response.get("gpa");
                             double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
 
-                            cgpaTv.setText(String.valueOf(roundOffGpa));
-                            creditPercTv.setText(String.valueOf(roundOffPerc) + "%");
-
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
                             mCircleView.setValueAnimated(Float.parseFloat(percentage));
 
@@ -121,13 +134,18 @@ public class Result extends AppCompatActivity {
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
                                 resultObj.percentage = String.valueOf((int) response.get("percentage"));
+                                resultObj.univRank = String.valueOf((int)response.get("urank"));
+                                resultObj.colRank = String.valueOf((int)response.get("crank"));
+                                resultObj.creditPerc = String.valueOf(roundOffPerc);
+                                resultObj.cgpa = String.valueOf(roundOffGpa);
+
                                 resultList.add(resultObj);
                             }
 
                             /**
                              * Saving data to realm
                              */
-                            if(resultList.size() != 0)   {
+                            if (resultList.size() != 0) {
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -168,7 +186,7 @@ public class Result extends AppCompatActivity {
                 avi.hide();
                 results = realm.where(ResultModel.class).findAll();
                 //setting percentage in the CircleView
-                if(results.size() != 0) {
+                if (results.size() != 0) {
                     mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
                     Log.d(TAG, "onErrorResponse: percentage " + results.get(1).percentage);
                     Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size() + "\n" + results);
