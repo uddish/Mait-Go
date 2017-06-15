@@ -13,7 +13,6 @@
         android:id="@+id/perc_cgpa_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/resolutionBlue"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -21,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:background="@color/resolutionBlue"
             android:padding="3dp">
 
             <TextView
@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:background="@color/darkBlue"
             android:padding="3dp">
 
             <TextView
@@ -86,13 +87,13 @@
         android:id="@+id/rank_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/resolutionBlue"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/darkBlue"
             android:orientation="vertical"
             android:padding="3dp">
 
@@ -126,6 +127,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/resolutionBlue"
             android:orientation="vertical"
             android:padding="3dp">
 
