@@ -21,19 +21,15 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
-import com.example.uddishverma22.mait_go.Utils.HideKeyboard;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -42,8 +38,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -65,10 +59,11 @@ public class UserProfile extends AppCompatActivity {
     String studentRollNo;
     String studentName;
     String studentSection;
+    String studentBranch;
+    String studentSemester;
 
     //Components to change image in the profile page
     CircleImageView profileImage;
-    public static final int IMAGE_CODE = 2990;
     private static Uri profilePicUri;
     Drawable profilePicDrawable;
     ImageView blurredBackImage;
@@ -79,8 +74,8 @@ public class UserProfile extends AppCompatActivity {
     //barcode ticket components
     ImageView leftCircle, rightCircle, barcodeImg;
 
-    BottomSheetBehavior branchBottomSheetBehavior, classBottomSheetBehavior;
-    NestedScrollView branchBottomSheet, classBottomSheet;
+    BottomSheetBehavior branchBottomSheetBehavior, classBottomSheetBehavior, semesterBottomSheetBehavior;
+    NestedScrollView branchBottomSheet, classBottomSheet, semesterBottomSheet;
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
@@ -125,17 +120,18 @@ public class UserProfile extends AppCompatActivity {
 
         setStudentDetails();
 
-        deriveSemesterFromRoll();
-
         setProfilePic();
 
         //Bottom sheet action
         branchBottomSheet = (NestedScrollView) findViewById(R.id.branch_bottomsheet);
         classBottomSheet = (NestedScrollView) findViewById(R.id.class_bottomsheet);
+        semesterBottomSheet = (NestedScrollView) findViewById(R.id.semester_bottomsheet);
         branchBottomSheetBehavior = BottomSheetBehavior.from(branchBottomSheet);
         classBottomSheetBehavior = BottomSheetBehavior.from(classBottomSheet);
+        semesterBottomSheetBehavior = BottomSheetBehavior.from(semesterBottomSheet);
         branchBottomSheetBehavior.setPeekHeight(0);
         classBottomSheetBehavior.setPeekHeight(0);
+        semesterBottomSheetBehavior.setPeekHeight(0);
 
 
         //Barcode generation function
@@ -205,7 +201,7 @@ public class UserProfile extends AppCompatActivity {
         semesterSelector.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alertSemesterDialog();
+                semesterSelector();
             }
         });
         classSelector.setOnClickListener(new View.OnClickListener() {
@@ -241,16 +237,17 @@ public class UserProfile extends AppCompatActivity {
         studentName = Preferences.getPrefs("studentName", getApplicationContext());
         studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
         studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
-        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound") && !studentSection.equals("notfound")) {
+        studentBranch = Preferences.getPrefs("studentBranch", getApplicationContext());
+        studentSemester = Preferences.getPrefs("studentSemester", getApplicationContext());
+        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
+                && !studentSection.equals("notfound") && !studentBranch.equals("notfound")
+                && !studentSemester.equals("notfound")) {
             name.setText(studentName);
             roll.setText(studentRollNo);
             className.setText(studentSection);
+            branch.setText(studentBranch);
+            semester.setText(studentSemester);
         }
-    }
-
-    public void deriveSemesterFromRoll() {
-        studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
-        Log.d(TAG, "deriveSemesterFromRoll: " + studentRollNo.substring(studentRollNo.length() - 2, studentRollNo.length()));
     }
 
     @Override
@@ -258,7 +255,7 @@ public class UserProfile extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == KITKAT_VALUE) {
-            if (resultCode == Activity.RESULT_OK && data != null)  {
+            if (resultCode == Activity.RESULT_OK && data != null) {
                 Log.d(TAG, "onActivityResult: Request code is inside KITKAT");
                 profilePicUri = data.getData();
                 Picasso.with(this).load(profilePicUri).into(profileImage);
@@ -306,6 +303,24 @@ public class UserProfile extends AppCompatActivity {
 
         branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
+        branchBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        if(!TextUtils.isEmpty("N/A")) {
+                            Preferences.setPrefs("studentBranch", branch.getText().toString(),
+                                    getApplicationContext());
+                        }
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
         branchCs = (TextView) findViewById(R.id.branch_cs);
         branchIt = (TextView) findViewById(R.id.branch_it);
         branchEce = (TextView) findViewById(R.id.branch_ece);
@@ -350,78 +365,91 @@ public class UserProfile extends AppCompatActivity {
 
     }
 
-    private void alertSemesterDialog() {
+    private void semesterSelector() {
 
-        LayoutInflater inflater = getLayoutInflater();
-        alertLayout = inflater.inflate(R.layout.semester_selector_layout, null);
-        alert.setView(alertLayout);
+        semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        first = (TextView) alertLayout.findViewById(R.id.alert_first);
-        second = (TextView) alertLayout.findViewById(R.id.alert_second);
-        third = (TextView) alertLayout.findViewById(R.id.alert_third);
-        fourth = (TextView) alertLayout.findViewById(R.id.alert_fourth);
-        fifth = (TextView) alertLayout.findViewById(R.id.alert_fifth);
-        sixth = (TextView) alertLayout.findViewById(R.id.alert_sixth);
-        seventh = (TextView) alertLayout.findViewById(R.id.alert_seventh);
-        eighth = (TextView) alertLayout.findViewById(R.id.alert_eighth);
+        semesterBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        if(!TextUtils.isEmpty("N/A")) {
+                            Preferences.setPrefs("studentSemester", semester.getText().toString(),
+                                    getApplicationContext());
+                        }
+                }
+            }
 
-        final AlertDialog dialog = alert.create();
-        dialog.show();
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        first = (TextView) findViewById(R.id.semester_one);
+        second = (TextView) findViewById(R.id.semester_two);
+        third = (TextView) findViewById(R.id.semester_three);
+        fourth = (TextView) findViewById(R.id.semester_four);
+        fifth = (TextView) findViewById(R.id.semester_five);
+        sixth = (TextView) findViewById(R.id.semester_six);
+        seventh = (TextView) findViewById(R.id.semester_seven);
+        eighth = (TextView) findViewById(R.id.semester_eight);
 
         first.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(first.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(second.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         third.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(third.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         fourth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(fourth.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         fifth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(fifth.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         sixth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(sixth.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         seventh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(seventh.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         eighth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 semester.setText(eighth.getText().toString());
-                dialog.dismiss();
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
 
