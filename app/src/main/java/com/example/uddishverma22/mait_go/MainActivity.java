@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity
     JSONArray fridayScheduleArray = null;
     JSONObject fridayScheduleObject = null;
 
+    public List<DailySchedule> currentDaySchedule = new ArrayList<>();
+
     AVLoadingIndicatorView mAvi;
 
 
@@ -196,7 +198,43 @@ public class MainActivity extends AppCompatActivity
                                 }
                             });
 //***************************************************************************************************************************
-                            mondayScheduleFunction();
+                            switch (currentDay) {
+                                case "Monday":
+                                    mondayScheduleFunction();
+                                    mon.setBackgroundResource(R.drawable.circular_image);
+                                    mon.setTextColor(Color.BLACK);
+                                    scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+                                    recyclerView.setAdapter(scheduleListAdapter);
+                                    break;
+                                case "Tuesday":
+                                    tuesdayScheduleFunction();
+                                    tue.setBackgroundResource(R.drawable.circular_image);
+                                    tue.setTextColor(Color.BLACK);
+                                    scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+                                    recyclerView.setAdapter(scheduleListAdapter);
+                                    break;
+                                case "Wednesday":
+                                    wednesdayScheduleFunction();
+                                    wed.setBackgroundResource(R.drawable.circular_image);
+                                    wed.setTextColor(Color.BLACK);
+                                    scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+                                    recyclerView.setAdapter(scheduleListAdapter);
+                                    break;
+                                case "Thursday":
+                                    thursdayScheduleFunction();
+                                    thu.setBackgroundResource(R.drawable.circular_image);
+                                    thu.setTextColor(Color.BLACK);
+                                    scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+                                    recyclerView.setAdapter(scheduleListAdapter);
+                                    break;
+                                case "Friday":
+                                    fridayScheduleFunction();
+                                    fri.setBackgroundResource(R.drawable.circular_image);
+                                    fri.setTextColor(Color.BLACK);
+                                    scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+                                    recyclerView.setAdapter(scheduleListAdapter);
+                                    break;
+                            }
 
 
                         } catch (JSONException e) {
@@ -238,7 +276,34 @@ public class MainActivity extends AppCompatActivity
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    mondayScheduleFunction();
+                    switch (currentDay) {
+                        case "Monday":
+                            mondayScheduleFunction();
+                            scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+                            recyclerView.setAdapter(scheduleListAdapter);
+                            break;
+                        case "Tuesday":
+                            tuesdayScheduleFunction();
+                            scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+                            recyclerView.setAdapter(scheduleListAdapter);
+                            break;
+                        case "Wednesday":
+                            wednesdayScheduleFunction();
+                            scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+                            recyclerView.setAdapter(scheduleListAdapter);
+                            break;
+                        case "Thursday":
+                            thursdayScheduleFunction();
+                            scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+                            recyclerView.setAdapter(scheduleListAdapter);
+                            break;
+                        case "Friday":
+                            fridayScheduleFunction();
+                            scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+                            recyclerView.setAdapter(scheduleListAdapter);
+                            break;
+                    }
+
                 } else {
                     Toast.makeText(MainActivity.this, "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
                 }
@@ -249,13 +314,8 @@ public class MainActivity extends AppCompatActivity
         });
         queue.add(request);
 
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        //Sending the list to the adapter
-        scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(scheduleListAdapter);
-        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
         //Attaching all the fields
         attachFields();
@@ -268,13 +328,15 @@ public class MainActivity extends AppCompatActivity
         day.setText(currentDay);
         month.setText(currentMonth.substring(0, 3) + " " + currentYear);
 
-        //Setting the actual details in all the fields
+//        Setting the actual details in all the fields
         attachDateToDays();
 
-//        if(UserProfile.themeColor == 101) {
-//            Log.d(TAG, "onCreate: Theme " + UserProfile.themeColor);
-//            linearLayout.setBackgroundResource(R.drawable.orange_gradient);
-//        }
+//        Sending the list to the adapter
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(scheduleListAdapter);
+        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
+
 
         /**
          * Checking which day is selected
@@ -478,6 +540,7 @@ public class MainActivity extends AppCompatActivity
         calendar = Calendar.getInstance();
 
         if (currentDay.equals("Monday")) {
+
             mon.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -502,6 +565,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (currentDay.equals("Tuesday")) {
+
             tue.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -526,6 +590,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (currentDay.equals("Wednesday")) {
+
             wed.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -549,6 +614,7 @@ public class MainActivity extends AppCompatActivity
             mon.setText(dt.substring(0, 2));
         }
         if (currentDay.equals("Thursday")) {
+
             thu.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -572,6 +638,7 @@ public class MainActivity extends AppCompatActivity
             mon.setText(dt.substring(0, 2));
         }
         if (currentDay.equals("Friday")) {
+
             fri.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
@@ -777,6 +844,7 @@ public class MainActivity extends AppCompatActivity
 
     //Adding the friday Schedule in the list
     private void fridayScheduleFunction() {
+
         try {
             DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
             fridaySchedule.add(movie);
