@@ -213,40 +213,40 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10dp">-->
 
-                <ImageView
-                    android:id="@+id/orange_theme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="7dp"
-                    android:src="@drawable/yellow_theme_selector" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/orange_theme"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/yellow_theme_selector" />-->
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="7dp"
-                    android:src="@drawable/green_theme_selector" />
+                <!--<ImageView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/green_theme_selector" />-->
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="7dp"
-                    android:src="@drawable/purple_theme_selector" />
+                <!--<ImageView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/purple_theme_selector" />-->
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="7dp"
-                    android:src="@drawable/blue_theme_selector" />
-            </LinearLayout>
+                <!--<ImageView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:padding="7dp"-->
+                    <!--android:src="@drawable/blue_theme_selector" />-->
+            <!--</LinearLayout>-->
 
             <RelativeLayout
                 android:id="@+id/barcode_background"
