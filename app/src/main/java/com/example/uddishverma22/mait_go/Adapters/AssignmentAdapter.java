@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -74,6 +75,7 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.de
         holder.teacher.setText(obj.teacher);
         holder.lastDate.setText(obj.lastdate.substring(0, 10));
         holder.marks.setText(obj.marks);
+        Picasso.with(holder.marks.getContext()).load(obj.imageUrl).into(holder.assignmentImage);
     }
 
     @Override
