@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Adapters;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by uddishverma22 on 02/05/17.
  */
 
-public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.detailsViewHolder>{
+public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.detailsViewHolder> {
 
     List<Faculty> facultyList;
     String imageUrl = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/";
@@ -35,8 +36,9 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
 
     public class detailsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, designation, qual, exp;
+        TextView name, designation, qual, exp, expHeading;
         CircleImageView image;
+        Typeface tfLight, openSansReg, openSansBold, openSansLight;
 
         public detailsViewHolder(View itemView) {
             super(itemView);
@@ -44,7 +46,13 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
             designation = (TextView) itemView.findViewById(R.id.fac_desig);
             qual = (TextView) itemView.findViewById(R.id.fac_qual);
             exp = (TextView) itemView.findViewById(R.id.fac_exp);
+            expHeading = (TextView) itemView.findViewById(R.id.exp_heading);
             image = (CircleImageView) itemView.findViewById(R.id.image);
+
+            tfLight = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/Raleway-Light.ttf");
+            openSansReg = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+            openSansBold = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Bold.ttf");
+            openSansLight = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Light.ttf");
         }
     }
 
@@ -63,6 +71,12 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
         holder.designation.setText(facultyObj.designation);
         holder.qual.setText(facultyObj.qualification);
         holder.exp.setText(facultyObj.experience);
+
+        holder.name.setTypeface(holder.openSansBold);
+        holder.designation.setTypeface(holder.openSansReg);
+        holder.qual.setTypeface(holder.openSansReg);
+        holder.exp.setTypeface(holder.openSansReg);
+        holder.expHeading.setTypeface(holder.openSansReg);
 
         Picasso.with(holder.image.getContext()).load(imageUrl + facultyObj.imageUrl).into(holder.image);
         Log.d(TAG, "onBindViewHolder: " + facultyObj.imageUrl);

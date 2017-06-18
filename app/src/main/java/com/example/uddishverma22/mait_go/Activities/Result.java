@@ -79,13 +79,6 @@ public class Result extends AppCompatActivity {
 
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
 
-//        cgpaPercLayout = (LinearLayout) findViewById(R.id.perc_cgpa_ll);
-
-//        cgpaTv = (TextView) findViewById(R.id.cgpa);
-//        cgpaTitle = (TextView) findViewById(R.id.cgpa_heading);
-//        creditPercTv = (TextView) findViewById(R.id.credit_perc);
-//        creditPercTitle = (TextView) findViewById(R.id.creditp_heading);
-
         Typeface tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
         Typeface tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Light.ttf");
 

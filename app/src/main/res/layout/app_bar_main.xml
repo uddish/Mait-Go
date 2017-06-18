@@ -92,6 +92,7 @@
                         android:padding="3dp">
 
                         <TextView
+                            android:id="@+id/mon_heading"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -118,6 +119,7 @@
                         android:padding="3dp">
 
                         <TextView
+                            android:id="@+id/tue_heading"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -144,6 +146,7 @@
                         android:padding="3dp">
 
                         <TextView
+                            android:id="@+id/wed_heading"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -170,6 +173,7 @@
                         android:padding="3dp">
 
                         <TextView
+                            android:id="@+id/thu_heading"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -196,6 +200,7 @@
                         android:padding="3dp">
 
                         <TextView
+                            android:id="@+id/fri_heading"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
