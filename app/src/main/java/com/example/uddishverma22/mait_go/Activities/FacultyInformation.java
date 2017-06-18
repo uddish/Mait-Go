@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,8 @@ public class FacultyInformation extends AppCompatActivity {
 
     AVLoadingIndicatorView mAvi;
 
+    Typeface openSansReg, openSansBold;
+
     ArrayList<Faculty> itFacList = new ArrayList<>();
     ArrayList<Faculty> cseFacList = new ArrayList<>();
 
@@ -66,11 +69,20 @@ public class FacultyInformation extends AppCompatActivity {
         eeeLine = findViewById(R.id.eee_line);
         maeLine = findViewById(R.id.mae_line);
 
+        openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+        openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
+
         it = (TextView) findViewById(R.id.it);
         cse = (TextView) findViewById(R.id.cse);
         eee = (TextView) findViewById(R.id.eee);
         ece = (TextView) findViewById(R.id.ece);
         mae = (TextView) findViewById(R.id.mae);
+
+        it.setTypeface(openSansReg);
+        cse.setTypeface(openSansReg);
+        eee.setTypeface(openSansReg);
+        ece.setTypeface(openSansReg);
+        mae.setTypeface(openSansReg);
 
 
         it.setOnClickListener(new View.OnClickListener() {

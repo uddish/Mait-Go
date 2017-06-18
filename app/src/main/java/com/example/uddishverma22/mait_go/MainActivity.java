@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -97,6 +98,11 @@ public class MainActivity extends AppCompatActivity
     DailySchedule mSchedule;
     RealmResults<TempModel> result;
 
+    Typeface tfThin;
+    Typeface tfLight;
+    Typeface openSansReg;
+    Typeface openSansBold;
+
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
     JSONArray mondayScheduleArray = null;
     JSONObject mondayScheduleObject = null;
@@ -124,6 +130,7 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     TextView date, day, month;
     TextView mon, tue, wed, thu, fri;
+    TextView monHeading, tueHeading, wedHeading, thuHeading, friheading;
     static int monSelected = 0;
     static int tueSelected = 0;
     static int wedSelected = 0;
@@ -153,6 +160,12 @@ public class MainActivity extends AppCompatActivity
         if (!Preferences.getPrefs("studentRollNo", getApplicationContext()).equals("notfound")) {
             navHeaderText.setText(Preferences.getPrefs("studentRollNo", getApplicationContext()));
         }
+
+        //Setting the fonts
+        tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
+        tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Light.ttf");
+        openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+        openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
 
         realm = Realm.getDefaultInstance();
 
@@ -517,6 +530,28 @@ public class MainActivity extends AppCompatActivity
         wed = (TextView) findViewById(R.id.date_wed);
         thu = (TextView) findViewById(R.id.date_thu);
         fri = (TextView) findViewById(R.id.date_fri);
+
+        date.setTypeface(openSansBold);
+        day.setTypeface(openSansReg);
+        month.setTypeface(openSansReg);
+        mon.setTypeface(openSansReg);
+        tue.setTypeface(openSansReg);
+        wed.setTypeface(openSansReg);
+        thu.setTypeface(openSansReg);
+        fri.setTypeface(openSansReg);
+
+        monHeading = (TextView) findViewById(R.id.mon_heading);
+        tueHeading = (TextView) findViewById(R.id.tue_heading);
+        wedHeading = (TextView) findViewById(R.id.wed_heading);
+        thuHeading = (TextView) findViewById(R.id.thu_heading);
+        friheading = (TextView) findViewById(R.id.fri_heading);
+
+        monHeading.setTypeface(openSansReg);
+        tueHeading.setTypeface(openSansReg);
+        wedHeading.setTypeface(openSansReg);
+        thuHeading.setTypeface(openSansReg);
+        friheading.setTypeface(openSansReg);
+
     }
 
     private String getCurrentDate() {

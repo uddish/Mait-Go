@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Adapters;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
     public class detailsViewHolder extends RecyclerView.ViewHolder {
 
         TextView teacherName, announ, time, date, imageLetter;
+        Typeface openSansReg,openSansBold, openSansLight;
 
         public detailsViewHolder(View itemView) {
             super(itemView);
@@ -35,6 +37,10 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
             time = (TextView) itemView.findViewById(R.id.time);
             date = (TextView) itemView.findViewById(R.id.date);
             imageLetter = (TextView) itemView.findViewById(R.id.img_letter);
+
+            openSansReg = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+            openSansBold = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Bold.ttf");
+            openSansLight = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Light.ttf");
 
         }
     }
@@ -50,9 +56,15 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         ClassAnnouncementsModel model = list.get(position);
         holder.teacherName.setText(model.teacherName);
         holder.announ.setText(model.announcement);
-        holder.imageLetter.setText(model.teacherName.substring(0,1));
+        holder.imageLetter.setText(model.teacherName.substring(0, 1));
         holder.date.setText(model.msgDate.substring(0, 10));
         holder.time.setText(model.msgDate.substring(11, 16));
+
+        holder.teacherName.setTypeface(holder.openSansBold);
+        holder.announ.setTypeface(holder.openSansReg);
+        holder.imageLetter.setTypeface(holder.openSansBold);
+        holder.date.setTypeface(holder.openSansLight);
+        holder.time.setTypeface(holder.openSansLight);
     }
 
     @Override

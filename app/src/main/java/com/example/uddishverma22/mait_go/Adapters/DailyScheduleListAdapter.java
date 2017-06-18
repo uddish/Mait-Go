@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Adapters;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +41,8 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
         private ImageView dotColor;
         private LinearLayout mContainer;
 
+        Typeface tfThin, tfLight, openSansReg, openSansBold, openSansLight;
+
         public detailsViewHolder(View itemView) {
             super(itemView);
             time = (TextView) itemView.findViewById(R.id.time);
@@ -48,6 +51,10 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
             teacher = (TextView) itemView.findViewById(R.id.teacher);
             dotColor = (ImageView) itemView.findViewById(R.id.dot_design);
             mContainer = (LinearLayout) itemView.findViewById(R.id.container);
+
+            //Setting the fonts
+            openSansReg = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+            openSansBold = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/OpenSans-Bold.ttf");
         }
     }
 
@@ -68,10 +75,12 @@ public class DailyScheduleListAdapter extends RecyclerView.Adapter<DailySchedule
         holder.subject.setText(schedulelist.getSubject());
         holder.room.setText(schedulelist.getRoom());
         holder.teacher.setText(schedulelist.getTeacher());
-        if(UserProfile.themeColor == 101)   {
-            Log.d(TAG, "onBindViewHolder: THEME CHANGED ");
-            holder.dotColor.setImageResource(R.drawable.orange_circle);
-        }
+
+        holder.time.setTypeface(holder.openSansLight);
+        holder.room.setTypeface(holder.openSansLight);
+        holder.subject.setTypeface(holder.openSansBold);
+        holder.teacher.setTypeface(holder.openSansReg);
+
     }
 
     @Override
