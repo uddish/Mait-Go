@@ -35,7 +35,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FacultyInformation extends AppCompatActivity {
+public class FacultyInformation extends AppCompatActivity implements FacultyFragment.OnFacultyChangeListener{
 
     public static final String TAG = "FacultyInformation";
 //    TextView cse, it, eee, ece, mae;
@@ -218,10 +218,11 @@ public class FacultyInformation extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
                 switch (tab.getPosition())  {
                     case 0:
-                        Log.d(TAG, "onTabSelected: " + cseFacList);
+                        onFacultyChange(cseFacList);
                         break;
                     case 1:
                         Log.d(TAG, "onTabSelected: " + itFacList);
+                        onFacultyChange(itFacList);
                         break;
                 }
             }
@@ -244,6 +245,12 @@ public class FacultyInformation extends AppCompatActivity {
         adapter.addFrag(new FacultyFragment("IT"), "IT");
         adapter.addFrag(new FacultyFragment("ECE"), "ECE");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onFacultyChange(ArrayList<Faculty> list) {
+        FacultyListAdapter adapter = new FacultyListAdapter(list);
+        FacultyFragment.recyclerView.setAdapter(adapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
