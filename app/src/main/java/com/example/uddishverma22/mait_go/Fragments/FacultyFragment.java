@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
+import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 /**
  * Created by uddishverma on 20/06/17.
@@ -19,8 +25,11 @@ public class FacultyFragment extends Fragment {
 
     private View view;
     private String title;
+    ArrayList<Faculty> list;
 
-    private static RecyclerView recyclerView;
+    OnFacultyChangeListener onFacultyChangeListener;
+
+    public static RecyclerView recyclerView;
 
     public FacultyFragment() {
     }
@@ -42,5 +51,22 @@ public class FacultyFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+//        FacultyListAdapter adapter = new FacultyListAdapter(list);
+//        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            onFacultyChangeListener = (OnFacultyChangeListener) activity;
+        }catch (Exception e)    {
+            e.printStackTrace();
+        }
+    }
+
+    public interface OnFacultyChangeListener    {
+        public void onFacultyChange(ArrayList<Faculty> list);
     }
 }
