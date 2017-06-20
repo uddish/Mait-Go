@@ -40,7 +40,9 @@
         <activity
             android:name=".Activities.Login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.FacultyInformation" />
+        <activity
+            android:name=".Activities.FacultyInformation"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.Announcements" />
         <activity android:name=".Activities.Assignments" />
         <activity android:name=".Activities.UpcomingEvents" />
