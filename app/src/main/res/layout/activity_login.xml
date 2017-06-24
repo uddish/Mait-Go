@@ -93,7 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:background="@drawable/custom_box_yell"
+        android:background="@drawable/custom_box_signin"
         android:padding="10dp"
         android:textColor="@color/midnightBlue"
         android:drawableLeft="@drawable/ic_google_signin"
