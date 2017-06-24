@@ -8,14 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
 import com.example.uddishverma22.mait_go.Fragments.FacultyFragment;
-import com.example.uddishverma22.mait_go.Interface.FragmentInterface;
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
@@ -33,23 +27,16 @@ import com.wang.avi.AVLoadingIndicatorView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FacultyInformation extends AppCompatActivity {
 
     public static final String TAG = "FacultyInformation";
-//    TextView cse, it, eee, ece, mae;
-//    View cseLine, itLine, eceLine, eeeLine ,maeLine;
 
     private Toolbar toolbar;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-
-    RecyclerView mRecyclerView;
-    public static FacultyListAdapter listAdapter;
 
     JSONArray itFaculty = null;
     JSONArray cseFaculty = null;
@@ -57,17 +44,12 @@ public class FacultyInformation extends AppCompatActivity {
     JSONObject itFacObj, cseFacObj;
     Faculty itFacultyobj, cseFacultyobj;
 
-    AVLoadingIndicatorView mAvi;
-
     Typeface openSansReg, openSansBold;
 
     ArrayList<Faculty> itFacList = new ArrayList<>();
     ArrayList<Faculty> cseFacList = new ArrayList<>();
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/faculty";
-
-    FragmentInterface fragmentInterface;
-    Bundle fragBundle;
 
     RequestQueue queue;
 
@@ -86,25 +68,13 @@ public class FacultyInformation extends AppCompatActivity {
         fetchData(queue);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        setupViewPager(viewPager);
+//        setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
 
-//        mRecyclerView = (RecyclerView) findViewById(R.id.fac_recycler);
-
-//        mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-//        mAvi.show();
-
-//        cseLine = findViewById(R.id.cse_line);
-//        itLine = findViewById(R.id.it_line);
-//        eceLine = findViewById(R.id.ece_line);
-//        eeeLine = findViewById(R.id.eee_line);
-//        maeLine = findViewById(R.id.mae_line);
-
         //Handling click listeners on TabLayout
-
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -166,14 +136,11 @@ public class FacultyInformation extends AppCompatActivity {
                                 cseFacList.add(cseFacultyobj);
                             }
                             Globals.cseFacList = cseFacList;
+                            setupViewPager(viewPager);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-//                        listAdapter = new FacultyListAdapter(itFacList);
-//                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FacultyInformation.this);
-//                        mRecyclerView.setLayoutManager(layoutManager);
-//                        mRecyclerView.setAdapter(listAdapter);
 
                     }
                 }, new Response.ErrorListener() {
