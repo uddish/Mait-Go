@@ -6,13 +6,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
+import com.example.uddishverma22.mait_go.Interface.FragmentInterface;
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,11 +27,11 @@ import java.util.ArrayList;
 
 public class FacultyFragment extends Fragment {
 
+    private static final String TAG = "FacultyFragment";
     private View view;
     private String title;
     ArrayList<Faculty> list;
-
-    OnFacultyChangeListener onFacultyChangeListener;
+    public static FacultyListAdapter adapter;
 
     public static RecyclerView recyclerView;
 
@@ -38,35 +42,29 @@ public class FacultyFragment extends Fragment {
         this.title = title;
     }
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.faculty_recyclerview_test, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         setupRecycler();
+
         return view;
     }
 
     private void setupRecycler() {
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-//        FacultyListAdapter adapter = new FacultyListAdapter(list);
-//        recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            onFacultyChangeListener = (OnFacultyChangeListener) activity;
-        }catch (Exception e)    {
-            e.printStackTrace();
+        if (title.equals("CSE")) {
+            if (Globals.cseFacList != null && Globals.cseFacList.size() > 0)
+                adapter = new FacultyListAdapter(Globals.cseFacList);
+        } else {
+            if (Globals.itFacList != null && Globals.itFacList.size() > 0)
+                adapter = new FacultyListAdapter(Globals.itFacList);
         }
+        recyclerView.setAdapter(adapter);
+
     }
 
-    public interface OnFacultyChangeListener    {
-        public void onFacultyChange(ArrayList<Faculty> list);
-    }
 }

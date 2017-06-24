@@ -23,8 +23,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
 import com.example.uddishverma22.mait_go.Fragments.FacultyFragment;
+import com.example.uddishverma22.mait_go.Interface.FragmentInterface;
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -32,21 +34,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FacultyInformation extends AppCompatActivity implements FacultyFragment.OnFacultyChangeListener{
+public class FacultyInformation extends AppCompatActivity {
 
     public static final String TAG = "FacultyInformation";
 //    TextView cse, it, eee, ece, mae;
 //    View cseLine, itLine, eceLine, eeeLine ,maeLine;
 
-    private  Toolbar toolbar;
-    private  ViewPager viewPager;
-    private  TabLayout tabLayout;
+    private Toolbar toolbar;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     RecyclerView mRecyclerView;
-    FacultyListAdapter listAdapter;
+    public static FacultyListAdapter listAdapter;
 
     JSONArray itFaculty = null;
     JSONArray cseFaculty = null;
@@ -63,6 +66,11 @@ public class FacultyInformation extends AppCompatActivity implements FacultyFrag
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/faculty";
 
+    FragmentInterface fragmentInterface;
+    Bundle fragBundle;
+
+    RequestQueue queue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +79,18 @@ public class FacultyInformation extends AppCompatActivity implements FacultyFrag
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
+        openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
+
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        fetchData(queue);
+
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
 //        mRecyclerView = (RecyclerView) findViewById(R.id.fac_recycler);
 
@@ -90,83 +103,42 @@ public class FacultyInformation extends AppCompatActivity implements FacultyFrag
 //        eeeLine = findViewById(R.id.eee_line);
 //        maeLine = findViewById(R.id.mae_line);
 
-        openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
-        openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
+        //Handling click listeners on TabLayout
 
-//        it = (TextView) findViewById(R.id.it);
-//        cse = (TextView) findViewById(R.id.cse);
-//        eee = (TextView) findViewById(R.id.eee);
-//        ece = (TextView) findViewById(R.id.ece);
-//        mae = (TextView) findViewById(R.id.mae);
-//
-//        it.setTypeface(openSansReg);
-//        cse.setTypeface(openSansReg);
-//        eee.setTypeface(openSansReg);
-//        ece.setTypeface(openSansReg);
-//        mae.setTypeface(openSansReg);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+                switch (tab.getPosition()) {
+                    case 0:
+                        Globals.title = "CSE";
+                        Log.d(TAG, "onTabSelected: " + cseFacList);
+                        break;
+                    case 1:
+                        Globals.title = "IT";
+                        Log.d(TAG, "onTabSelected: " + itFacList);
+                        break;
+                }
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-//        it.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (itFacList != null) {
-//                    listAdapter = new FacultyListAdapter(itFacList);
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FacultyInformation.this);
-//                    mRecyclerView.setLayoutManager(layoutManager);
-//                    mRecyclerView.setAdapter(listAdapter);
-//                    itLine.setVisibility(View.VISIBLE);
-//                    cseLine.setVisibility(View.INVISIBLE);
-//                    eceLine.setVisibility(View.INVISIBLE);
-//                    eeeLine.setVisibility(View.INVISIBLE);
-//                    maeLine.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//        });
-//
-//        cse.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (cseFacList != null) {
-//                    listAdapter = new FacultyListAdapter(cseFacList);
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FacultyInformation.this);
-//                    mRecyclerView.setLayoutManager(layoutManager);
-//                    mRecyclerView.setAdapter(listAdapter);
-//                    cseLine.setVisibility(View.VISIBLE);
-//                    itLine.setVisibility(View.INVISIBLE);
-//                    eceLine.setVisibility(View.INVISIBLE);
-//                    eeeLine.setVisibility(View.INVISIBLE);
-//                    maeLine.setVisibility(View.INVISIBLE);
-//                }
-//            }
-//        });
-//
-//        eee.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(FacultyInformation.this, "Updating Soon...", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        ece.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(FacultyInformation.this, "Updating Soon...", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        mae.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(FacultyInformation.this, "Updating Soon...", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+            }
 
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    private void fetchData(RequestQueue queue) {
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-//                        mAvi.hide();
 
                         try {
                             itFaculty = response.getJSONArray("IT");
@@ -181,6 +153,8 @@ public class FacultyInformation extends AppCompatActivity implements FacultyFrag
                                 itFacultyobj.imageUrl = itFacObj.getString("img");
                                 itFacList.add(itFacultyobj);
                             }
+                            Globals.itFacList = itFacList;
+
                             for (int i = 0; i < cseFaculty.length(); i++) {
                                 cseFacObj = cseFaculty.getJSONObject(i);
                                 cseFacultyobj = new Faculty();
@@ -191,7 +165,7 @@ public class FacultyInformation extends AppCompatActivity implements FacultyFrag
                                 cseFacultyobj.imageUrl = cseFacObj.getString("img");
                                 cseFacList.add(cseFacultyobj);
                             }
-//                            Log.d(TAG, "onResponse: " + response.getJSONArray("IT"));
+                            Globals.cseFacList = cseFacList;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -209,49 +183,15 @@ public class FacultyInformation extends AppCompatActivity implements FacultyFrag
             }
         });
         queue.add(request);
-
-        //Handling click listeners on TabLayout
-
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                switch (tab.getPosition())  {
-                    case 0:
-                        onFacultyChange(cseFacList);
-                        break;
-                    case 1:
-                        Log.d(TAG, "onTabSelected: " + itFacList);
-                        onFacultyChange(itFacList);
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new FacultyFragment("CSE"), "CSE");
         adapter.addFrag(new FacultyFragment("IT"), "IT");
-        adapter.addFrag(new FacultyFragment("ECE"), "ECE");
         viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public void onFacultyChange(ArrayList<Faculty> list) {
-        FacultyListAdapter adapter = new FacultyListAdapter(list);
-        FacultyFragment.recyclerView.setAdapter(adapter);
-    }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
