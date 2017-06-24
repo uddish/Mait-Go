@@ -1,6 +1,5 @@
 package com.example.uddishverma22.mait_go.Fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
 import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
-import com.example.uddishverma22.mait_go.Interface.FragmentInterface;
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
-import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 
@@ -30,10 +27,9 @@ public class FacultyFragment extends Fragment {
     private static final String TAG = "FacultyFragment";
     private View view;
     private String title;
-    ArrayList<Faculty> list;
     public static FacultyListAdapter adapter;
-
     public static RecyclerView recyclerView;
+    public static AVLoadingIndicatorView indicatorView;
 
     public FacultyFragment() {
     }
@@ -47,6 +43,9 @@ public class FacultyFragment extends Fragment {
 
         view = inflater.inflate(R.layout.faculty_recyclerview_test, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
+        indicatorView.show();
+        Log.d(TAG, "onCreateView: Setting up recycler");
         setupRecycler();
 
         return view;
@@ -57,11 +56,15 @@ public class FacultyFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (title.equals("CSE")) {
-            if (Globals.cseFacList != null && Globals.cseFacList.size() > 0)
+            if (Globals.cseFacList != null && Globals.cseFacList.size() > 0) {
                 adapter = new FacultyListAdapter(Globals.cseFacList);
+                indicatorView.hide();
+            }
         } else {
-            if (Globals.itFacList != null && Globals.itFacList.size() > 0)
+            if (Globals.itFacList != null && Globals.itFacList.size() > 0) {
                 adapter = new FacultyListAdapter(Globals.itFacList);
+                indicatorView.hide();
+            }
         }
         recyclerView.setAdapter(adapter);
 
