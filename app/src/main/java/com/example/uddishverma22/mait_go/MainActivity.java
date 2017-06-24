@@ -26,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity
     private static int IS_NET_AVAIL = 2000;
 
     LinearLayout linearLayout;
-    AnimationDrawable gradAnim;
     ActionBarDrawerToggle toggle;
 
     public static Context context;
@@ -123,6 +123,11 @@ public class MainActivity extends AppCompatActivity
 
     AVLoadingIndicatorView mAvi;
 
+    RequestQueue queue;
+
+    //Views when there is no class
+    RelativeLayout noClassLayout;
+    TextView noClassTv;
 
     public RecyclerView recyclerView;
     public DailyScheduleListAdapter scheduleListAdapter;
@@ -150,6 +155,8 @@ public class MainActivity extends AppCompatActivity
         //Crashlytics support
         Fabric.with(this, new Crashlytics());
 
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
         navHeaderText = (TextView) headerView.findViewById(R.id.nav_textview);
@@ -160,6 +167,8 @@ public class MainActivity extends AppCompatActivity
         if (!Preferences.getPrefs("studentRollNo", getApplicationContext()).equals("notfound")) {
             navHeaderText.setText(Preferences.getPrefs("studentRollNo", getApplicationContext()));
         }
+
+        fetchData(queue);
 
         //Setting the fonts
         tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
@@ -172,7 +181,141 @@ public class MainActivity extends AppCompatActivity
         mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mAvi.show();
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        //Attaching all the fields
+        attachFields();
+
+        currentDate = getCurrentDate();
+        currentDay = getCurrentDay();
+        currentYear = getCurrentYear();
+        currentMonth = getCurrentMonth();
+        date.setText(currentDate);
+        day.setText(currentDay);
+        month.setText(currentMonth.substring(0, 3) + " " + currentYear);
+
+//        Setting the actual details in all the fields
+        attachDateToDays();
+
+//        Sending the list to the adapter
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(scheduleListAdapter);
+        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
+
+
+        /**
+         * Checking which day is selected
+         */
+        mon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noClassLayout.setVisibility(View.GONE);
+                mondaySchedule = new ArrayList<DailySchedule>();
+                mondayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                monSelected = 1;
+                tueSelected = 0;
+                wedSelected = 0;
+                thuSelected = 0;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        tue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noClassLayout.setVisibility(View.GONE);
+                tuesdaySchedule = new ArrayList<DailySchedule>();
+                tuesdayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                monSelected = 0;
+                tueSelected = 1;
+                wedSelected = 0;
+                thuSelected = 0;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        wed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noClassLayout.setVisibility(View.GONE);
+                wednesdaySchedule = new ArrayList<DailySchedule>();
+                wednesdayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                monSelected = 0;
+                tueSelected = 0;
+                wedSelected = 1;
+                thuSelected = 0;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        thu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noClassLayout.setVisibility(View.GONE);
+                thursdaySchedule = new ArrayList<DailySchedule>();
+                thursdayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                monSelected = 0;
+                tueSelected = 0;
+                wedSelected = 0;
+                thuSelected = 1;
+                friSelected = 0;
+                changeDayCircleColor();
+            }
+        });
+        fri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noClassLayout.setVisibility(View.GONE);
+                fridaySchedule = new ArrayList<DailySchedule>();
+                fridayScheduleFunction();
+                scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                monSelected = 0;
+                tueSelected = 0;
+                wedSelected = 0;
+                thuSelected = 0;
+                friSelected = 1;
+                changeDayCircleColor();
+            }
+        });
+
+
+        //Setting NavBar items
+        getSupportActionBar().setElevation(0);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        toggle.setDrawerIndicatorEnabled(false);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        ColorStateList csl = AppCompatResources.getColorStateList(this, R.color.white);
+        Drawable drawableone = getResources().getDrawable(R.drawable.hamburger_icon);
+        DrawableCompat.setTintList(drawableone, csl);
+        toolbar.setNavigationIcon(drawableone);
+
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void fetchData(RequestQueue queue) {
+
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -212,6 +355,7 @@ public class MainActivity extends AppCompatActivity
                             });
 //***************************************************************************************************************************
                             switch (currentDay) {
+
                                 case "Monday":
                                     mondayScheduleFunction();
                                     mon.setBackgroundResource(R.drawable.circular_image);
@@ -246,6 +390,8 @@ public class MainActivity extends AppCompatActivity
                                     fri.setTextColor(Color.BLACK);
                                     scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
+                                    break;
+                                default: noClassLayout.setVisibility(View.VISIBLE);
                                     break;
                             }
 
@@ -326,135 +472,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         queue.add(request);
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        //Attaching all the fields
-        attachFields();
-
-        currentDate = getCurrentDate();
-        currentDay = getCurrentDay();
-        currentYear = getCurrentYear();
-        currentMonth = getCurrentMonth();
-        date.setText(currentDate);
-        day.setText(currentDay);
-        month.setText(currentMonth.substring(0, 3) + " " + currentYear);
-
-//        Setting the actual details in all the fields
-        attachDateToDays();
-
-//        Sending the list to the adapter
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(scheduleListAdapter);
-        linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
-
-
-        /**
-         * Checking which day is selected
-         */
-        mon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mondaySchedule = new ArrayList<DailySchedule>();
-                mondayScheduleFunction();
-                scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
-                recyclerView.setAdapter(scheduleListAdapter);
-                monSelected = 1;
-                tueSelected = 0;
-                wedSelected = 0;
-                thuSelected = 0;
-                friSelected = 0;
-                changeDayCircleColor();
-            }
-        });
-        tue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                tuesdaySchedule = new ArrayList<DailySchedule>();
-                tuesdayScheduleFunction();
-                scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
-                recyclerView.setAdapter(scheduleListAdapter);
-                monSelected = 0;
-                tueSelected = 1;
-                wedSelected = 0;
-                thuSelected = 0;
-                friSelected = 0;
-                changeDayCircleColor();
-            }
-        });
-        wed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wednesdaySchedule = new ArrayList<DailySchedule>();
-                wednesdayScheduleFunction();
-                scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
-                recyclerView.setAdapter(scheduleListAdapter);
-                monSelected = 0;
-                tueSelected = 0;
-                wedSelected = 1;
-                thuSelected = 0;
-                friSelected = 0;
-                changeDayCircleColor();
-            }
-        });
-        thu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                thursdaySchedule = new ArrayList<DailySchedule>();
-                thursdayScheduleFunction();
-                scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
-                recyclerView.setAdapter(scheduleListAdapter);
-                monSelected = 0;
-                tueSelected = 0;
-                wedSelected = 0;
-                thuSelected = 1;
-                friSelected = 0;
-                changeDayCircleColor();
-            }
-        });
-        fri.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fridaySchedule = new ArrayList<DailySchedule>();
-                fridayScheduleFunction();
-                scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
-                recyclerView.setAdapter(scheduleListAdapter);
-                monSelected = 0;
-                tueSelected = 0;
-                wedSelected = 0;
-                thuSelected = 0;
-                friSelected = 1;
-                changeDayCircleColor();
-            }
-        });
-
-
-        //Setting NavBar items
-        getSupportActionBar().setElevation(0);
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-
-        toggle.setDrawerIndicatorEnabled(false);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-
-        ColorStateList csl = AppCompatResources.getColorStateList(this, R.color.white);
-        Drawable drawableone = getResources().getDrawable(R.drawable.hamburger_icon);
-        DrawableCompat.setTintList(drawableone, csl);
-        toolbar.setNavigationIcon(drawableone);
-
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -530,6 +547,10 @@ public class MainActivity extends AppCompatActivity
         wed = (TextView) findViewById(R.id.date_wed);
         thu = (TextView) findViewById(R.id.date_thu);
         fri = (TextView) findViewById(R.id.date_fri);
+
+        noClassLayout = (RelativeLayout) findViewById(R.id.noclass_layout);
+        noClassTv = (TextView) findViewById(R.id.no_class_tv);
+        noClassTv.setTypeface(openSansReg);
 
         date.setTypeface(openSansBold);
         day.setTypeface(openSansReg);
