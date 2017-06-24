@@ -301,6 +301,8 @@ public class UserProfile extends AppCompatActivity {
 
     private void branchSelector() {
 
+        classBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         branchBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -367,6 +369,8 @@ public class UserProfile extends AppCompatActivity {
 
     private void semesterSelector() {
 
+        classBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         semesterBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -457,6 +461,8 @@ public class UserProfile extends AppCompatActivity {
 
     private void classSelector() {
 
+        branchBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         classBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         classBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
