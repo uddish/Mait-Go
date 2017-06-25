@@ -70,6 +70,8 @@ public class Result extends AppCompatActivity {
         rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
         url = url + rollNumber;
 
+        Log.d(TAG, "onCreate: Roll No " + url);
+
         realm = Realm.getDefaultInstance();
 
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
@@ -98,7 +100,7 @@ public class Result extends AppCompatActivity {
                         try {
                             avi.hide();
                             JSONArray jsonArray = response.getJSONArray("marks");
-                            percentage = String.valueOf((int) response.get("percentage"));
+                            percentage = String.valueOf((double) response.get("percentage"));
 
                             //converting perc and gpa upto 2 decimal places
                             double creditp = (double) response.get("creditp");
@@ -119,7 +121,7 @@ public class Result extends AppCompatActivity {
                                 resultObj.extMarks = jsonObject.getString("external");
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
-                                resultObj.percentage = String.valueOf((int) response.get("percentage"));
+                                resultObj.percentage = String.valueOf((double) response.get("percentage"));
                                 resultObj.univRank = String.valueOf((int) response.get("urank"));
                                 resultObj.colRank = String.valueOf((int) response.get("crank"));
                                 resultObj.creditPerc = String.valueOf(roundOffPerc);

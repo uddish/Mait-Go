@@ -34,10 +34,6 @@
             android:icon="@drawable/ic_events"
             android:id="@+id/events"
             android:title="Events" />
-        <item
-            android:icon="@drawable/settings_ic"
-            android:id="@+id/nav_manage"
-            android:title="Settings" />
     </group>
 
 </menu>
