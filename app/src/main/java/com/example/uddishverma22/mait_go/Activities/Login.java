@@ -213,6 +213,7 @@ public class Login extends AppCompatActivity {
                             avi.hide();
                             // Sign in success, update UI with the signed-in user's information
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
+                            Preferences.setPrefs("studentImage", String.vialueOf(acct.getPhotoUrl()), getApplicationContext());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                         } else {
