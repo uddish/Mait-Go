@@ -259,6 +259,20 @@
                 </android.support.v7.widget.CardView>
             </RelativeLayout>
 
+            <Button
+                android:id="@+id/btn_signout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:background="@drawable/custom_box_blue"
+                android:textAppearance="?android:textAppearanceLarge"/>
+
         </LinearLayout>
 
     </ScrollView>
@@ -267,6 +281,7 @@
         android:id="@+id/branch_bottomsheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
@@ -408,6 +423,7 @@
         android:id="@+id/semester_bottomsheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
@@ -621,6 +637,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/bottom_sheet_behavior"
+        android:visibility="invisible"
         android:background="@color/toryBlue">
 
         <LinearLayout

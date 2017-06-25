@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -54,6 +56,7 @@ public class UserProfile extends AppCompatActivity {
     public static int themeColor = 0;
     LinearLayout branchSelector, semesterSelector, classSelector;
     Typeface tf;
+    Button signOut;
 
     //SharedPrefs values
     String studentRollNo;
@@ -99,6 +102,8 @@ public class UserProfile extends AppCompatActivity {
 
         name = (TextView) findViewById(R.id.name_tv);
         roll = (TextView) findViewById(R.id.enrollment_tv);
+
+        signOut = (Button) findViewById(R.id.btn_signout);
 
         profileImage = (CircleImageView) findViewById(R.id.circleImageView);
         blurredBackImage = (ImageView) findViewById(R.id.profile_blur_img);
@@ -166,6 +171,15 @@ public class UserProfile extends AppCompatActivity {
 
         //Custom alert dialog to pick the branch
         alert = new AlertDialog.Builder(UserProfile.this);
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                finish();
+            }
+        });
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override

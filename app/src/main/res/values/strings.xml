@@ -16,4 +16,5 @@
 
     <string name="rollno_error">Enter your roll number</string>
     <string name="section_error">Enter your class</string>
+    <string name="semester_error">Enter your semester</string>
 </resources>
