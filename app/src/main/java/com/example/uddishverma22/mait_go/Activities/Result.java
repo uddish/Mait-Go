@@ -22,6 +22,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Globals;
+import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.RecyclerScroller;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -39,16 +41,14 @@ import io.realm.RealmResults;
 
 public class Result extends AppCompatActivity {
 
-    String roll = "40514803115";
-    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/result/" + roll;
+    String rollNumber = null;
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/result/";
     JSONObject jsonObject;
     public static String percentage = null;
 
     public static final String TAG = "Result";
 
     CircleProgressView mCircleView;
-
-    TextView cgpaTv, creditPercTv, cgpaTitle, creditPercTitle;
 
     CollapsingToolbarLayout collapsingToolbar;
 
@@ -60,17 +60,21 @@ public class Result extends AppCompatActivity {
 
     Realm realm = null;
     RealmResults<ResultModel> results;
-
-    LinearLayout cgpaPercLayout;
+    RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
+        url = url + rollNumber;
+
         realm = Realm.getDefaultInstance();
 
-        RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+        requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+
+        fetchData(requestQueue);
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Result");
@@ -79,23 +83,12 @@ public class Result extends AppCompatActivity {
 
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
 
-        Typeface tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
-        Typeface tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Light.ttf");
-
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
 
-//        recyclerView.setOnScrollListener(new RecyclerScroller() {
-//            @Override
-//            public void hide() {
-////                cgpaPercLayout.animate().translationY(-cgpaPercLayout.getHeight()).setInterpolator(new AccelerateInterpolator(2)).start();
-//            }
-//
-//            @Override
-//            public void show() {
-////                cgpaPercLayout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-//            }
-//        });
+    }
+
+    private void fetchData(RequestQueue requestQueue) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -127,8 +120,8 @@ public class Result extends AppCompatActivity {
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
                                 resultObj.percentage = String.valueOf((int) response.get("percentage"));
-                                resultObj.univRank = String.valueOf((int)response.get("urank"));
-                                resultObj.colRank = String.valueOf((int)response.get("crank"));
+                                resultObj.univRank = String.valueOf((int) response.get("urank"));
+                                resultObj.colRank = String.valueOf((int) response.get("crank"));
                                 resultObj.creditPerc = String.valueOf(roundOffPerc);
                                 resultObj.cgpa = String.valueOf(roundOffGpa);
 
@@ -150,7 +143,6 @@ public class Result extends AppCompatActivity {
                                 }, new Realm.Transaction.OnSuccess() {
                                     @Override
                                     public void onSuccess() {
-                                        Toast.makeText(Result.this, "Info stored in realm", Toast.LENGTH_SHORT).show();
 
                                     }
                                 }, new Realm.Transaction.OnError() {
@@ -194,6 +186,5 @@ public class Result extends AppCompatActivity {
             }
         });
         requestQueue.add(request);
-
     }
 }

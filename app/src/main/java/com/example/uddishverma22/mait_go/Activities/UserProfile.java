@@ -235,19 +235,20 @@ public class UserProfile extends AppCompatActivity {
 
     private void setStudentDetails() {
         studentName = Preferences.getPrefs("studentName", getApplicationContext());
-        studentRollNo = Preferences.getPrefs("studentRollNo", getApplicationContext());
+        studentRollNo = Preferences.getPrefs("rollNo", getApplicationContext());
         studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
         studentBranch = Preferences.getPrefs("studentBranch", getApplicationContext());
         studentSemester = Preferences.getPrefs("studentSemester", getApplicationContext());
-        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
-                && !studentSection.equals("notfound") && !studentBranch.equals("notfound")
-                && !studentSemester.equals("notfound")) {
+//        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
+//                && !studentSection.equals("notfound") && !studentBranch.equals("notfound")
+//                && !studentSemester.equals("notfound")) {
             name.setText(studentName);
             roll.setText(studentRollNo);
             className.setText(studentSection);
-            branch.setText(studentBranch);
+        Log.d(TAG, "setStudentDetails: " + studentSection);
+            branch.setText("CSE");
             semester.setText(studentSemester);
-        }
+//        }
     }
 
     @Override
