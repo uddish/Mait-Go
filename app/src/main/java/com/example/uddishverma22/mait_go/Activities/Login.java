@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
+import com.example.uddishverma22.mait_go.Utils.HideKeyboard;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -89,6 +92,8 @@ public class Login extends AppCompatActivity {
                 if(checkForNullRollNo() && checkForNullSection() && checkForNullSemester()) {
                     signIn();
                     avi.show();
+                    InputMethodManager imm = (InputMethodManager) MainActivity.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);
                 }
             }
         });
@@ -160,7 +165,7 @@ public class Login extends AppCompatActivity {
 
     private boolean checkForNullSemester()   {
         if(TextUtils.isEmpty(semester.getText().toString()))  {
-            semesterLayout.setError(getString(R.string.section_error));
+            semesterLayout.setError(getString(R.string.semester_error));
             requestFocus(semester);
             return false;
         }
