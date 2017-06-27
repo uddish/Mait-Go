@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity
     TextView date, day, month;
     TextView monTv, tueTv, wedTv, thuTv, friTv;
     TextView monHeading, tueHeading, wedHeading, thuHeading, friheading;
+
+    View mainSideView;
+
     LinearLayout mon, tue, wed, thu, fri;
     static int monSelected = 0;
     static int tueSelected = 0;
@@ -282,7 +285,24 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setElevation(0);
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)   {
+            public void onDrawerClosed(View view) {
+                supportInvalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                supportInvalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                mainSideView.setTranslationX(slideOffset * drawerView.getWidth());
+                drawer.bringChildToFront(drawerView);
+                drawer.requestLayout();
+            }
+        };
+        drawer.setDrawerListener(toggle);
 
         toggle.setDrawerIndicatorEnabled(false);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -525,6 +545,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void attachFields() {
+
+        mainSideView = (View)findViewById(R.id.main_view);
+
         date = (TextView) findViewById(R.id.date_tv);
         day = (TextView) findViewById(R.id.day_tv);
         month = (TextView) findViewById(R.id.month_tv);
