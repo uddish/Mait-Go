@@ -1,16 +1,12 @@
-package com.example.uddishverma22.mait_go;
+package com.example.uddishverma22.mait_go.Activities;
 
-import android.app.ActionBar;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,20 +31,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
-import com.example.uddishverma22.mait_go.Activities.Announcements;
-import com.example.uddishverma22.mait_go.Activities.Assignments;
-import com.example.uddishverma22.mait_go.Activities.FacultyInformation;
-import com.example.uddishverma22.mait_go.Activities.Login;
-import com.example.uddishverma22.mait_go.Activities.Notices;
-import com.example.uddishverma22.mait_go.Activities.Result;
-import com.example.uddishverma22.mait_go.Activities.UpcomingEvents;
-import com.example.uddishverma22.mait_go.Activities.UserProfile;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
-import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.Models.TempModel;
+import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.squareup.picasso.Picasso;
@@ -134,8 +121,9 @@ public class MainActivity extends AppCompatActivity
     String currentDate, currentDay, currentYear, currentMonth;
     Toolbar toolbar;
     TextView date, day, month;
-    TextView mon, tue, wed, thu, fri;
+    TextView monTv, tueTv, wedTv, thuTv, friTv;
     TextView monHeading, tueHeading, wedHeading, thuHeading, friheading;
+    LinearLayout mon, tue, wed, thu, fri;
     static int monSelected = 0;
     static int tueSelected = 0;
     static int wedSelected = 0;
@@ -168,6 +156,7 @@ public class MainActivity extends AppCompatActivity
             navHeaderText.setText(Preferences.getPrefs("studentRollNo", getApplicationContext()));
         }
 
+        //fetching data from API
         fetchData(queue);
 
         //Setting the fonts
@@ -358,36 +347,36 @@ public class MainActivity extends AppCompatActivity
 
                                 case "Monday":
                                     mondayScheduleFunction();
-                                    mon.setBackgroundResource(R.drawable.circular_image);
-                                    mon.setTextColor(Color.BLACK);
+                                    monTv.setBackgroundResource(R.drawable.circular_image);
+                                    monTv.setTextColor(Color.BLACK);
                                     scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
                                     break;
                                 case "Tuesday":
                                     tuesdayScheduleFunction();
-                                    tue.setBackgroundResource(R.drawable.circular_image);
-                                    tue.setTextColor(Color.BLACK);
+                                    tueTv.setBackgroundResource(R.drawable.circular_image);
+                                    tueTv.setTextColor(Color.BLACK);
                                     scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
                                     break;
                                 case "Wednesday":
                                     wednesdayScheduleFunction();
-                                    wed.setBackgroundResource(R.drawable.circular_image);
-                                    wed.setTextColor(Color.BLACK);
+                                    wedTv.setBackgroundResource(R.drawable.circular_image);
+                                    wedTv.setTextColor(Color.BLACK);
                                     scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
                                     break;
                                 case "Thursday":
                                     thursdayScheduleFunction();
-                                    thu.setBackgroundResource(R.drawable.circular_image);
-                                    thu.setTextColor(Color.BLACK);
+                                    thuTv.setBackgroundResource(R.drawable.circular_image);
+                                    thuTv.setTextColor(Color.BLACK);
                                     scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
                                     break;
                                 case "Friday":
                                     fridayScheduleFunction();
-                                    fri.setBackgroundResource(R.drawable.circular_image);
-                                    fri.setTextColor(Color.BLACK);
+                                    friTv.setBackgroundResource(R.drawable.circular_image);
+                                    friTv.setTextColor(Color.BLACK);
                                     scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
                                     break;
@@ -539,11 +528,17 @@ public class MainActivity extends AppCompatActivity
         date = (TextView) findViewById(R.id.date_tv);
         day = (TextView) findViewById(R.id.day_tv);
         month = (TextView) findViewById(R.id.month_tv);
-        mon = (TextView) findViewById(R.id.date_mon);
-        tue = (TextView) findViewById(R.id.date_tue);
-        wed = (TextView) findViewById(R.id.date_wed);
-        thu = (TextView) findViewById(R.id.date_thu);
-        fri = (TextView) findViewById(R.id.date_fri);
+        monTv = (TextView) findViewById(R.id.date_mon);
+        tueTv = (TextView) findViewById(R.id.date_tue);
+        wedTv = (TextView) findViewById(R.id.date_wed);
+        thuTv = (TextView) findViewById(R.id.date_thu);
+        friTv = (TextView) findViewById(R.id.date_fri);
+
+        mon = (LinearLayout) findViewById(R.id.ll_mon);
+        tue = (LinearLayout) findViewById(R.id.ll_tue);
+        wed = (LinearLayout) findViewById(R.id.ll_wed);
+        thu = (LinearLayout) findViewById(R.id.ll_thu);
+        fri = (LinearLayout) findViewById(R.id.ll_fri);
 
         noClassLayout = (RelativeLayout) findViewById(R.id.noclass_layout);
         noClassTv = (TextView) findViewById(R.id.no_class_tv);
@@ -552,11 +547,11 @@ public class MainActivity extends AppCompatActivity
         date.setTypeface(openSansBold);
         day.setTypeface(openSansReg);
         month.setTypeface(openSansReg);
-        mon.setTypeface(openSansReg);
-        tue.setTypeface(openSansReg);
-        wed.setTypeface(openSansReg);
-        thu.setTypeface(openSansReg);
-        fri.setTypeface(openSansReg);
+        monTv.setTypeface(openSansReg);
+        tueTv.setTypeface(openSansReg);
+        wedTv.setTypeface(openSansReg);
+        thuTv.setTypeface(openSansReg);
+        friTv.setTypeface(openSansReg);
 
         monHeading = (TextView) findViewById(R.id.mon_heading);
         tueHeading = (TextView) findViewById(R.id.tue_heading);
@@ -594,7 +589,7 @@ public class MainActivity extends AppCompatActivity
 
         if (currentDay.equals("Monday")) {
 
-            mon.setText(currentDate);
+            monTv.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -602,24 +597,24 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, 1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0, 2));
-            //setting date for wed
+            tueTv.setText(dt.substring(0, 2));
+            //setting date for wedTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0, 2));
-            //setting date for thu
+            wedTv.setText(dt.substring(0, 2));
+            //setting date for thuTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0, 2));
-            //setting date for fri
+            thuTv.setText(dt.substring(0, 2));
+            //setting date for friTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0, 2));
+            friTv.setText(dt.substring(0, 2));
         }
 
         if (currentDay.equals("Tuesday")) {
 
-            tue.setText(currentDate);
+            tueTv.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -627,24 +622,24 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0, 2));
-            //setting date for wed
+            monTv.setText(dt.substring(0, 2));
+            //setting date for wedTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0, 2));
-            //setting date for thu
+            wedTv.setText(dt.substring(0, 2));
+            //setting date for thuTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0, 2));
-            //setting date for fri
+            thuTv.setText(dt.substring(0, 2));
+            //setting date for friTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0, 2));
+            friTv.setText(dt.substring(0, 2));
         }
 
         if (currentDay.equals("Wednesday")) {
 
-            wed.setText(currentDate);
+            wedTv.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -652,23 +647,23 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, 1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0, 2));
-            //setting date for fri
+            thuTv.setText(dt.substring(0, 2));
+            //setting date for friTv
             calendar.add(Calendar.DATE, 1);
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0, 2));
-            //setting date for tue
+            friTv.setText(dt.substring(0, 2));
+            //setting date for tueTv
             calendar.add(Calendar.DATE, -3);
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0, 2));
-            //setting date for mon
+            tueTv.setText(dt.substring(0, 2));
+            //setting date for monTv
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0, 2));
+            monTv.setText(dt.substring(0, 2));
         }
         if (currentDay.equals("Thursday")) {
 
-            thu.setText(currentDate);
+            thuTv.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -676,23 +671,23 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, 1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0, 2));
-            //setting date for wed
+            friTv.setText(dt.substring(0, 2));
+            //setting date for wedTv
             calendar.add(Calendar.DATE, -2);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0, 2));
-            //setting date for tue
+            wedTv.setText(dt.substring(0, 2));
+            //setting date for tueTv
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0, 2));
-            //setting date for mon
+            tueTv.setText(dt.substring(0, 2));
+            //setting date for monTv
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0, 2));
+            monTv.setText(dt.substring(0, 2));
         }
         if (currentDay.equals("Friday")) {
 
-            fri.setText(currentDate);
+            friTv.setText(currentDate);
             try {
                 calendar.setTime(sdf.parse(dt));
             } catch (ParseException e) {
@@ -700,19 +695,19 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0, 2));
-            //setting date for wed
+            thuTv.setText(dt.substring(0, 2));
+            //setting date for wedTv
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0, 2));
-            //setting date for tue
+            wedTv.setText(dt.substring(0, 2));
+            //setting date for tueTv
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0, 2));
-            //setting date for mon
+            tueTv.setText(dt.substring(0, 2));
+            //setting date for monTv
             calendar.add(Calendar.DATE, -1);
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0, 2));
+            monTv.setText(dt.substring(0, 2));
         }
         if (currentDay.equals("Saturday")) {
             try {
@@ -722,19 +717,19 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0, 2));      //setting date for fri
+            friTv.setText(dt.substring(0, 2));      //setting date for friTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0, 2));      //setting date for thu
+            thuTv.setText(dt.substring(0, 2));      //setting date for thuTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0, 2));      //setting date for wed
+            wedTv.setText(dt.substring(0, 2));      //setting date for wedTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0, 2));      //setting date for tue
+            tueTv.setText(dt.substring(0, 2));      //setting date for tueTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0, 2));      //setting date for mon
+            monTv.setText(dt.substring(0, 2));      //setting date for monTv
         }
         if (currentDay.equals("Sunday")) {
             try {
@@ -744,19 +739,19 @@ public class MainActivity extends AppCompatActivity
             }
             calendar.add(Calendar.DATE, -2);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            fri.setText(dt.substring(0, 2));      //setting date for fri
+            friTv.setText(dt.substring(0, 2));      //setting date for friTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            thu.setText(dt.substring(0, 2));      //setting date for thu
+            thuTv.setText(dt.substring(0, 2));      //setting date for thuTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            wed.setText(dt.substring(0, 2));      //setting date for wed
+            wedTv.setText(dt.substring(0, 2));      //setting date for wedTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            tue.setText(dt.substring(0, 2));      //setting date for tue
+            tueTv.setText(dt.substring(0, 2));      //setting date for tueTv
             calendar.add(Calendar.DATE, -1);  // number of days to add
             dt = sdf.format(calendar.getTime());
-            mon.setText(dt.substring(0, 2));      //setting date for mon
+            monTv.setText(dt.substring(0, 2));      //setting date for monTv
         }
 
     }
@@ -921,65 +916,65 @@ public class MainActivity extends AppCompatActivity
 
     private void changeDayCircleColor() {
         if (monSelected == 1) {
-            mon.setBackgroundResource(R.drawable.circular_image);
-            mon.setTextColor(Color.BLACK);
+            monTv.setBackgroundResource(R.drawable.circular_image);
+            monTv.setTextColor(Color.BLACK);
 
-            tue.setBackgroundResource(0);
-            tue.setTextColor(Color.WHITE);
-            wed.setBackgroundResource(0);
-            wed.setTextColor(Color.WHITE);
-            thu.setBackgroundResource(0);
-            thu.setTextColor(Color.WHITE);
-            fri.setBackgroundResource(0);
-            fri.setTextColor(Color.WHITE);
+            tueTv.setBackgroundResource(0);
+            tueTv.setTextColor(Color.WHITE);
+            wedTv.setBackgroundResource(0);
+            wedTv.setTextColor(Color.WHITE);
+            thuTv.setBackgroundResource(0);
+            thuTv.setTextColor(Color.WHITE);
+            friTv.setBackgroundResource(0);
+            friTv.setTextColor(Color.WHITE);
         } else if (tueSelected == 1) {
-            tue.setBackgroundResource(R.drawable.circular_image);
-            tue.setTextColor(Color.BLACK);
+            tueTv.setBackgroundResource(R.drawable.circular_image);
+            tueTv.setTextColor(Color.BLACK);
 
-            mon.setBackgroundResource(0);
-            mon.setTextColor(Color.WHITE);
-            wed.setBackgroundResource(0);
-            wed.setTextColor(Color.WHITE);
-            thu.setBackgroundResource(0);
-            thu.setTextColor(Color.WHITE);
-            fri.setBackgroundResource(0);
-            fri.setTextColor(Color.WHITE);
+            monTv.setBackgroundResource(0);
+            monTv.setTextColor(Color.WHITE);
+            wedTv.setBackgroundResource(0);
+            wedTv.setTextColor(Color.WHITE);
+            thuTv.setBackgroundResource(0);
+            thuTv.setTextColor(Color.WHITE);
+            friTv.setBackgroundResource(0);
+            friTv.setTextColor(Color.WHITE);
         } else if (wedSelected == 1) {
-            wed.setBackgroundResource(R.drawable.circular_image);
-            wed.setTextColor(Color.BLACK);
+            wedTv.setBackgroundResource(R.drawable.circular_image);
+            wedTv.setTextColor(Color.BLACK);
 
-            mon.setBackgroundResource(0);
-            mon.setTextColor(Color.WHITE);
-            tue.setBackgroundResource(0);
-            tue.setTextColor(Color.WHITE);
-            thu.setBackgroundResource(0);
-            thu.setTextColor(Color.WHITE);
-            fri.setBackgroundResource(0);
-            fri.setTextColor(Color.WHITE);
+            monTv.setBackgroundResource(0);
+            monTv.setTextColor(Color.WHITE);
+            tueTv.setBackgroundResource(0);
+            tueTv.setTextColor(Color.WHITE);
+            thuTv.setBackgroundResource(0);
+            thuTv.setTextColor(Color.WHITE);
+            friTv.setBackgroundResource(0);
+            friTv.setTextColor(Color.WHITE);
         } else if (thuSelected == 1) {
-            thu.setBackgroundResource(R.drawable.circular_image);
-            thu.setTextColor(Color.BLACK);
+            thuTv.setBackgroundResource(R.drawable.circular_image);
+            thuTv.setTextColor(Color.BLACK);
 
-            mon.setBackgroundResource(0);
-            mon.setTextColor(Color.WHITE);
-            tue.setBackgroundResource(0);
-            tue.setTextColor(Color.WHITE);
-            wed.setBackgroundResource(0);
-            wed.setTextColor(Color.WHITE);
-            fri.setBackgroundResource(0);
-            fri.setTextColor(Color.WHITE);
+            monTv.setBackgroundResource(0);
+            monTv.setTextColor(Color.WHITE);
+            tueTv.setBackgroundResource(0);
+            tueTv.setTextColor(Color.WHITE);
+            wedTv.setBackgroundResource(0);
+            wedTv.setTextColor(Color.WHITE);
+            friTv.setBackgroundResource(0);
+            friTv.setTextColor(Color.WHITE);
         } else if (friSelected == 1) {
-            fri.setBackgroundResource(R.drawable.circular_image);
-            fri.setTextColor(Color.BLACK);
+            friTv.setBackgroundResource(R.drawable.circular_image);
+            friTv.setTextColor(Color.BLACK);
 
-            mon.setBackgroundResource(0);
-            mon.setTextColor(Color.WHITE);
-            tue.setBackgroundResource(0);
-            tue.setTextColor(Color.WHITE);
-            thu.setBackgroundResource(0);
-            thu.setTextColor(Color.WHITE);
-            wed.setBackgroundResource(0);
-            wed.setTextColor(Color.WHITE);
+            monTv.setBackgroundResource(0);
+            monTv.setTextColor(Color.WHITE);
+            tueTv.setBackgroundResource(0);
+            tueTv.setTextColor(Color.WHITE);
+            thuTv.setBackgroundResource(0);
+            thuTv.setTextColor(Color.WHITE);
+            wedTv.setBackgroundResource(0);
+            wedTv.setTextColor(Color.WHITE);
         }
     }
 

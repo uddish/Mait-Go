@@ -23,8 +23,6 @@
             android:fitsSystemWindows="true"
             CircleProgressView:collapsedTitleTextAppearance="?android:textAppearanceMedium"
             CircleProgressView:contentScrim="@color/toryBlue"
-            CircleProgressView:expandedTitleMarginEnd="64dp"
-            CircleProgressView:expandedTitleMarginStart="28dp"
             CircleProgressView:expandedTitleTextAppearance="?android:textAppearanceLarge"
             CircleProgressView:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -92,12 +90,12 @@
         CircleProgressView:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/perc_cgpa_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/resolutionBlue"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="0dp"

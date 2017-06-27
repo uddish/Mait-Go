@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,7 +83,6 @@ public class UserProfile extends AppCompatActivity {
 
 
     AlertDialog.Builder alert;
-    View alertLayout;
     TextView branchCs, branchIt, branchEce, branchEee, branchMae;            //tv for the branch bottomsheet
     TextView first, second, third, fourth, fifth, sixth, seventh, eighth;    //tv for the popup semester menu
     EditText classCharacter, classNo;                                       //et for the class bottomsheet

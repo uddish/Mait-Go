@@ -3,10 +3,9 @@ package com.example.uddishverma22.mait_go.Utils;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.example.uddishverma22.mait_go.MainActivity;
+import com.example.uddishverma22.mait_go.Activities.MainActivity;
 
 /**
  * Created by uddishverma on 13/06/17.

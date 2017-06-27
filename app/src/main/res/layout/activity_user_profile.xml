@@ -281,7 +281,6 @@
         android:id="@+id/branch_bottomsheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
@@ -423,7 +422,6 @@
         android:id="@+id/semester_bottomsheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
@@ -637,7 +635,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/bottom_sheet_behavior"
-        android:visibility="invisible"
         android:background="@color/toryBlue">
 
         <LinearLayout

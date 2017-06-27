@@ -19,10 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.uddishverma22.mait_go.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
-import com.example.uddishverma22.mait_go.Utils.HideKeyboard;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -59,6 +57,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         signInButton = (Button) findViewById(R.id.sign_in_button);
 
         mAuth = FirebaseAuth.getInstance();
@@ -92,7 +91,7 @@ public class Login extends AppCompatActivity {
                 if(checkForNullRollNo() && checkForNullSection() && checkForNullSemester()) {
                     signIn();
                     avi.show();
-                    InputMethodManager imm = (InputMethodManager) MainActivity.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) Login.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);
                 }
             }
