@@ -100,7 +100,7 @@ public class Result extends AppCompatActivity {
                         try {
                             avi.hide();
                             JSONArray jsonArray = response.getJSONArray("marks");
-                            percentage = String.valueOf((double) response.get("percentage"));
+                            percentage = String.valueOf(Double.parseDouble(String.valueOf((response.get("percentage")))));
 
                             //converting perc and gpa upto 2 decimal places
                             double creditp = (double) response.get("creditp");
@@ -121,9 +121,9 @@ public class Result extends AppCompatActivity {
                                 resultObj.extMarks = jsonObject.getString("external");
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
-                                resultObj.percentage = String.valueOf((double) response.get("percentage"));
-                                resultObj.univRank = String.valueOf((int) response.get("urank"));
-                                resultObj.colRank = String.valueOf((int) response.get("crank"));
+                                resultObj.percentage = String.valueOf(response.get("percentage"));
+                                resultObj.univRank = String.valueOf(response.get("urank"));
+                                resultObj.colRank = String.valueOf(response.get("crank"));
                                 resultObj.creditPerc = String.valueOf(roundOffPerc);
                                 resultObj.cgpa = String.valueOf(roundOffGpa);
 

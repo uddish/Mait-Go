@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.uddishverma22.mait_go.MainActivity">
+    tools:context="com.example.uddishverma22.mait_go.Activities.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -85,6 +85,7 @@
                     android:padding="10dp">
 
                     <LinearLayout
+                        android:id="@+id/ll_mon"
                         android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -112,6 +113,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_tue"
                         android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -139,6 +141,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_wed"
                         android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -166,6 +169,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_thu"
                         android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -193,6 +197,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_fri"
                         android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
