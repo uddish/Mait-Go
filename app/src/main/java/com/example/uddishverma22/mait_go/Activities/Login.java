@@ -65,7 +65,7 @@ public class Login extends AppCompatActivity {
 
         attachViews();
 
-        if(currentUser != null) {
+        if (currentUser != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkForNullRollNo() && checkForNullSection() && checkForNullSemester()) {
+                if (checkForNullRollNo() && checkForNullSection() && checkForNullSemester()) {
                     signIn();
                     avi.show();
                     InputMethodManager imm = (InputMethodManager) Login.this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -109,7 +109,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length() == 1)
+                if (s.length() == 1)
                     s.append("-");
             }
         });
@@ -135,26 +135,25 @@ public class Login extends AppCompatActivity {
         subHeading.setTypeface(tf);
     }
 
-    private boolean checkForNullRollNo()   {
-        if(TextUtils.isEmpty(rollNo.getText().toString()))  {
+    private boolean checkForNullRollNo() {
+        if (TextUtils.isEmpty(rollNo.getText().toString())) {
             rollnoLayout.setError(getString(R.string.rollno_error));
             requestFocus(rollNo);
             return false;
-        }
-        else    {
+        } else {
             Globals.rollNo = rollNo.getText().toString();
             Preferences.setPrefs("rollNo", rollNo.getText().toString(), getApplicationContext());
             rollnoLayout.setErrorEnabled(false);
         }
         return true;
     }
-    private boolean checkForNullSection()   {
-        if(TextUtils.isEmpty(section.getText().toString()))  {
+
+    private boolean checkForNullSection() {
+        if (TextUtils.isEmpty(section.getText().toString())) {
             sectionLayout.setError(getString(R.string.section_error));
             requestFocus(section);
             return false;
-        }
-        else    {
+        } else {
             Globals.section = section.getText().toString();
             Preferences.setPrefs("studentSection", Globals.section, getApplicationContext());
             sectionLayout.setErrorEnabled(false);
@@ -162,13 +161,12 @@ public class Login extends AppCompatActivity {
         return true;
     }
 
-    private boolean checkForNullSemester()   {
-        if(TextUtils.isEmpty(semester.getText().toString()))  {
+    private boolean checkForNullSemester() {
+        if (TextUtils.isEmpty(semester.getText().toString())) {
             semesterLayout.setError(getString(R.string.semester_error));
             requestFocus(semester);
             return false;
-        }
-        else    {
+        } else {
             Globals.semester = semester.getText().toString();
             Preferences.setPrefs("studentSemester", Globals.semester, getApplicationContext());
             semesterLayout.setErrorEnabled(false);

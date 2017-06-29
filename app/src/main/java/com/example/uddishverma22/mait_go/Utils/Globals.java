@@ -13,6 +13,7 @@ public class Globals {
 
     public static ArrayList<Faculty> itFacList = new ArrayList<>();
     public static ArrayList<Faculty> cseFacList = new ArrayList<>();
+    public static ArrayList<Faculty> eceFacList = new ArrayList<>();
     public static String rollNo;
     public static String section;
     public static String semester;

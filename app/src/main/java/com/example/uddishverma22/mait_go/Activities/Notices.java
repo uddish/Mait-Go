@@ -90,17 +90,16 @@ public class Notices extends AppCompatActivity {
         setToolbar();
 
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener()    {
+                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(View view, int position) {
-                        if(IS_INTERNET_AVAILABLE == 2009) {
+                        if (IS_INTERNET_AVAILABLE == 2009) {
                             Notice notice = noticeList.get(position);
                             Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
                             i.putExtra("url", notice.url);
                             startActivity(i);
-                        }
-                        else    {
+                        } else {
                             Toast.makeText(Notices.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -113,7 +112,7 @@ public class Notices extends AppCompatActivity {
         );
 
         noticeHeading = (TextView) findViewById(R.id.notice_tv);
-        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
         noticeHeading.setTypeface(tf);
 
     }
@@ -129,8 +128,7 @@ public class Notices extends AppCompatActivity {
 
                         indicatorView.hide();
                         try {
-                            for(int n = 0; n < response.length(); n++)
-                            {
+                            for (int n = 0; n < response.length(); n++) {
                                 object = response.getJSONObject(n);
                                 noticeObj = new Notice();
                                 noticeObj.notice = object.getString("notice");
@@ -142,7 +140,7 @@ public class Notices extends AppCompatActivity {
                             /**
                              * ************************** Saving data to Realm **************************
                              */
-                            if(noticeList.size() != 0) {
+                            if (noticeList.size() != 0) {
 
                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                     @Override

@@ -259,12 +259,12 @@ public class UserProfile extends AppCompatActivity {
 //        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
 //                && !studentSection.equals("notfound") && !studentBranch.equals("notfound")
 //                && !studentSemester.equals("notfound")) {
-            name.setText(studentName);
-            roll.setText(studentRollNo);
-            className.setText(studentSection);
+        name.setText(studentName);
+        roll.setText(studentRollNo);
+        className.setText(studentSection);
         Log.d(TAG, "setStudentDetails: " + studentSection);
-            branch.setText("CSE");
-            semester.setText(studentSemester);
+        branch.setText("CSE");
+        semester.setText(studentSemester);
 //        }
     }
 
@@ -335,7 +335,7 @@ public class UserProfile extends AppCompatActivity {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
-                        if(!TextUtils.isEmpty("N/A")) {
+                        if (!TextUtils.isEmpty("N/A")) {
                             Preferences.setPrefs("studentBranch", branch.getText().toString(),
                                     getApplicationContext());
                         }
@@ -403,7 +403,7 @@ public class UserProfile extends AppCompatActivity {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
-                        if(!TextUtils.isEmpty("N/A")) {
+                        if (!TextUtils.isEmpty("N/A")) {
                             Preferences.setPrefs("studentSemester", semester.getText().toString(),
                                     getApplicationContext());
                         }
