@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -55,6 +57,7 @@ public class UserProfile extends AppCompatActivity {
     LinearLayout branchSelector, semesterSelector, classSelector;
     Typeface tf;
     Button signOut;
+    Toolbar toolbar;
 
     //SharedPrefs values
     String studentRollNo;
@@ -93,32 +96,9 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        //Back Button
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        attachViews();
 
-        name = (TextView) findViewById(R.id.name_tv);
-        roll = (TextView) findViewById(R.id.enrollment_tv);
-
-        signOut = (Button) findViewById(R.id.btn_signout);
-
-        profileImage = (CircleImageView) findViewById(R.id.circleImageView);
-        blurredBackImage = (ImageView) findViewById(R.id.profile_blur_img);
-        display = getWindowManager().getDefaultDisplay();
-        size = new Point();
-
-        tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
-        branch = (TextView) findViewById(R.id.branch_tv);
-        semester = (TextView) findViewById(R.id.semester_tv);
-        className = (TextView) findViewById(R.id.class_tv);
-        branch.setTypeface(tf);
-        semester.setTypeface(tf);
-        className.setTypeface(tf);
-
-
-        branchSelector = (LinearLayout) findViewById(R.id.branch_selector);
-        semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
-        classSelector = (LinearLayout) findViewById(R.id.class_selector);
+        setToolbar();
 
         setStudentDetails();
 
@@ -227,6 +207,32 @@ public class UserProfile extends AppCompatActivity {
 
     }
 
+    private void attachViews() {
+
+        name = (TextView) findViewById(R.id.name_tv);
+        roll = (TextView) findViewById(R.id.enrollment_tv);
+
+        signOut = (Button) findViewById(R.id.btn_signout);
+
+        profileImage = (CircleImageView) findViewById(R.id.circleImageView);
+        blurredBackImage = (ImageView) findViewById(R.id.profile_blur_img);
+        display = getWindowManager().getDefaultDisplay();
+        size = new Point();
+
+        tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
+        branch = (TextView) findViewById(R.id.branch_tv);
+        semester = (TextView) findViewById(R.id.semester_tv);
+        className = (TextView) findViewById(R.id.class_tv);
+        branch.setTypeface(tf);
+        semester.setTypeface(tf);
+        className.setTypeface(tf);
+
+        branchSelector = (LinearLayout) findViewById(R.id.branch_selector);
+        semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
+        classSelector = (LinearLayout) findViewById(R.id.class_selector);
+
+    }
+
     private void setProfilePic() {
 
         studentPicPath = Preferences.getPrefs("studentImage", getApplicationContext());
@@ -303,12 +309,19 @@ public class UserProfile extends AppCompatActivity {
 //        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        finish();
-        return true;
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        Intent i = new Intent(this, MainActivity.class);
+//        startActivity(i);
+//        finish();
+//        return true;
+//    }
+
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_profile);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 
     private void branchSelector() {

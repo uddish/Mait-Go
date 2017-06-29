@@ -2,11 +2,16 @@ package com.example.uddishverma22.mait_go.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -58,11 +63,11 @@ public class Notices extends AppCompatActivity {
     public RecyclerView recyclerView;
     public NoticeAdapter noticeAdapter;
     TextView noticeHeading;
-    RelativeLayout relativeLayout;
     View view;
     ImageView iconNotice;
-
     RealmResults<Notice> results;
+    Toolbar toolbar;
+    AVLoadingIndicatorView indicatorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +78,16 @@ public class Notices extends AppCompatActivity {
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
-        final AVLoadingIndicatorView indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
         recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
 
-        relativeLayout = (RelativeLayout) findViewById(R.id.relativelayout);
+        fetchData(queue);
+
         view = findViewById(R.id.view);
         iconNotice = (ImageView) findViewById(R.id.img_notice_icon);
+
+        setToolbar();
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener()    {
@@ -107,6 +115,10 @@ public class Notices extends AppCompatActivity {
         noticeHeading = (TextView) findViewById(R.id.notice_tv);
         Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(),"fonts/Raleway-Regular.ttf");
         noticeHeading.setTypeface(tf);
+
+    }
+
+    private void fetchData(RequestQueue queue) {
 
         JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
@@ -143,7 +155,6 @@ public class Notices extends AppCompatActivity {
                                 }, new Realm.Transaction.OnSuccess() {
                                     @Override
                                     public void onSuccess() {
-                                        Toast.makeText(Notices.this, "Info Stored in Realm", Toast.LENGTH_SHORT).show();
                                     }
                                 }, new Realm.Transaction.OnError() {
                                     @Override
@@ -187,22 +198,20 @@ public class Notices extends AppCompatActivity {
             }
         });
         queue.add(jsonArrayReq);
-//        jsonArrayReq.setRetryPolicy(new DefaultRetryPolicy(
-//                5000,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+    }
 
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_notice);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+//        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+//        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+//        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(UserProfile.themeColor == 101)   {
-            relativeLayout.setBackgroundResource(R.drawable.yellow_gradient);
-            view.setBackgroundResource(R.drawable.yellow_gradient);
-            iconNotice.setImageResource(R.drawable.ic_notice_yel);
-            iconNotice.setBackgroundResource(R.drawable.circular_yellow);
-            recyclerView.setAdapter(noticeAdapter);
-        }
     }
 }

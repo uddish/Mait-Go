@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -58,17 +59,15 @@ public class FacultyInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faculty_information);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
+        fetchData(queue);
+
+        setToolbar();
 
         openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
 
-        queue = VolleySingleton.getInstance(this).getRequestQueue();
-        fetchData(queue);
-
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-//        setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
@@ -188,5 +187,12 @@ public class FacultyInformation extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_faculty);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 }

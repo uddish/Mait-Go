@@ -87,20 +87,8 @@ public class Result extends AppCompatActivity {
 
         fetchData(requestQueue);
 
-        //Setting text on collabsible toolbar according to screen size
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        screenHeight = size.y;
-        screenWidth = size.x;
-        toolbar = (Toolbar) findViewById(R.id.result_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_result);
-        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(screenWidth, screenHeight/3));
-
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Result");
+        //Setting text on collapsible toolbar according to screen size
+        initCollapsibleToolbar();
 
         recyclerView = (RecyclerView) findViewById(R.id.result_list);
 
@@ -111,13 +99,22 @@ public class Result extends AppCompatActivity {
 
     }
 
-//    private void setCollapsingToolbarLayoutTitle(String title) {
-//        collapsingToolbar.setTitle(title);
-//        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
-//        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
-//        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
-//        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
-//    }
+    private void initCollapsibleToolbar() {
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenHeight = size.y;
+        screenWidth = size.x;
+        toolbar = (Toolbar) findViewById(R.id.result_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_result);
+        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(screenWidth, screenHeight/3));
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle("Result");
+
+    }
 
     private void fetchData(RequestQueue requestQueue) {
 
@@ -201,15 +198,15 @@ public class Result extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
                 avi.hide();
-//                results = realm.where(ResultModel.class).findAll();
-                //setting percentage in the CircleView
-//                if (results.size() != 0) {
-//                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
-//                    resultAdapter = new ResultAdapter(results);
-//                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
-//                    recyclerView.setLayoutManager(mLayoutManager);
-//                    recyclerView.setAdapter(resultAdapter);
-//                }
+                results = realm.where(ResultModel.class).findAll();
+//                setting percentage in the CircleView
+                if (results.size() != 0) {
+                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
+                    resultAdapter = new ResultAdapter(results);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setAdapter(resultAdapter);
+                }
 
             }
         });

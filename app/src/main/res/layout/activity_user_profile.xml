@@ -23,6 +23,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="260dp">
 
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar_profile"
+                    android:layout_width="fill_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="#00000000"
+                    android:backgroundTint="#00000000"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    android:elevation="2dp"
+                    app:theme="@style/ToolbarStyle"/>
+
                 <ImageView
                     android:id="@+id/profile_blur_img"
                     android:layout_width="wrap_content"

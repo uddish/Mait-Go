@@ -1,9 +1,11 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -37,6 +39,7 @@ public class Announcements extends AppCompatActivity {
     public AnnouncementAdapter mAdapter;
 
     AVLoadingIndicatorView avi;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +50,16 @@ public class Announcements extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
+        fetchData(queue);
+
+        setToolbar();
+
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
 
+    }
+
+    private void fetchData(RequestQueue queue) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -83,5 +93,12 @@ public class Announcements extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
+
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_announcement);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 }

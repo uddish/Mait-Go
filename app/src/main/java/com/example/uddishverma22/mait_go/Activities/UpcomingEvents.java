@@ -1,10 +1,12 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ public class UpcomingEvents extends AppCompatActivity {
     private List<UpcomingEventsModel> eventsList = new ArrayList<>();
     private RecyclerView recyclerView;
     private UpcomingEventsAdapter eventsAdapter;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,11 @@ public class UpcomingEvents extends AppCompatActivity {
 
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
+
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+        fetchData(queue);
+
+        setToolbar();
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerView,
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -78,8 +86,9 @@ public class UpcomingEvents extends AppCompatActivity {
                     }
                 }));
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+    }
 
+    private void fetchData(RequestQueue queue) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -116,7 +125,12 @@ public class UpcomingEvents extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
 
-
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_events);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 }
