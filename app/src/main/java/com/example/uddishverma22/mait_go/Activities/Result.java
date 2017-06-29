@@ -67,6 +67,8 @@ public class Result extends AppCompatActivity {
     RealmResults<ResultModel> results;
     RequestQueue requestQueue;
 
+    LinearLayout noResultLayout;
+
     int screenHeight, screenWidth;
     AppBarLayout appBarLayout;
     Toolbar toolbar;
@@ -93,6 +95,8 @@ public class Result extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.result_list);
 
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
+
+        noResultLayout = (LinearLayout) findViewById(R.id.no_result_layout);
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
@@ -124,6 +128,8 @@ public class Result extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         try {
+
+                            noResultLayout.setVisibility(View.GONE);
 
                             avi.hide();
                             JSONArray jsonArray = response.getJSONArray("marks");
@@ -198,15 +204,16 @@ public class Result extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
                 avi.hide();
-                results = realm.where(ResultModel.class).findAll();
+                noResultLayout.setVisibility(View.VISIBLE);
+//                results = realm.where(ResultModel.class).findAll();
 //                setting percentage in the CircleView
-                if (results.size() != 0) {
-                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
-                    resultAdapter = new ResultAdapter(results);
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setAdapter(resultAdapter);
-                }
+//                if (results.size() != 0) {
+//                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
+//                    resultAdapter = new ResultAdapter(results);
+//                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+//                    recyclerView.setLayoutManager(mLayoutManager);
+//                    recyclerView.setAdapter(resultAdapter);
+//                }
 
             }
         });
