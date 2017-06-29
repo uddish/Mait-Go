@@ -30,11 +30,10 @@ public class NoticeWebView extends AppCompatActivity {
         i = getIntent();
         Log.d(TAG, "onCreate: " + i.getStringExtra("url").substring(0, 1));
 
-        if(i.getStringExtra("url").substring(0, 1).equals("h"))    {
+        if (i.getStringExtra("url").substring(0, 1).equals("h")) {
             pdf = i.getStringExtra("url");
             Log.d(TAG, i.getStringExtra("url"));
-        }
-        else {
+        } else {
             pdf = "http://www.ipu.ac.in" + i.getStringExtra("url");
             Log.d(TAG, "http://www.ipu.ac.in" + i.getStringExtra("url"));
         }
@@ -51,8 +50,7 @@ public class NoticeWebView extends AppCompatActivity {
             }
 
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon)
-            {
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 pd.show();
             }
 
@@ -63,7 +61,7 @@ public class NoticeWebView extends AppCompatActivity {
 
             }
 
-    });
+        });
 
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + pdf);
     }

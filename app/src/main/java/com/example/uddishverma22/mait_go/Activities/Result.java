@@ -110,7 +110,7 @@ public class Result extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_result);
-        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(screenWidth, screenHeight/3));
+        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(screenWidth, screenHeight / 3));
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Result");
 

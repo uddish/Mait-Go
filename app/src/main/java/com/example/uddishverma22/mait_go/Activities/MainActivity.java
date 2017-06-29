@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity
         //Setting NavBar items
         getSupportActionBar().setElevation(0);
         toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)   {
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             public void onDrawerClosed(View view) {
                 supportInvalidateOptionsMenu();
             }
@@ -408,7 +408,8 @@ public class MainActivity extends AppCompatActivity
                                     scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
                                     recyclerView.setAdapter(scheduleListAdapter);
                                     break;
-                                default: noClassLayout.setVisibility(View.VISIBLE);
+                                default:
+                                    noClassLayout.setVisibility(View.VISIBLE);
                                     break;
                             }
 
@@ -531,7 +532,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
             startActivity(new Intent(this, Result.class));
-        }else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_share) {
             startActivity(new Intent(this, FacultyInformation.class));
 
         } else if (id == R.id.nav_send) {
@@ -550,7 +551,7 @@ public class MainActivity extends AppCompatActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mainSideView = (View)findViewById(R.id.main_view);
+        mainSideView = (View) findViewById(R.id.main_view);
 
         date = (TextView) findViewById(R.id.date_tv);
         day = (TextView) findViewById(R.id.day_tv);

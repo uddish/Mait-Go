@@ -60,9 +60,15 @@ public class FacultyFragment extends Fragment {
                 adapter = new FacultyListAdapter(Globals.cseFacList);
                 indicatorView.hide();
             }
-        } else {
+        } else if(title.equals("IT")) {
             if (Globals.itFacList != null && Globals.itFacList.size() > 0) {
                 adapter = new FacultyListAdapter(Globals.itFacList);
+                indicatorView.hide();
+            }
+        }
+        else    {
+            if (Globals.eceFacList != null && Globals.eceFacList.size() > 0) {
+                adapter = new FacultyListAdapter(Globals.eceFacList);
                 indicatorView.hide();
             }
         }
