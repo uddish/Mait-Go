@@ -31,7 +31,9 @@
         <activity android:name=".Activities.Notices"
             android:label="@string/notice_activity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".Activities.NoticeWebView" />
 
         <activity
@@ -40,7 +42,7 @@
             android:label="@string/profile_activity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".BarcodeGenerator.Generation"/>
 
         <activity
@@ -53,7 +55,9 @@
         <activity
             android:name=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/schedule_activity"/>
+            android:label="@string/schedule_activity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".Activities.FacultyInformation"
             android:theme="@style/AppTheme.NoActionBar"
@@ -64,17 +68,20 @@
         <activity android:name=".Activities.Announcements"
             android:label="@string/announcements_activity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".Activities.Assignments"
             android:label="@string/assignments_activity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".Activities.UpcomingEvents"
             android:label="@string/events_activity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".Activities.AssignmentImageViewer" />
 

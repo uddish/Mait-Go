@@ -12,15 +12,31 @@
         style="@style/AVLoadingIndicatorView.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:layout_centerInParent="true"
+        android:visibility="visible"
         app:indicatorColor="@color/white"
         app:indicatorName="BallRotateIndicator" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/event_recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"/>
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_events"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#00000000"
+            android:backgroundTint="#00000000"
+            android:elevation="0dp"
+            app:theme="@style/ToolbarStyle" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/event_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

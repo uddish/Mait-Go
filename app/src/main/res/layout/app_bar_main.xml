@@ -240,23 +240,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerInParent="true">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/no_classes_ic" />
-                <TextView
-                    android:id="@+id/no_class_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No Classes Today!"
-                    android:layout_gravity="center"
-                    android:textAppearance="?android:textAppearanceLarge" />
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/no_classes_ic" />
+
+                    <TextView
+                        android:id="@+id/no_class_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="No Classes Today!"
+                        android:textAppearance="?android:textAppearanceLarge" />
                 </LinearLayout>
 
             </RelativeLayout>

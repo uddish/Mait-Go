@@ -1,10 +1,12 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -41,6 +43,7 @@ public class Assignments extends AppCompatActivity {
     public List<AssignmentModel> assignmentList = new ArrayList<>();
     public RecyclerView recyclerView;
     public AssignmentAdapter assignmentAdapter;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,11 @@ public class Assignments extends AppCompatActivity {
 
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
+        setToolbar();
+
+        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+
+        fetchData(queue);
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
@@ -69,8 +77,9 @@ public class Assignments extends AppCompatActivity {
                 })
         );
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
+    }
 
+    private void fetchData(RequestQueue queue) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -106,6 +115,12 @@ public class Assignments extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
 
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_assignments);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 }
