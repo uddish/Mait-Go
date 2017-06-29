@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Mait-Go</string>
+    <string name="notice_activity">Notices</string>
+    <string name="result_activity">Result</string>
+    <string name="schedule_activity">Schedule</string>
+    <string name="faculty_activity">Faculty</string>
+    <string name="events_activity">Events</string>
+    <string name="assignments_activity">Assignments</string>
+    <string name="announcements_activity">Announcements</string>
+    <string name="profile_activity">Profile</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

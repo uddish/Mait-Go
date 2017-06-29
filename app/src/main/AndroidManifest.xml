@@ -28,26 +28,60 @@
             android:name="io.fabric.ApiKey"
             android:value="56844c04f3322c63da5e3cde103324db6365f674" />
 
-        <activity android:name=".Activities.Notices" />
+        <activity android:name=".Activities.Notices"
+            android:label="@string/notice_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Activities.NoticeWebView" />
+
         <activity
             android:name=".Activities.UserProfile"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".BarcodeGenerator.Generation" />
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/profile_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".BarcodeGenerator.Generation"/>
+
         <activity
             android:name=".Activities.Result"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/result_activity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/schedule_activity"/>
         <activity
             android:name=".Activities.FacultyInformation"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.Announcements" />
-        <activity android:name=".Activities.Assignments" />
-        <activity android:name=".Activities.UpcomingEvents" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/faculty_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".Activities.Announcements"
+            android:label="@string/announcements_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".Activities.Assignments"
+            android:label="@string/assignments_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".Activities.UpcomingEvents"
+            android:label="@string/events_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".Activities.AssignmentImageViewer" />
-        <activity android:name=".Activities.EventsDetailsPage"></activity>
+
+        <activity android:name=".Activities.EventsDetailsPage"
+            android:label="@string/events_activity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

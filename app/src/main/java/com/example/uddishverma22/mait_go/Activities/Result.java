@@ -1,12 +1,17 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.graphics.Point;
 import android.graphics.Typeface;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -62,6 +67,10 @@ public class Result extends AppCompatActivity {
     RealmResults<ResultModel> results;
     RequestQueue requestQueue;
 
+    int screenHeight, screenWidth;
+    AppBarLayout appBarLayout;
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,13 +79,25 @@ public class Result extends AppCompatActivity {
         rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
         url = url + rollNumber;
 
-        Log.d(TAG, "onCreate: Roll No " + url);
+        Log.d(TAG, "onCreate: Roll No " + rollNumber);
 
         realm = Realm.getDefaultInstance();
 
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
 
         fetchData(requestQueue);
+
+        //Setting text on collabsible toolbar according to screen size
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenHeight = size.y;
+        screenWidth = size.x;
+        toolbar = (Toolbar) findViewById(R.id.result_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_result);
+        appBarLayout.setLayoutParams(new CoordinatorLayout.LayoutParams(screenWidth, screenHeight/3));
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Result");
@@ -90,6 +111,14 @@ public class Result extends AppCompatActivity {
 
     }
 
+//    private void setCollapsingToolbarLayoutTitle(String title) {
+//        collapsingToolbar.setTitle(title);
+//        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+//        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+//        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
+//        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
+//    }
+
     private void fetchData(RequestQueue requestQueue) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -98,6 +127,7 @@ public class Result extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         try {
+
                             avi.hide();
                             JSONArray jsonArray = response.getJSONArray("marks");
                             percentage = String.valueOf(Double.parseDouble(String.valueOf((response.get("percentage")))));
@@ -171,19 +201,15 @@ public class Result extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
                 avi.hide();
-                results = realm.where(ResultModel.class).findAll();
+//                results = realm.where(ResultModel.class).findAll();
                 //setting percentage in the CircleView
-                if (results.size() != 0) {
-                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
-                    Log.d(TAG, "onErrorResponse: percentage " + results.get(1).percentage);
-                    Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size() + "\n" + results);
-                    resultAdapter = new ResultAdapter(results);
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
-                    recyclerView.setLayoutManager(mLayoutManager);
-                    recyclerView.setAdapter(resultAdapter);
-                }
-                //If internet connectivity is not available
-                // Showing data from the realm database
+//                if (results.size() != 0) {
+//                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
+//                    resultAdapter = new ResultAdapter(results);
+//                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+//                    recyclerView.setLayoutManager(mLayoutManager);
+//                    recyclerView.setAdapter(resultAdapter);
+//                }
 
             }
         });

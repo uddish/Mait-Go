@@ -11,11 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
+        android:elevation="0dp"
+        app:cardElevation="0dp"
         app:cardCornerRadius="4dp">
 
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/midnightBlueTrans">
 
             <ImageView
                 android:id="@+id/event_image"
@@ -46,14 +49,14 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/blackTrans"
+            app:cardBackgroundColor="@color/white"
             android:layout_margin="10dp"
             app:cardCornerRadius="20dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/blackTrans">
+            android:background="@color/white">
 
             <TextView
                 android:id="@+id/ev_event"
@@ -62,27 +65,28 @@
                 android:padding="10dp"
                 android:text="Event Name"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/darkBlue"
                 android:textStyle="bold"
                 android:textAppearance="?android:textAppearanceLarge" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/white"/>
+                android:background="@color/darkBlue"/>
 
             <LinearLayout
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/ev_name_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Organiser"
-                    android:textColor="@color/white"
+                    android:textColor="@color/resolutionBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <TextView
@@ -90,25 +94,26 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Uddish Verma"
-                    android:textColor="@color/white"
+                    android:textColor="@color/toryBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/ev_date_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Date"
-                    android:textColor="@color/white"
+                    android:textColor="@color/resolutionBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <TextView
@@ -116,24 +121,25 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="27/06/2017"
-                    android:textColor="@color/white"
+                    android:textColor="@color/toryBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
             </LinearLayout>
             <LinearLayout
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/ev_society_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Society"
-                    android:textColor="@color/white"
+                    android:textColor="@color/resolutionBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <TextView
@@ -141,25 +147,26 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="SD MAIT"
-                    android:textColor="@color/white"
+                    android:textColor="@color/toryBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
             </LinearLayout>
             <LinearLayout
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/ev_no_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Phone No."
-                    android:textColor="@color/white"
+                    android:textColor="@color/resolutionBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <TextView
@@ -167,24 +174,25 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="9877769834"
-                    android:textColor="@color/white"
+                    android:textColor="@color/toryBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
             </LinearLayout>
             <LinearLayout
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/ev_fee_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Registration Fees"
-                    android:textColor="@color/white"
+                    android:textColor="@color/resolutionBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <TextView
@@ -192,35 +200,36 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Free"
-                    android:textColor="@color/white"
+                    android:textColor="@color/toryBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
             </LinearLayout>
             <LinearLayout
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/ev_email_title"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="Email Id"
-                    android:textColor="@color/white"
+                    android:textColor="@color/resolutionBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/ev_email"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:maxLines="2"
                     android:text="uddishverma22@gmail.com"
-                    android:textColor="@color/white"
+                    android:textColor="@color/toryBlue"
                     android:textAppearance="?android:textAppearanceMedium" />
             </LinearLayout>
 

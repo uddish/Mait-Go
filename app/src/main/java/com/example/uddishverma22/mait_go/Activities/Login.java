@@ -199,6 +199,8 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
+                avi.hide();
+                Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
                 // Google Sign In failed, update UI appropriately
                 // .
             }
@@ -221,6 +223,7 @@ public class Login extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                         } else {
+                            avi.hide();
                             // If sign in fails, display a message to the user.
                             Log.d(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",

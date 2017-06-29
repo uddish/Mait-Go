@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity
     JSONArray fridayScheduleArray = null;
     JSONObject fridayScheduleObject = null;
 
-    public List<DailySchedule> currentDaySchedule = new ArrayList<>();
-
     AVLoadingIndicatorView mAvi;
 
     RequestQueue queue;
@@ -134,6 +132,8 @@ public class MainActivity extends AppCompatActivity
     static int friSelected = 0;
     Calendar calendar;
 
+    DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity
         if (!Preferences.getPrefs("studentImage", getApplicationContext()).equals("notfound")) {
             Picasso.with(this).load(Preferences.getPrefs("studentImage", getApplicationContext())).into(navHeaderImage);
         }
-        if (!Preferences.getPrefs("studentRollNo", getApplicationContext()).equals("notfound")) {
-            navHeaderText.setText(Preferences.getPrefs("studentRollNo", getApplicationContext()));
+        if (!Preferences.getPrefs("studentName", getApplicationContext()).equals("notfound")) {
+            navHeaderText.setText(Preferences.getPrefs("studentName", getApplicationContext()));
         }
 
         //fetching data from API
@@ -195,6 +195,15 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(scheduleListAdapter);
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
+
+        //Opening profile page on click of image on nav drawer
+        navHeaderImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, UserProfile.class));
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
 
         /**
          * Checking which day is selected
@@ -283,7 +292,6 @@ public class MainActivity extends AppCompatActivity
 
         //Setting NavBar items
         getSupportActionBar().setElevation(0);
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)   {
             public void onDrawerClosed(View view) {
@@ -507,11 +515,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -539,12 +542,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this, UpcomingEvents.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     private void attachFields() {
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mainSideView = (View)findViewById(R.id.main_view);
 
