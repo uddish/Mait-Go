@@ -173,6 +173,7 @@ public class UserProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                Preferences.deletePrefs(getApplicationContext());
                 startActivity(new Intent(getApplicationContext(), Login.class));
                 finish();
             }
@@ -184,7 +185,6 @@ public class UserProfile extends AppCompatActivity {
                 Intent intent;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    intent = new Intent();
                     intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                     intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
                     intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
@@ -499,7 +499,6 @@ public class UserProfile extends AppCompatActivity {
         classNo = (EditText) findViewById(R.id.class_no);
         classDone = (ImageView) findViewById(R.id.class_done);
 
-        //TODO optimise keyboard hiding when bottomsheet is collapsed
         classDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
