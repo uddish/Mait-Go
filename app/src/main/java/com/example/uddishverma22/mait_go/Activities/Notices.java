@@ -1,12 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,42 +8,25 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
-import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
-import com.example.uddishverma22.mait_go.Fragments.FacultyFragment;
 import com.example.uddishverma22.mait_go.Fragments.NoticeFragment;
-import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
-import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +36,7 @@ import io.realm.RealmResults;
 public class Notices extends AppCompatActivity {
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/notices";
-    JSONObject object;
-    Notice noticeObj;
+    Notice noticeObj, examNoticeObj;
 
     private static int IS_INTERNET_AVAILABLE = 2000;
 
@@ -69,17 +45,14 @@ public class Notices extends AppCompatActivity {
     public static final String TAG = "Notices";
 
     public ArrayList<Notice> noticeList = new ArrayList<>();
+    public ArrayList<Notice> examNoticeList = new ArrayList<>();
     public RecyclerView recyclerView;
-    public NoticeAdapter noticeAdapter;
-    TextView noticeHeading;
-    View view;
-    ImageView iconNotice;
     RealmResults<Notice> results;
     Toolbar toolbar;
-    AVLoadingIndicatorView indicatorView;
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    JSONObject jsonNoticeObject, jsonExamNoticeObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,54 +101,40 @@ public class Notices extends AppCompatActivity {
             }
         });
 
-//        recyclerView.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-//
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        if (IS_INTERNET_AVAILABLE == 2009) {
-//                            Notice notice = noticeList.get(position);
-//                            Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
-//                            i.putExtra("url", notice.url);
-//                            startActivity(i);
-//                        } else {
-//                            Toast.makeText(Notices.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//
-//                    }
-//                })
-//        );
-
-//        noticeHeading = (TextView) findViewById(R.id.notice_tv);
-//        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
-//        noticeHeading.setTypeface(tf);
-
     }
 
     private void fetchData(RequestQueue queue) {
 
-        JsonArrayRequest jsonArrayReq = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(final JSONArray response) {
+                    public void onResponse(final JSONObject response) {
 
                         IS_INTERNET_AVAILABLE = 2009;
 
-//                        indicatorView.hide();
                         try {
-                            for (int n = 0; n < response.length(); n++) {
-                                object = response.getJSONObject(n);
+
+                            JSONArray noticeArray = response.getJSONArray("exams");
+                            JSONArray examNoticeArray = response.getJSONArray("datesheets");
+
+                            for (int n = 0; n < noticeArray.length(); n++) {
+                                jsonNoticeObject = noticeArray.getJSONObject(n);
                                 noticeObj = new Notice();
-                                noticeObj.notice = object.getString("notice");
-                                noticeObj.url = object.getString("url");
-                                Log.d(TAG, "onResponse: DJSON " + object.get("notice"));
+                                noticeObj.notice = jsonNoticeObject.getString("notice");
+                                noticeObj.url = jsonNoticeObject.getString("url");
                                 noticeList.add(noticeObj);
                             }
                             Globals.noticeList = noticeList;
+
+                            for (int n = 0; n < examNoticeArray.length(); n++) {
+                                jsonExamNoticeObject = examNoticeArray.getJSONObject(n);
+                                examNoticeObj = new Notice();
+                                examNoticeObj.notice = jsonExamNoticeObject.getString("datesheet");
+                                examNoticeObj.url = jsonExamNoticeObject.getString("url");
+                                examNoticeList.add(examNoticeObj);
+                            }
+                            Globals.examinationNoticeList = examNoticeList;
+
                             //Setting up Viewpager
                             setupViewPager(viewPager);
 
@@ -209,11 +168,6 @@ public class Notices extends AppCompatActivity {
                              * ***************************************************************************
                              */
 
-                            noticeAdapter = new NoticeAdapter(noticeList);
-//                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
-//                            recyclerView.setLayoutManager(mLayoutManager);
-//                            recyclerView.setAdapter(noticeAdapter);
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -238,7 +192,7 @@ public class Notices extends AppCompatActivity {
 
             }
         });
-        queue.add(jsonArrayReq);
+        queue.add(jsonObjReq);
     }
 
     private void setToolbar() {
@@ -262,7 +216,6 @@ public class Notices extends AppCompatActivity {
         adapter.addFrag(new NoticeFragment("Examination"), "Examination");
         viewPager.setAdapter(adapter);
     }
-
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -293,4 +246,5 @@ public class Notices extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
 }
