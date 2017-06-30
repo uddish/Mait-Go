@@ -100,6 +100,9 @@ public class Login extends AppCompatActivity {
         });
 
         section.addTextChangedListener(new TextWatcher() {
+
+            int flag = 0;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -114,8 +117,13 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 1) {
-                        s.append("-");
+                Log.d(TAG, "afterTextChanged: " + s);
+                if (s.length() == 1 && flag == 0) {
+                    s.append("-");
+                    flag = 1;
+                }
+                if(s.length() == 1) {
+                    flag = 0;
                 }
 
             }
