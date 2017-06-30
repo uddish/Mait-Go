@@ -7,6 +7,11 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,9 +35,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
+import com.example.uddishverma22.mait_go.Fragments.FacultyFragment;
+import com.example.uddishverma22.mait_go.Fragments.NoticeFragment;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -41,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +68,7 @@ public class Notices extends AppCompatActivity {
 
     public static final String TAG = "Notices";
 
-    public List<Notice> noticeList = new ArrayList<>();
+    public ArrayList<Notice> noticeList = new ArrayList<>();
     public RecyclerView recyclerView;
     public NoticeAdapter noticeAdapter;
     TextView noticeHeading;
@@ -68,6 +77,9 @@ public class Notices extends AppCompatActivity {
     RealmResults<Notice> results;
     Toolbar toolbar;
     AVLoadingIndicatorView indicatorView;
+
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,42 +90,69 @@ public class Notices extends AppCompatActivity {
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
-        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        indicatorView.show();
-        recyclerView = (RecyclerView) findViewById(R.id.notice_recycler_view);
-
         fetchData(queue);
-
-        view = findViewById(R.id.view);
-        iconNotice = (ImageView) findViewById(R.id.img_notice_icon);
 
         setToolbar();
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        if (IS_INTERNET_AVAILABLE == 2009) {
-                            Notice notice = noticeList.get(position);
-                            Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
-                            i.putExtra("url", notice.url);
-                            startActivity(i);
-                        } else {
-                            Toast.makeText(Notices.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
+        tabLayout.setTabTextColors(Color.parseColor("#3D5392"), Color.parseColor("#23283D"));
 
-                    }
-                })
-        );
+        //Handling click listeners on TabLayout
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+                switch (tab.getPosition()) {
+                    case 0:
+                        Log.d(TAG, "onTabSelected: Notices");
+                        break;
+                    case 1:
+                        Log.d(TAG, "onTabSelected: Examination Notices");
+                        break;
 
-        noticeHeading = (TextView) findViewById(R.id.notice_tv);
-        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
-        noticeHeading.setTypeface(tf);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+//        recyclerView.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+//
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        if (IS_INTERNET_AVAILABLE == 2009) {
+//                            Notice notice = noticeList.get(position);
+//                            Intent i = new Intent(getApplicationContext(), NoticeWebView.class);
+//                            i.putExtra("url", notice.url);
+//                            startActivity(i);
+//                        } else {
+//                            Toast.makeText(Notices.this, "Please connect to the internet", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onLongItemClick(View view, int position) {
+//
+//                    }
+//                })
+//        );
+
+//        noticeHeading = (TextView) findViewById(R.id.notice_tv);
+//        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
+//        noticeHeading.setTypeface(tf);
 
     }
 
@@ -126,7 +165,7 @@ public class Notices extends AppCompatActivity {
 
                         IS_INTERNET_AVAILABLE = 2009;
 
-                        indicatorView.hide();
+//                        indicatorView.hide();
                         try {
                             for (int n = 0; n < response.length(); n++) {
                                 object = response.getJSONObject(n);
@@ -136,6 +175,10 @@ public class Notices extends AppCompatActivity {
                                 Log.d(TAG, "onResponse: DJSON " + object.get("notice"));
                                 noticeList.add(noticeObj);
                             }
+                            Globals.noticeList = noticeList;
+                            //Setting up Viewpager
+                            setupViewPager(viewPager);
+
 
                             /**
                              * ************************** Saving data to Realm **************************
@@ -167,9 +210,9 @@ public class Notices extends AppCompatActivity {
                              */
 
                             noticeAdapter = new NoticeAdapter(noticeList);
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
-                            recyclerView.setLayoutManager(mLayoutManager);
-                            recyclerView.setAdapter(noticeAdapter);
+//                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
+//                            recyclerView.setLayoutManager(mLayoutManager);
+//                            recyclerView.setAdapter(noticeAdapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -185,13 +228,13 @@ public class Notices extends AppCompatActivity {
                 /**If internet connectivity is not available
                  * Showing data from the realm database
                  */
-                indicatorView.hide();
-                results = realm.where(Notice.class).findAll();
-                Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size());
-                noticeAdapter = new NoticeAdapter(results);
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
-                recyclerView.setLayoutManager(mLayoutManager);
-                recyclerView.setAdapter(noticeAdapter);
+//                indicatorView.hide();
+//                results = realm.where(Notice.class).findAll();
+//                Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size());
+//                noticeAdapter = new NoticeAdapter(results);
+//                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
+//                recyclerView.setLayoutManager(mLayoutManager);
+//                recyclerView.setAdapter(noticeAdapter);
 
             }
         });
@@ -211,5 +254,43 @@ public class Notices extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        Notices.ViewPagerAdapter adapter = new Notices.ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new NoticeFragment("Notice"), "Notice");
+        adapter.addFrag(new NoticeFragment("Examination"), "Examination");
+        viewPager.setAdapter(adapter);
+    }
+
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+
+        private final List<Fragment> mFragmentList = new ArrayList<>();//fragment arraylist
+        private final List<String> mFragmentTitleList = new ArrayList<>();//title arraylist
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

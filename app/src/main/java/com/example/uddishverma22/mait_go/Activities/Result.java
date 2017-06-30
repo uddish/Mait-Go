@@ -132,6 +132,7 @@ public class Result extends AppCompatActivity {
                             noResultLayout.setVisibility(View.GONE);
 
                             avi.hide();
+
                             JSONArray jsonArray = response.getJSONArray("marks");
                             percentage = String.valueOf(Double.parseDouble(String.valueOf((response.get("percentage")))));
 
@@ -166,28 +167,28 @@ public class Result extends AppCompatActivity {
                             /**
                              * Saving data to realm
                              */
-                            if (resultList.size() != 0) {
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        //Deleting the previous result to remove repeatity
-                                        realm.where(ResultModel.class).findAll().deleteAllFromRealm();
-                                        //Adding the results in the realm database
-                                        realm.copyToRealmOrUpdate(resultList);
-                                    }
-                                }, new Realm.Transaction.OnSuccess() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-                                }, new Realm.Transaction.OnError() {
-                                    @Override
-                                    public void onError(Throwable error) {
-                                        Log.e(TAG, "onError: " + error.toString());
-                                    }
-                                });
-
-                            }
+//                            if (resultList.size() != 0) {
+//                                realm.executeTransactionAsync(new Realm.Transaction() {
+//                                    @Override
+//                                    public void execute(Realm realm) {
+//                                        //Deleting the previous result to remove repeatity
+//                                        realm.where(ResultModel.class).findAll().deleteAllFromRealm();
+//                                        //Adding the results in the realm database
+//                                        realm.copyToRealmOrUpdate(resultList);
+//                                    }
+//                                }, new Realm.Transaction.OnSuccess() {
+//                                    @Override
+//                                    public void onSuccess() {
+//
+//                                    }
+//                                }, new Realm.Transaction.OnError() {
+//                                    @Override
+//                                    public void onError(Throwable error) {
+//                                        Log.e(TAG, "onError: " + error.toString());
+//                                    }
+//                                });
+//
+//                            }
 
                             resultAdapter = new ResultAdapter(resultList);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
