@@ -93,6 +93,7 @@ public class Login extends AppCompatActivity {
                     avi.show();
                     InputMethodManager imm = (InputMethodManager) Login.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);
+
                 }
             }
         });
