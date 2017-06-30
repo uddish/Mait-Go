@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -102,16 +103,21 @@ public class Login extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                Log.d(TAG, "beforeTextChanged: " + count);
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: " + count);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 1)
-                    s.append("-");
+                if (s.length() == 1) {
+                        s.append("-");
+                }
+
             }
         });
 

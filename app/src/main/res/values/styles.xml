@@ -34,4 +34,12 @@
         <item name="colorControlNormal">@color/white</item>
         <item name="colorControlHighlight">@color/resolutionBlue</item>
     </style>
+
+    <style name="AppTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/YourTextAppareance</item>
+    </style>
+
+    <style name="YourTextAppareance" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
 </resources>
