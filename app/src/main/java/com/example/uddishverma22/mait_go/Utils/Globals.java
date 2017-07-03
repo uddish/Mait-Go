@@ -23,6 +23,7 @@ public class Globals {
     public static String section;
     public static String semester;
     public static String userName;
+    public static String fcmRefreshToken;
 
     public static String title = "";
 
