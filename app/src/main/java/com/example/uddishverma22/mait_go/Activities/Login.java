@@ -3,6 +3,7 @@ package com.example.uddishverma22.mait_go.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
+import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -38,6 +45,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Login extends AppCompatActivity {
 
     GoogleApiClient mGoogleApiClient;
@@ -47,17 +60,21 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "Login";
     public static FirebaseUser currentUser = null;
     Typeface tf, tfBold;
+    String android_id;
 
     TextView heading, subHeading;
     EditText rollNo, section, semester;
     TextInputLayout rollnoLayout, sectionLayout, semesterLayout;
     AVLoadingIndicatorView avi;
+    String server_url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Getting the mobile unique ID
+        android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
 
         signInButton = (Button) findViewById(R.id.sign_in_button);
 
@@ -231,6 +248,7 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             avi.hide();
                             // Sign in success, update UI with the signed-in user's information
+                            sendDataToApi();
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -253,6 +271,38 @@ public class Login extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    public void sendDataToApi() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Status","SUCCESS");
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "onErrorResponse: " + error.toString());
+                    }
+                })
+        {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("deviceID", android_id);
+                params.put("class", Globals.semester+ Globals.section.charAt(0) + Globals.section.charAt(2));
+                params.put("token", "Uddish");
+                JSONObject jsonObject = new JSONObject(params);
+                jsonObject.toString();
+                params.put("data",jsonObject.toString());
+                Log.d("TAG", "getParams: " + jsonObject);
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(Login.this).addToRequestQueue(stringRequest);
     }
 
 }
