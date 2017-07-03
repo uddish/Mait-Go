@@ -36,8 +36,10 @@ import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.TempModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -161,6 +163,9 @@ public class MainActivity extends AppCompatActivity
 
         //fetching data from API
         fetchData(queue);
+
+        //Getting the FCM token
+        Log.d(TAG, "onCreate: " + Preferences.getPrefs("fcmToken",getApplicationContext()));
 
         //Setting the fonts
         tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");

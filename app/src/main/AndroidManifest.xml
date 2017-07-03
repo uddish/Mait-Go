@@ -20,6 +20,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -28,67 +29,78 @@
             android:name="io.fabric.ApiKey"
             android:value="56844c04f3322c63da5e3cde103324db6365f674" />
 
-        <activity android:name=".Activities.Notices"
+        <activity
+            android:name=".Activities.Notices"
             android:label="@string/notice_activity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.NoticeWebView" />
-
         <activity
             android:name=".Activities.UserProfile"
-            android:windowSoftInputMode="stateHidden|adjustResize"
             android:label=""
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".BarcodeGenerator.Generation"/>
-
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".BarcodeGenerator.Generation" />
         <activity
             android:name=".Activities.Result"
             android:label="@string/result_activity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/schedule_activity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.FacultyInformation"
-            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/faculty_activity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait" />
-
-        <activity android:name=".Activities.Announcements"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Announcements"
             android:label="@string/announcements_activity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".Activities.Assignments"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Assignments"
             android:label="@string/assignments_activity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".Activities.UpcomingEvents"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.UpcomingEvents"
             android:label="@string/events_activity"
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.AssignmentImageViewer" />
-
-        <activity android:name=".Activities.EventsDetailsPage"
+        <activity
+            android:name=".Activities.EventsDetailsPage"
             android:label="@string/events_activity"
             android:parentActivityName=".Activities.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".Service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".Service.FirebaseIDService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
