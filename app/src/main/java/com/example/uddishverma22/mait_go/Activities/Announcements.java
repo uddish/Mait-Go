@@ -17,6 +17,7 @@ import com.example.uddishverma22.mait_go.Adapters.AnnouncementAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -30,13 +31,15 @@ public class Announcements extends AppCompatActivity {
 
     public static final String TAG = "Announcements";
 
-    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/announcement/4I4";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/announcement/";
     JSONObject object;
     ClassAnnouncementsModel announcement;
     public ArrayList<ClassAnnouncementsModel> list = new ArrayList<>();
 
     public RecyclerView recyclerView;
     public AnnouncementAdapter mAdapter;
+
+    String requestClassEndpoint;
 
     AVLoadingIndicatorView avi;
     Toolbar toolbar;
@@ -45,6 +48,10 @@ public class Announcements extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_announcements);
+        requestClassEndpoint = Preferences.getPrefs("class and section", Announcements.this);
+        if(!requestClassEndpoint.equals("notfound"))
+            url = url + requestClassEndpoint;
+
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
