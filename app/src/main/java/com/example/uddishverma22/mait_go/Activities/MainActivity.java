@@ -164,7 +164,6 @@ public class MainActivity extends AppCompatActivity
         requestClassEndpoint = Preferences.getPrefs("class and section", MainActivity.this);
         if(!requestClassEndpoint.equals("notfound"))
             url = url + requestClassEndpoint;
-        Log.d(TAG, "onCreate: " + url);
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
 
