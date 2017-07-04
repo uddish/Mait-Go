@@ -60,21 +60,16 @@ public class Login extends AppCompatActivity {
     private static final String TAG = "Login";
     public static FirebaseUser currentUser = null;
     Typeface tf, tfBold;
-    String android_id;
 
     TextView heading, subHeading;
     EditText rollNo, section, semester;
     TextInputLayout rollnoLayout, sectionLayout, semesterLayout;
     AVLoadingIndicatorView avi;
-    String server_url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        //Getting the mobile unique ID
-        android_id = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
 
         signInButton = (Button) findViewById(R.id.sign_in_button);
 
@@ -248,7 +243,6 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             avi.hide();
                             // Sign in success, update UI with the signed-in user's information
-                            sendDataToApi();
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -273,36 +267,5 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void sendDataToApi() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Status","SUCCESS");
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "onErrorResponse: " + error.toString());
-                    }
-                })
-        {
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-
-                params.put("deviceID", android_id);
-                params.put("class", Globals.semester+ Globals.section.charAt(0) + Globals.section.charAt(2));
-                params.put("token", "Uddish");
-                JSONObject jsonObject = new JSONObject(params);
-                jsonObject.toString();
-                params.put("data",jsonObject.toString());
-                Log.d("TAG", "getParams: " + jsonObject);
-                return params;
-            }
-        };
-        VolleySingleton.getInstance(Login.this).addToRequestQueue(stringRequest);
-    }
 
 }

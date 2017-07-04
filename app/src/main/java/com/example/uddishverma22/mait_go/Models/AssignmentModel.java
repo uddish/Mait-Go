@@ -1,18 +1,21 @@
 package com.example.uddishverma22.mait_go.Models;
 
+import org.json.JSONArray;
+
 import io.realm.RealmObject;
 
 /**
  * Created by uddishverma22 on 07/05/17.
  */
 
-public class AssignmentModel extends RealmObject {
+public class AssignmentModel{
 
     public String imageUrl;
     public String subject;
     public String teacher;
     public String lastdate;
     public String marks;
+    public JSONArray images;
 
     public String getMarks() {
         return marks;

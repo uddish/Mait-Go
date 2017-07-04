@@ -1,8 +1,7 @@
 package com.example.uddishverma22.mait_go.Service;
 
-import android.app.Service;
 import android.content.Intent;
-import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.uddishverma22.mait_go.Utils.Globals;
@@ -17,18 +16,22 @@ public class FirebaseIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.
-        Globals.fcmRefreshToken = FirebaseInstanceId.getInstance().getToken();
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+        Globals.fcmRefreshToken = token;
+
         Preferences.setPrefs("fcmToken", FirebaseInstanceId.getInstance().getToken(), getApplicationContext());
 
-        Log.d(TAG, "Refreshed token: " + Globals.fcmRefreshToken);
+//        Intent i = new Intent("tokenReceiver");
+//        LocalBroadcastManager localBroadcastManager= LocalBroadcastManager.getInstance(this);
+//        i.putExtra("token", token);
+//        localBroadcastManager.sendBroadcast(i);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
         sendRegistrationToServer(Globals.fcmRefreshToken);
     }
 
     private void sendRegistrationToServer(String refreshedToken) {
+
     }
 
 }
