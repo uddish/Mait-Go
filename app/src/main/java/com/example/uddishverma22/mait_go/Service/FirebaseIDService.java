@@ -18,14 +18,7 @@ public class FirebaseIDService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String token = FirebaseInstanceId.getInstance().getToken();
 
-        Globals.fcmRefreshToken = token;
-
         Preferences.setPrefs("fcmToken", FirebaseInstanceId.getInstance().getToken(), getApplicationContext());
-
-//        Intent i = new Intent("tokenReceiver");
-//        LocalBroadcastManager localBroadcastManager= LocalBroadcastManager.getInstance(this);
-//        i.putExtra("token", token);
-//        localBroadcastManager.sendBroadcast(i);
 
         sendRegistrationToServer(Globals.fcmRefreshToken);
     }
