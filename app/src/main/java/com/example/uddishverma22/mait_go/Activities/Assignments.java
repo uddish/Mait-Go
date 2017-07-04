@@ -19,6 +19,7 @@ import com.example.uddishverma22.mait_go.Adapters.AssignmentAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -34,11 +35,13 @@ public class Assignments extends AppCompatActivity {
 
     public static final String TAG = "Assignment";
 
-    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/assignment/4I4";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/assignment/";
     JSONObject object;
     AssignmentModel assignmentObj;
 
     AVLoadingIndicatorView indicatorView;
+
+    String requestClassEndpoint;
 
     public List<AssignmentModel> assignmentList = new ArrayList<>();
     public RecyclerView recyclerView;
@@ -55,6 +58,10 @@ public class Assignments extends AppCompatActivity {
         indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
         setToolbar();
+
+        requestClassEndpoint = Preferences.getPrefs("class and section", Assignments.this);
+        if(!requestClassEndpoint.equals("notfound"))
+            url = url + requestClassEndpoint;
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
