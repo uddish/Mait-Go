@@ -176,12 +176,6 @@ public class MainActivity extends AppCompatActivity
         //fetching data from API
         fetchData(queue);
 
-        //Getting the fcm token
-//        LocalBroadcastManager.getInstance(this).registerReceiver(tokenReceiver,
-//                new IntentFilter("tokenReceiver"));
-
-        deviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-
         //Setting the fonts
         tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
         tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Light.ttf");
@@ -215,6 +209,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(scheduleListAdapter);
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
+        //Sending the FCM token to the api
         if(FirebaseInstanceId.getInstance().getToken() != null) {
             Log.d(TAG, "onCreate: Sending data to APIS");
             sendDataToApi();
@@ -222,19 +217,6 @@ public class MainActivity extends AppCompatActivity
         else    {
             Log.d(TAG, "onCreate: FCM token is null");
         }
-
-//        tokenReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                String token = intent.getStringExtra("token");
-//                Log.d(TAG, "onReceive: Token Sent "+ token);
-//                if(token != null)   {
-//                    Log.d(TAG, "onReceive: Token Sent");
-
-//                }
-//            }
-//        };
-
 
         //Opening profile page on click of image on nav drawer
         navHeaderImage.setOnClickListener(new View.OnClickListener() {
@@ -1067,6 +1049,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void sendDataToApi() {
+
+        deviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
                 new Response.Listener<String>() {
                     @Override
