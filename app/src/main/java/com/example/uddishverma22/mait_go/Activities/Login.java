@@ -245,6 +245,7 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
+                            Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                         } else {
