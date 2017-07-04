@@ -95,6 +95,9 @@ public class Assignments extends AppCompatActivity {
                                 assignmentObj.imageUrl = object.getString("files");
                                 assignmentObj.marks = object.getString("marks");
                                 assignmentObj.lastdate = object.getString("last");
+                                //Test Array
+                                assignmentObj.images = object.getJSONArray("files");
+                                Log.d(TAG, "onResponse: Images number " + assignmentObj.images);
                                 assignmentObj.imageUrl = object.getJSONArray("files").getString(0);
                                 Log.d(TAG, "onResponse: Image Url " + assignmentObj.imageUrl);
                                 assignmentList.add(assignmentObj);

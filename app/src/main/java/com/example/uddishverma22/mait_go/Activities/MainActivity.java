@@ -1,12 +1,16 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +30,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
@@ -53,7 +59,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.fabric.sdk.android.Fabric;
@@ -66,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     public static final String TAG = "MainActivity";
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/timetable/4I4";
+    String server_url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/users";
 
     private static int IS_NET_AVAIL = 2000;
 
@@ -91,6 +100,8 @@ public class MainActivity extends AppCompatActivity
     Typeface tfLight;
     Typeface openSansReg;
     Typeface openSansBold;
+
+    String deviceID;
 
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
     JSONArray mondayScheduleArray = null;
@@ -135,6 +146,7 @@ public class MainActivity extends AppCompatActivity
     Calendar calendar;
 
     DrawerLayout drawer;
+    BroadcastReceiver tokenReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,8 +176,11 @@ public class MainActivity extends AppCompatActivity
         //fetching data from API
         fetchData(queue);
 
-        //Getting the FCM token
-        Log.d(TAG, "onCreate: " + Preferences.getPrefs("fcmToken",getApplicationContext()));
+        //Getting the fcm token
+//        LocalBroadcastManager.getInstance(this).registerReceiver(tokenReceiver,
+//                new IntentFilter("tokenReceiver"));
+
+        deviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         //Setting the fonts
         tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
@@ -199,6 +214,26 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(scheduleListAdapter);
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
+
+        if(FirebaseInstanceId.getInstance().getToken() != null) {
+            Log.d(TAG, "onCreate: Sending data to APIS");
+            sendDataToApi();
+        }
+        else    {
+            Log.d(TAG, "onCreate: FCM token is null");
+        }
+
+//        tokenReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                String token = intent.getStringExtra("token");
+//                Log.d(TAG, "onReceive: Token Sent "+ token);
+//                if(token != null)   {
+//                    Log.d(TAG, "onReceive: Token Sent");
+
+//                }
+//            }
+//        };
 
 
         //Opening profile page on click of image on nav drawer
@@ -1029,5 +1064,39 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
 //        if (gradAnim != null && gradAnim.isRunning())
 //            gradAnim.stop();
+    }
+
+    public void sendDataToApi() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, server_url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Status", "SUCCESS");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "onErrorResponse: " + error.toString());
+                    }
+                }) {
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+
+                try {
+                    params.put("_id", deviceID);
+                    params.put("class", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2));
+                    params.put("token", FirebaseInstanceId.getInstance().getToken());
+                    JSONObject jsonObject = new JSONObject(params);
+                    jsonObject.toString();
+                    params.put("data", jsonObject.toString());
+                }catch (Exception e)    {
+                    e.printStackTrace();
+                }
+
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(MainActivity.this).addToRequestQueue(stringRequest);
     }
 }
