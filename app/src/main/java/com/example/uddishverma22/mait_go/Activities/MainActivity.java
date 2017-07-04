@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     public static final String TAG = "MainActivity";
 
-    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/timetable/4I4";
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/timetable/";
     String server_url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/users";
 
     private static int IS_NET_AVAIL = 2000;
@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity
     Typeface openSansBold;
 
     String deviceID;
+
+    String requestClassEndpoint;
 
     public List<DailySchedule> mondaySchedule = new ArrayList<>();
     JSONArray mondayScheduleArray = null;
@@ -146,7 +148,6 @@ public class MainActivity extends AppCompatActivity
     Calendar calendar;
 
     DrawerLayout drawer;
-    BroadcastReceiver tokenReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +160,11 @@ public class MainActivity extends AppCompatActivity
 
         //Crashlytics support
         Fabric.with(this, new Crashlytics());
+
+        requestClassEndpoint = Preferences.getPrefs("class and section", MainActivity.this);
+        if(!requestClassEndpoint.equals("notfound"))
+            url = url + requestClassEndpoint;
+        Log.d(TAG, "onCreate: " + url);
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -447,65 +453,65 @@ public class MainActivity extends AppCompatActivity
                 mAvi.hide();
                 IS_NET_AVAIL = 2000;
                 //Showing data from Realm)
-                result = realm.where(TempModel.class).findAll();
-                ArrayList<TempModel> list = new ArrayList<>(result);        //converting realm list into arraylist
-                Log.d(TAG, "onErrorResponse: List Size " + list.size() + "\n" + list);
-
-                //Offline JSONArray
-                JSONArray monArray = null;
-                JSONArray tuesArray = null;
-                JSONArray wedArray = null;
-                JSONArray thursArray = null;
-                JSONArray friArray = null;
-                if (list.size() != 0) {
-                    try {
-                        monArray = new JSONArray(list.get(0).getMonday());
-                        tuesArray = new JSONArray(list.get(0).getTuesday());
-                        wedArray = new JSONArray(list.get(0).getWednesday());
-                        thursArray = new JSONArray(list.get(0).getThursday());
-                        friArray = new JSONArray(list.get(0).getFriday());
-
-                        //Saving offline data to JSONObject
-                        mondayScheduleObject = monArray.getJSONObject(0);
-                        tuesdayScheduleObject = tuesArray.getJSONObject(0);
-                        wednesdayScheduleObject = wedArray.getJSONObject(0);
-                        thursdayScheduleObject = thursArray.getJSONObject(0);
-                        fridayScheduleObject = friArray.getJSONObject(0);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    switch (currentDay) {
-                        case "Monday":
-                            mondayScheduleFunction();
-                            scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
-                            recyclerView.setAdapter(scheduleListAdapter);
-                            break;
-                        case "Tuesday":
-                            tuesdayScheduleFunction();
-                            scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
-                            recyclerView.setAdapter(scheduleListAdapter);
-                            break;
-                        case "Wednesday":
-                            wednesdayScheduleFunction();
-                            scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
-                            recyclerView.setAdapter(scheduleListAdapter);
-                            break;
-                        case "Thursday":
-                            thursdayScheduleFunction();
-                            scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
-                            recyclerView.setAdapter(scheduleListAdapter);
-                            break;
-                        case "Friday":
-                            fridayScheduleFunction();
-                            scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
-                            recyclerView.setAdapter(scheduleListAdapter);
-                            break;
-                    }
-
-                } else {
-                    Toast.makeText(MainActivity.this, "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
-                }
+//                result = realm.where(TempModel.class).findAll();
+//                ArrayList<TempModel> list = new ArrayList<>(result);        //converting realm list into arraylist
+//                Log.d(TAG, "onErrorResponse: List Size " + list.size() + "\n" + list);
+//
+//                //Offline JSONArray
+//                JSONArray monArray = null;
+//                JSONArray tuesArray = null;
+//                JSONArray wedArray = null;
+//                JSONArray thursArray = null;
+//                JSONArray friArray = null;
+//                if (list.size() != 0) {
+//                    try {
+//                        monArray = new JSONArray(list.get(0).getMonday());
+//                        tuesArray = new JSONArray(list.get(0).getTuesday());
+//                        wedArray = new JSONArray(list.get(0).getWednesday());
+//                        thursArray = new JSONArray(list.get(0).getThursday());
+//                        friArray = new JSONArray(list.get(0).getFriday());
+//
+//                        //Saving offline data to JSONObject
+//                        mondayScheduleObject = monArray.getJSONObject(0);
+//                        tuesdayScheduleObject = tuesArray.getJSONObject(0);
+//                        wednesdayScheduleObject = wedArray.getJSONObject(0);
+//                        thursdayScheduleObject = thursArray.getJSONObject(0);
+//                        fridayScheduleObject = friArray.getJSONObject(0);
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    switch (currentDay) {
+//                        case "Monday":
+//                            mondayScheduleFunction();
+//                            scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+//                            recyclerView.setAdapter(scheduleListAdapter);
+//                            break;
+//                        case "Tuesday":
+//                            tuesdayScheduleFunction();
+//                            scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+//                            recyclerView.setAdapter(scheduleListAdapter);
+//                            break;
+//                        case "Wednesday":
+//                            wednesdayScheduleFunction();
+//                            scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+//                            recyclerView.setAdapter(scheduleListAdapter);
+//                            break;
+//                        case "Thursday":
+//                            thursdayScheduleFunction();
+//                            scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+//                            recyclerView.setAdapter(scheduleListAdapter);
+//                            break;
+//                        case "Friday":
+//                            fridayScheduleFunction();
+//                            scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+//                            recyclerView.setAdapter(scheduleListAdapter);
+//                            break;
+//                    }
+//
+//                } else {
+//                    Toast.makeText(MainActivity.this, "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
+//                }
 
                 Log.d(TAG, "onErrorResponse: " + error.toString() + " NET_CODE " + IS_NET_AVAIL);
 
