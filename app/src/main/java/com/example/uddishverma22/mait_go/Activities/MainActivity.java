@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
         Fabric.with(this, new Crashlytics());
 
         requestClassEndpoint = Preferences.getPrefs("class and section", MainActivity.this);
-        if(!requestClassEndpoint.equals("notfound"))
+        if (!requestClassEndpoint.equals("notfound"))
             url = url + requestClassEndpoint;
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
@@ -215,11 +215,10 @@ public class MainActivity extends AppCompatActivity
         linearLayout = (LinearLayout) findViewById(R.id.linear_layout_one);
 
         //Sending the FCM token to the api
-        if(FirebaseInstanceId.getInstance().getToken() != null) {
+        if (FirebaseInstanceId.getInstance().getToken() != null) {
             Log.d(TAG, "onCreate: Sending data to APIS");
             sendDataToApi();
-        }
-        else    {
+        } else {
             Log.d(TAG, "onCreate: FCM token is null");
         }
 
@@ -1080,7 +1079,7 @@ public class MainActivity extends AppCompatActivity
                     JSONObject jsonObject = new JSONObject(params);
                     jsonObject.toString();
                     params.put("data", jsonObject.toString());
-                }catch (Exception e)    {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
