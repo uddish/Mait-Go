@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.Activities.Announcements;
+import com.example.uddishverma22.mait_go.Activities.Assignments;
 import com.example.uddishverma22.mait_go.Activities.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -24,37 +25,54 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        if (remoteMessage.getData() != null) {
-            showFirebaseNotificationMessage(remoteMessage);
+
+        if (remoteMessage.getData().get("title").equals("New Announcement!")) {
+            showFirebaseNotificationForAnnouncements(remoteMessage);
+        }
+        else if (remoteMessage.getData().get("title").equals("New Assignment!")) {
+            showFirebaseNotificationForAssignments(remoteMessage);
         }
 
-        // Check if message contains a data payload.
-//        if (remoteMessage.getData().size() > 0) {
-//            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-//        }
-
-        // Check if message contains a notification payload.
-//        if (remoteMessage.getNotification() != null) {
-//            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-//        }
-
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private void showFirebaseNotificationMessage(RemoteMessage remoteMessage) {
+    private void showFirebaseNotificationForAnnouncements(RemoteMessage remoteMessage) {
+
         try {
             Random random = new Random();
             int m = random.nextInt(9999 - 1000) + 1000;
-            Intent intent = new Intent(this, Announcements.class);
+                Intent intent = new Intent(this, Announcements.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                Notification.Builder notificationBuilder = new Notification.Builder(this);
+                notificationBuilder.setContentTitle(remoteMessage.getData().get("title"));
+                notificationBuilder.setAutoCancel(true);
+                notificationBuilder.setSmallIcon(R.drawable.icon_error);
+                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_error));
+                notificationBuilder.setContentText(remoteMessage.getData().get("body"));
+                notificationBuilder.setContentIntent(pendingIntent);
+                notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
+                notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(m, notificationBuilder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showFirebaseNotificationForAssignments(RemoteMessage remoteMessage) {
+
+        try {
+            Random random = new Random();
+            int m = random.nextInt(9999 - 1000) + 1000;
+            Intent intent = new Intent(this, Assignments.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
             Notification.Builder notificationBuilder = new Notification.Builder(this);
-            notificationBuilder.setContentTitle(remoteMessage.getNotification().getTitle());
+            notificationBuilder.setContentTitle(remoteMessage.getData().get("title"));
             notificationBuilder.setAutoCancel(true);
             notificationBuilder.setSmallIcon(R.drawable.icon_error);
             notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_error));
-            notificationBuilder.setContentText(remoteMessage.getNotification().getBody());
+            notificationBuilder.setContentText(remoteMessage.getData().get("body"));
             notificationBuilder.setContentIntent(pendingIntent);
             notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
             notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
