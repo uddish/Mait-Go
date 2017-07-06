@@ -2,6 +2,7 @@ package com.example.uddishverma22.mait_go.Adapters;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.R;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
 
 import java.util.List;
 
@@ -20,6 +23,8 @@ import java.util.List;
 public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.detailsViewHolder> {
 
     List<AssignmentModel> list;
+
+    public static final String TAG = "AssignmentAdapter";
 
     public AssignmentAdapter(List<AssignmentModel> notice) {
         this.list = notice;
@@ -75,7 +80,11 @@ public class AssignmentAdapter extends RecyclerView.Adapter<AssignmentAdapter.de
         holder.teacher.setText(obj.teacher);
         holder.lastDate.setText(obj.lastdate.substring(0, 10));
         holder.marks.setText(obj.marks);
-        Picasso.with(holder.marks.getContext()).load(obj.imageUrl).into(holder.assignmentImage);
+        try {
+            Picasso.with(holder.marks.getContext()).load(obj.images.getString(0)).into(holder.assignmentImage);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.example.uddishverma22.mait_go.Adapters.AssignmentAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
@@ -72,8 +73,17 @@ public class Assignments extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         AssignmentModel assignment = assignmentList.get(position);
+                        ArrayList<String> images = new ArrayList<String>();
                         Intent i = new Intent(getApplicationContext(), AssignmentImageViewer.class);
-                        i.putExtra("imageUrl", assignment.imageUrl);
+                        try {
+                        for(int j = 0; j < assignment.images.length(); j++) {
+                            images.add(assignment.images.getString(j));
+                        }
+
+                            i.putExtra("imageUrl", images);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         startActivity(i);
                     }
 
@@ -102,11 +112,8 @@ public class Assignments extends AppCompatActivity {
                                 assignmentObj.imageUrl = object.getString("files");
                                 assignmentObj.marks = object.getString("marks");
                                 assignmentObj.lastdate = object.getString("last");
-                                //Test Array
+                                //Adding array of images
                                 assignmentObj.images = object.getJSONArray("files");
-                                Log.d(TAG, "onResponse: Images number " + assignmentObj.images);
-                                assignmentObj.imageUrl = object.getJSONArray("files").getString(0);
-                                Log.d(TAG, "onResponse: Image Url " + assignmentObj.imageUrl);
                                 assignmentList.add(assignmentObj);
                             }
                         } catch (JSONException e) {
