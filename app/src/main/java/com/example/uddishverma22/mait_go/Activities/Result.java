@@ -25,7 +25,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
+<<<<<<< HEAD
 import com.example.uddishverma22.mait_go.Models.ResultHeader;
+=======
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
@@ -74,9 +77,12 @@ public class Result extends AppCompatActivity {
     AppBarLayout appBarLayout;
     Toolbar toolbar;
 
+<<<<<<< HEAD
     //Result Header
     ResultHeader resultHeader;
 
+=======
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +91,11 @@ public class Result extends AppCompatActivity {
         rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
         url = url + rollNumber;
 
+<<<<<<< HEAD
+=======
+        Log.d(TAG, "onCreate: Roll No " + rollNumber);
+
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
         realm = Realm.getDefaultInstance();
 
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
@@ -147,24 +158,38 @@ public class Result extends AppCompatActivity {
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
                             mCircleView.setValueAnimated(Float.parseFloat(percentage));
 
+<<<<<<< HEAD
                             resultHeader = new ResultHeader();
                             resultHeader.univRank = String.valueOf(response.get("urank"));
                             resultHeader.colRank = String.valueOf(response.get("crank"));
                             resultHeader.creditPerc = String.valueOf(roundOffPerc);
                             resultHeader.cgpa = String.valueOf(roundOffGpa);
+=======
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
 
                             for (int i = 0; i < jsonArray.length(); i++) {
 
                                 jsonObject = jsonArray.getJSONObject(i);
                                 ResultModel resultObj = new ResultModel();
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
                                 resultObj.subName = jsonObject.getString("subjectName");
                                 resultObj.intMarks = jsonObject.getString("internal");
                                 resultObj.extMarks = jsonObject.getString("external");
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
                                 resultObj.percentage = String.valueOf(response.get("percentage"));
+<<<<<<< HEAD
+=======
+                                resultObj.univRank = String.valueOf(response.get("urank"));
+                                resultObj.colRank = String.valueOf(response.get("crank"));
+                                resultObj.creditPerc = String.valueOf(roundOffPerc);
+                                resultObj.cgpa = String.valueOf(roundOffGpa);
+
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
                                 resultList.add(resultObj);
                             }
 
@@ -194,7 +219,11 @@ public class Result extends AppCompatActivity {
 //
 //                            }
 
+<<<<<<< HEAD
                             resultAdapter = new ResultAdapter(resultList, resultHeader);
+=======
+                            resultAdapter = new ResultAdapter(resultList);
+>>>>>>> 7f92da904b61192e5522b419d9b051d381985320
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setAdapter(resultAdapter);
