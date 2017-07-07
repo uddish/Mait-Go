@@ -111,8 +111,6 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-<<<<<<< HEAD
-=======
         <LinearLayout
             android:id="@+id/perc_cgpa_ll"
             android:layout_width="match_parent"
@@ -179,7 +177,6 @@
 
         </LinearLayout>
 
->>>>>>> 7f92da904b61192e5522b419d9b051d381985320
         <android.support.v7.widget.RecyclerView
             android:id="@+id/result_list"
             android:layout_width="match_parent"

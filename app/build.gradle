@@ -21,11 +21,8 @@ android {
     defaultConfig {
         applicationId "com.example.uddishverma22.mait_go"
         minSdkVersion 16
-<<<<<<< HEAD
         targetSdkVersion 26
-=======
         targetSdkVersion 25
->>>>>>> 7f92da904b61192e5522b419d9b051d381985320
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
