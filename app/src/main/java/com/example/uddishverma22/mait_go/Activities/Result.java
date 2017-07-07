@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
+import com.example.uddishverma22.mait_go.Models.ResultHeader;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
@@ -73,6 +74,9 @@ public class Result extends AppCompatActivity {
     AppBarLayout appBarLayout;
     Toolbar toolbar;
 
+    //Result Header
+    ResultHeader resultHeader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +84,6 @@ public class Result extends AppCompatActivity {
 
         rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
         url = url + rollNumber;
-
-        Log.d(TAG, "onCreate: Roll No " + rollNumber);
 
         realm = Realm.getDefaultInstance();
 
@@ -145,22 +147,24 @@ public class Result extends AppCompatActivity {
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
                             mCircleView.setValueAnimated(Float.parseFloat(percentage));
 
+                            resultHeader = new ResultHeader();
+                            resultHeader.univRank = String.valueOf(response.get("urank"));
+                            resultHeader.colRank = String.valueOf(response.get("crank"));
+                            resultHeader.creditPerc = String.valueOf(roundOffPerc);
+                            resultHeader.cgpa = String.valueOf(roundOffGpa);
 
                             for (int i = 0; i < jsonArray.length(); i++) {
 
                                 jsonObject = jsonArray.getJSONObject(i);
                                 ResultModel resultObj = new ResultModel();
+
+
                                 resultObj.subName = jsonObject.getString("subjectName");
                                 resultObj.intMarks = jsonObject.getString("internal");
                                 resultObj.extMarks = jsonObject.getString("external");
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
                                 resultObj.percentage = String.valueOf(response.get("percentage"));
-                                resultObj.univRank = String.valueOf(response.get("urank"));
-                                resultObj.colRank = String.valueOf(response.get("crank"));
-                                resultObj.creditPerc = String.valueOf(roundOffPerc);
-                                resultObj.cgpa = String.valueOf(roundOffGpa);
-
                                 resultList.add(resultObj);
                             }
 
@@ -190,7 +194,7 @@ public class Result extends AppCompatActivity {
 //
 //                            }
 
-                            resultAdapter = new ResultAdapter(resultList);
+                            resultAdapter = new ResultAdapter(resultList, resultHeader);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setAdapter(resultAdapter);
