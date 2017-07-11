@@ -14,17 +14,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.uddishverma22.mait_go.Adapters.AnnouncementAdapter;
-import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class Announcements extends AppCompatActivity {
@@ -49,7 +52,7 @@ public class Announcements extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_announcements);
         requestClassEndpoint = Preferences.getPrefs("class and section", Announcements.this);
-        if(!requestClassEndpoint.equals("notfound"))
+        if (!requestClassEndpoint.equals("notfound"))
             url = url + requestClassEndpoint;
 
 
@@ -72,10 +75,8 @@ public class Announcements extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         avi.hide();
-                        Log.d(TAG, "onResponse: " + response);
                         try {
                             for (int i = 0; i < response.length(); i++) {
-
                                 object = response.getJSONObject(i);
                                 announcement = new ClassAnnouncementsModel();
                                 announcement.teacherName = object.getString("name");
@@ -83,6 +84,12 @@ public class Announcements extends AppCompatActivity {
                                 announcement.msgDate = object.getString("createdAt");
                                 list.add(announcement);
                             }
+
+                            //Saving offline
+                            Gson gson = new Gson();
+                            String announcJson = gson.toJson(list);
+                            Preferences.setPrefs("announcements", announcJson, Announcements.this);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -97,7 +104,37 @@ public class Announcements extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                Gson gson = new Gson();
+                String announcementStr = Preferences.getPrefs("announcements", Announcements.this);
+                Type type = new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
+                }.getType();
+                ArrayList<ClassAnnouncementsModel> arrayList = gson.fromJson(announcementStr, type);
+
+                if (arrayList != null) {
+                    try {
+                        String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
+                        }.getType());
+                        JSONArray jsonArray = new JSONArray(listString);
+                        Log.d(TAG, "JSONArray: " + jsonArray);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            object = jsonArray.getJSONObject(i);
+                            announcement = new ClassAnnouncementsModel();
+                            announcement.teacherName = object.getString("teacherName");
+                            announcement.announcement = object.getString("announcement");
+                            announcement.msgDate = object.getString("msgDate");
+                            list.add(announcement);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                mAdapter = new AnnouncementAdapter(list);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Announcements.this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(mAdapter);
             }
+
+
         });
         queue.add(request);
     }
@@ -107,5 +144,9 @@ public class Announcements extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+    }
+
+    private void saveAnnouncementOffline() {
+
     }
 }

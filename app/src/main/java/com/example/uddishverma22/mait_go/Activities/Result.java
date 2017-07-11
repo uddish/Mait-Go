@@ -85,8 +85,6 @@ public class Result extends AppCompatActivity {
         rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
         url = url + rollNumber;
 
-        Log.d(TAG, "onCreate: Roll No " + rollNumber);
-
         realm = Realm.getDefaultInstance();
 
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
@@ -147,7 +145,7 @@ public class Result extends AppCompatActivity {
                             double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
 
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
-                            mCircleView.setValueAnimated(Float.parseFloat(percentage));
+                            mCircleView.setValueAnimated(Float.parseFloat((percentage)));
 
                             resultHeader = new ResultHeader();
                             resultHeader.univRank = String.valueOf(response.get("urank"));
@@ -167,11 +165,6 @@ public class Result extends AppCompatActivity {
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
                                 resultObj.percentage = String.valueOf(response.get("percentage"));
-//                                resultObj.univRank = String.valueOf(response.get("urank"));
-//                                resultObj.colRank = String.valueOf(response.get("crank"));
-//                                resultObj.creditPerc = String.valueOf(roundOffPerc);
-//                                resultObj.cgpa = String.valueOf(roundOffGpa);
-
                                 resultList.add(resultObj);
                             }
 
