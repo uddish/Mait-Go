@@ -145,8 +145,4 @@ public class Announcements extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
-
-    private void saveAnnouncementOffline() {
-
-    }
 }

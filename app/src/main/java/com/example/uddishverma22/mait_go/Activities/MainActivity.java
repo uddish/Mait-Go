@@ -8,6 +8,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
@@ -39,6 +40,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
+import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.TempModel;
 import com.example.uddishverma22.mait_go.R;
@@ -46,6 +48,9 @@ import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -53,6 +58,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,6 +81,8 @@ public class MainActivity extends AppCompatActivity
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/timetable/";
     String server_url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/users";
+
+    private static int IS_LOCAL_DB = 1009;
 
     private static int IS_NET_AVAIL = 2000;
 
@@ -148,6 +156,9 @@ public class MainActivity extends AppCompatActivity
     Calendar calendar;
 
     DrawerLayout drawer;
+
+    //Offline objects
+    JSONObject monOfflineObject, tueOfflineObject, wedOfflineObject, thuOfflineObject, friOfflineObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -366,6 +377,7 @@ public class MainActivity extends AppCompatActivity
                     public void onResponse(final JSONObject response) {
                         try {
                             IS_NET_AVAIL = 2001;
+                            IS_LOCAL_DB = 1009;
                             mAvi.hide();
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
@@ -378,24 +390,20 @@ public class MainActivity extends AppCompatActivity
                             thursdayScheduleObject = thursdayScheduleArray.getJSONObject(0);
                             fridayScheduleObject = fridayScheduleArray.getJSONObject(0);
 
-//*************************************         Saving data to realm           ***********************************************
-                            realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    realm.where(TempModel.class).findAll().deleteAllFromRealm();
-                                    realm.createObjectFromJson(TempModel.class, response);
-                                }
-                            }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
-                                    Log.d(TAG, "onSuccess: Realm Object Saved");
-                                }
-                            }, new Realm.Transaction.OnError() {
-                                @Override
-                                public void onError(Throwable error) {
-                                    Log.d(TAG, "onError: " + error.toString());
-                                }
-                            });
+//*************************************         Saving data to Shared Prefs           ***********************************************
+                            Gson gson = new Gson();
+                            String mondayString = gson.toJson(mondayScheduleArray);
+                            String tuesdayString = gson.toJson(tuesdayScheduleArray);
+                            String wednesdayString = gson.toJson(wednesdayScheduleArray);
+                            String thursdayString = gson.toJson(thursdayScheduleArray);
+                            String fridayString = gson.toJson(fridayScheduleArray);
+
+                            Preferences.setPrefs("mondaySchedule", mondayString, MainActivity.this);
+                            Preferences.setPrefs("tuesdaySchedule", tuesdayString, MainActivity.this);
+                            Preferences.setPrefs("wednesdaySchedule", wednesdayString, MainActivity.this);
+                            Preferences.setPrefs("thursdaySchedule", thursdayString, MainActivity.this);
+                            Preferences.setPrefs("fridaySchedule", fridayString, MainActivity.this);
+
 //***************************************************************************************************************************
                             switch (currentDay) {
 
@@ -448,70 +456,89 @@ public class MainActivity extends AppCompatActivity
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                IS_LOCAL_DB = 1008;
                 mAvi.hide();
-                IS_NET_AVAIL = 2000;
-                //Showing data from Realm)
-//                result = realm.where(TempModel.class).findAll();
-//                ArrayList<TempModel> list = new ArrayList<>(result);        //converting realm list into arraylist
-//                Log.d(TAG, "onErrorResponse: List Size " + list.size() + "\n" + list);
-//
-//                //Offline JSONArray
-//                JSONArray monArray = null;
-//                JSONArray tuesArray = null;
-//                JSONArray wedArray = null;
-//                JSONArray thursArray = null;
-//                JSONArray friArray = null;
-//                if (list.size() != 0) {
-//                    try {
-//                        monArray = new JSONArray(list.get(0).getMonday());
-//                        tuesArray = new JSONArray(list.get(0).getTuesday());
-//                        wedArray = new JSONArray(list.get(0).getWednesday());
-//                        thursArray = new JSONArray(list.get(0).getThursday());
-//                        friArray = new JSONArray(list.get(0).getFriday());
-//
-//                        //Saving offline data to JSONObject
-//                        mondayScheduleObject = monArray.getJSONObject(0);
-//                        tuesdayScheduleObject = tuesArray.getJSONObject(0);
-//                        wednesdayScheduleObject = wedArray.getJSONObject(0);
-//                        thursdayScheduleObject = thursArray.getJSONObject(0);
-//                        fridayScheduleObject = friArray.getJSONObject(0);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    switch (currentDay) {
-//                        case "Monday":
-//                            mondayScheduleFunction();
-//                            scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
-//                            recyclerView.setAdapter(scheduleListAdapter);
-//                            break;
-//                        case "Tuesday":
-//                            tuesdayScheduleFunction();
-//                            scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
-//                            recyclerView.setAdapter(scheduleListAdapter);
-//                            break;
-//                        case "Wednesday":
-//                            wednesdayScheduleFunction();
-//                            scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
-//                            recyclerView.setAdapter(scheduleListAdapter);
-//                            break;
-//                        case "Thursday":
-//                            thursdayScheduleFunction();
-//                            scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
-//                            recyclerView.setAdapter(scheduleListAdapter);
-//                            break;
-//                        case "Friday":
-//                            fridayScheduleFunction();
-//                            scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
-//                            recyclerView.setAdapter(scheduleListAdapter);
-//                            break;
-//                    }
-//
-//                } else {
-//                    Toast.makeText(MainActivity.this, "Please Connect to the Internet", Toast.LENGTH_SHORT).show();
-//                }
 
-                Log.d(TAG, "onErrorResponse: " + error.toString() + " NET_CODE " + IS_NET_AVAIL);
+                String mondayStr = Preferences.getPrefs("mondaySchedule", MainActivity.this);
+                String tuesdayStr = Preferences.getPrefs("tuesdaySchedule", MainActivity.this);
+                String wednesdayStr = Preferences.getPrefs("wednesdaySchedule", MainActivity.this);
+                String thursdayStr = Preferences.getPrefs("thursdaySchedule", MainActivity.this);
+                String fridayStr = Preferences.getPrefs("fridaySchedule", MainActivity.this);
+                JSONObject monObj, tueObj, wedObj, thuObj, friObj;
+                new loadDataOffline().execute();
+
+                switch (currentDay) {
+
+                    case "Monday":
+                        try {
+                            monObj = new JSONObject(mondayStr);
+                            monOfflineObject = monObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        mondayScheduleFunction();
+                        monTv.setBackgroundResource(R.drawable.circular_image);
+                        monTv.setTextColor(Color.BLACK);
+                        scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+                        recyclerView.setAdapter(scheduleListAdapter);
+                        break;
+                    case "Tuesday":
+                        try {
+                            tueObj = new JSONObject(tuesdayStr);
+                            tueOfflineObject = tueObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        tuesdayScheduleFunction();
+                        tueTv.setBackgroundResource(R.drawable.circular_image);
+                        tueTv.setTextColor(Color.BLACK);
+                        scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+                        recyclerView.setAdapter(scheduleListAdapter);
+                        break;
+                    case "Wednesday":
+                        try {
+                            wedObj = new JSONObject(wednesdayStr);
+                            wedOfflineObject = wedObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        wednesdayScheduleFunction();
+                        wedTv.setBackgroundResource(R.drawable.circular_image);
+                        wedTv.setTextColor(Color.BLACK);
+                        scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+                        recyclerView.setAdapter(scheduleListAdapter);
+                        break;
+                    case "Thursday":
+                        try {
+                            thuObj = new JSONObject(thursdayStr);
+                            thuOfflineObject = thuObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        thursdayScheduleFunction();
+                        thuTv.setBackgroundResource(R.drawable.circular_image);
+                        thuTv.setTextColor(Color.BLACK);
+                        scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+                        recyclerView.setAdapter(scheduleListAdapter);
+                        break;
+                    case "Friday":
+                        try {
+                            friObj = new JSONObject(fridayStr);
+                            friOfflineObject = friObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        fridayScheduleFunction();
+                        friTv.setBackgroundResource(R.drawable.circular_image);
+                        friTv.setTextColor(Color.BLACK);
+                        scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+                        recyclerView.setAdapter(scheduleListAdapter);
+                        break;
+                    default:
+                        noClassLayout.setVisibility(View.VISIBLE);
+                        break;
+                }
 
             }
         });
@@ -854,21 +881,58 @@ public class MainActivity extends AppCompatActivity
     //Adding the monday Schedule in the list
     private void mondayScheduleFunction() {
         try {
-            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
-            movie = new DailySchedule("9:15 - 10:15", (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
-            movie = new DailySchedule("10:15 - 11:15", (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
-            movie = new DailySchedule("11:45 - 12:45", (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
-            movie = new DailySchedule("12:45 - 1:45", (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
-            movie = new DailySchedule("1:45 - 2:45", (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
-            movie = new DailySchedule("2:45 - 3:45", (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
-            mondaySchedule.add(movie);
+            if (IS_LOCAL_DB == 1008) {
 
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) monOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+
+                schedule = new DailySchedule("9:15 - 10:15", (String) monOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+
+                schedule = new DailySchedule("10:15 - 11:15", (String) monOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+
+                schedule = new DailySchedule("11:45 - 12:45", (String) monOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+
+                schedule = new DailySchedule("12:45 - 1:45", (String) monOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+
+                schedule = new DailySchedule("1:45 - 2:45", (String) monOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+
+                schedule = new DailySchedule("2:45 - 3:45", (String) monOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) monOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) monOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                mondaySchedule.add(schedule);
+            } else {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+                schedule = new DailySchedule("9:15 - 10:15", (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+                schedule = new DailySchedule("10:15 - 11:15", (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+                schedule = new DailySchedule("11:45 - 12:45", (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+                schedule = new DailySchedule("12:45 - 1:45", (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+                schedule = new DailySchedule("1:45 - 2:45", (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+                schedule = new DailySchedule("2:45 - 3:45", (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) mondayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+                mondaySchedule.add(schedule);
+            }
             scheduleListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
@@ -878,20 +942,58 @@ public class MainActivity extends AppCompatActivity
     //Adding the tuesday Schedule in the list
     private void tuesdayScheduleFunction() {
         try {
-            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
-            movie = new DailySchedule("9:15 - 10:15", (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
-            movie = new DailySchedule("10:15 - 11:15", (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
-            movie = new DailySchedule("11:45 - 12:45", (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
-            movie = new DailySchedule("12:45 - 1:45", (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
-            movie = new DailySchedule("1:45 - 2:45", (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
-            movie = new DailySchedule("2:45 - 3:45", (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
-            tuesdaySchedule.add(movie);
+
+            if (IS_LOCAL_DB == 1008) {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) tueOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("9:15 - 10:15", (String) tueOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("10:15 - 11:15", (String) tueOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("11:45 - 12:45", (String) tueOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("12:45 - 1:45", (String) tueOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("1:45 - 2:45", (String) tueOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("2:45 - 3:45", (String) tueOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) tueOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) tueOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                tuesdaySchedule.add(schedule);
+            } else {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+                schedule = new DailySchedule("9:15 - 10:15", (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+                schedule = new DailySchedule("10:15 - 11:15", (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+                schedule = new DailySchedule("11:45 - 12:45", (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+                schedule = new DailySchedule("12:45 - 1:45", (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+                schedule = new DailySchedule("1:45 - 2:45", (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+                schedule = new DailySchedule("2:45 - 3:45", (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) tuesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+                tuesdaySchedule.add(schedule);
+            }
             scheduleListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
@@ -901,20 +1003,57 @@ public class MainActivity extends AppCompatActivity
     //Adding the wednesday Schedule in the list
     private void wednesdayScheduleFunction() {
         try {
-            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
-            movie = new DailySchedule("9:15 - 10:15", (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
-            movie = new DailySchedule("10:15 - 11:15", (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
-            movie = new DailySchedule("11:45 - 12:45", (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
-            movie = new DailySchedule("12:45 - 1:45", (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
-            movie = new DailySchedule("1:45 - 2:45", (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
-            movie = new DailySchedule("2:45 - 3:45", (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
-            wednesdaySchedule.add(movie);
+            if (IS_LOCAL_DB == 1008) {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) wedOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("9:15 - 10:15", (String) wedOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("10:15 - 11:15", (String) wedOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("11:45 - 12:45", (String) wedOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("12:45 - 1:45", (String) wedOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("1:45 - 2:45", (String) wedOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("2:45 - 3:45", (String) wedOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) wedOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) wedOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                wednesdaySchedule.add(schedule);
+            } else {
+                DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+                movie = new DailySchedule("9:15 - 10:15", (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+                movie = new DailySchedule("10:15 - 11:15", (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+                movie = new DailySchedule("11:45 - 12:45", (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+                movie = new DailySchedule("12:45 - 1:45", (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+                movie = new DailySchedule("1:45 - 2:45", (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+                movie = new DailySchedule("2:45 - 3:45", (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) wednesdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+                wednesdaySchedule.add(movie);
+            }
             scheduleListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
@@ -924,20 +1063,58 @@ public class MainActivity extends AppCompatActivity
     //Adding the thursday Schedule in the list
     private void thursdayScheduleFunction() {
         try {
-            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
-            movie = new DailySchedule("9:15 - 10:15", (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
-            movie = new DailySchedule("10:15 - 11:15", (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
-            movie = new DailySchedule("11:45 - 12:45", (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
-            movie = new DailySchedule("12:45 - 1:45", (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
-            movie = new DailySchedule("1:45 - 2:45", (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
-            movie = new DailySchedule("2:45 - 3:45", (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
-            thursdaySchedule.add(movie);
+            if (IS_LOCAL_DB == 1008) {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) thuOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("9:15 - 10:15", (String) thuOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("10:15 - 11:15", (String) thuOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("11:45 - 12:45", (String) thuOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("12:45 - 1:45", (String) thuOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("1:45 - 2:45", (String) thuOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+
+                schedule = new DailySchedule("2:45 - 3:45", (String) thuOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) thuOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) thuOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                thursdaySchedule.add(schedule);
+            }
+            else {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+                schedule = new DailySchedule("9:15 - 10:15", (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+                schedule = new DailySchedule("10:15 - 11:15", (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+                schedule = new DailySchedule("11:45 - 12:45", (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+                schedule = new DailySchedule("12:45 - 1:45", (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+                schedule = new DailySchedule("1:45 - 2:45", (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+                schedule = new DailySchedule("2:45 - 3:45", (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+                thursdaySchedule.add(schedule);
+            }
             scheduleListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
@@ -948,20 +1125,58 @@ public class MainActivity extends AppCompatActivity
     private void fridayScheduleFunction() {
 
         try {
-            DailySchedule movie = new DailySchedule("8:15 - 9:15", (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
-            movie = new DailySchedule("9:15 - 10:15", (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
-            movie = new DailySchedule("10:15 - 11:15", (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
-            movie = new DailySchedule("11:45 - 12:45", (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
-            movie = new DailySchedule("12:45 - 1:45", (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
-            movie = new DailySchedule("1:45 - 2:45", (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
-            movie = new DailySchedule("2:45 - 3:45", (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
-            fridaySchedule.add(movie);
+            if (IS_LOCAL_DB == 1008) {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) friOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p1").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+
+                schedule = new DailySchedule("9:15 - 10:15", (String) friOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p2").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+
+                schedule = new DailySchedule("10:15 - 11:15", (String) friOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p3").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+
+                schedule = new DailySchedule("11:45 - 12:45", (String) friOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p4").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+
+                schedule = new DailySchedule("12:45 - 1:45", (String) friOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p5").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+
+                schedule = new DailySchedule("1:45 - 2:45", (String) friOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p6").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+
+                schedule = new DailySchedule("2:45 - 3:45", (String) friOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("subject"),
+                        (String) friOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
+                        (String) friOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
+                fridaySchedule.add(schedule);
+            }
+            else {
+                DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+                schedule = new DailySchedule("9:15 - 10:15", (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+                schedule = new DailySchedule("10:15 - 11:15", (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p3").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+                schedule = new DailySchedule("11:45 - 12:45", (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p4").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+                schedule = new DailySchedule("12:45 - 1:45", (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p5").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+                schedule = new DailySchedule("1:45 - 2:45", (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p6").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+                schedule = new DailySchedule("2:45 - 3:45", (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p7").getJSONObject(0).get("teacher"));
+                fridaySchedule.add(schedule);
+            }
             scheduleListAdapter.notifyDataSetChanged();
         } catch (Exception e) {
             Log.d(TAG, "mondayScheduleFunction: " + e.toString());
@@ -1037,12 +1252,6 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 //        if (gradAnim != null && !gradAnim.isRunning())
 //            gradAnim.start();
-        if (UserProfile.themeColor == 101) {
-            Log.d(TAG, "onCreate: Theme " + UserProfile.themeColor);
-            linearLayout.setBackgroundResource(R.drawable.orange_gradient);
-            toolbar.setBackgroundResource(R.drawable.orange_gradient);
-            recyclerView.setAdapter(scheduleListAdapter);
-        }
     }
 
     @Override
@@ -1087,5 +1296,37 @@ public class MainActivity extends AppCompatActivity
             }
         };
         VolleySingleton.getInstance(MainActivity.this).addToRequestQueue(stringRequest);
+    }
+
+    private class loadDataOffline extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONObject monObj, tueObj, wedObj, thuObj, friObj;
+
+            String mondayStr = Preferences.getPrefs("mondaySchedule", MainActivity.this);
+            String tuesdayStr = Preferences.getPrefs("tuesdaySchedule", MainActivity.this);
+            String wednesdayStr = Preferences.getPrefs("wednesdaySchedule", MainActivity.this);
+            String thursdayStr = Preferences.getPrefs("thursdaySchedule", MainActivity.this);
+            String fridayStr = Preferences.getPrefs("fridaySchedule", MainActivity.this);
+
+            try {
+                monObj = new JSONObject(mondayStr);
+                monOfflineObject = monObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                tueObj = new JSONObject(tuesdayStr);
+                tueOfflineObject = tueObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                wedObj = new JSONObject(wednesdayStr);
+                wedOfflineObject = wedObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                thuObj = new JSONObject(thursdayStr);
+                thuOfflineObject = thuObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                friObj = new JSONObject(fridayStr);
+                friOfflineObject = friObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 }
