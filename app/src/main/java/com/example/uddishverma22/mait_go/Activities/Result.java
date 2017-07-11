@@ -2,6 +2,7 @@ package com.example.uddishverma22.mait_go.Activities;
 
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -24,7 +25,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.example.uddishverma22.mait_go.Adapters.AnnouncementAdapter;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
+import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.Models.ResultHeader;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
@@ -32,13 +36,17 @@ import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.RecyclerScroller;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import at.grabner.circleprogress.CircleProgressView;
@@ -157,8 +165,6 @@ public class Result extends AppCompatActivity {
 
                                 jsonObject = jsonArray.getJSONObject(i);
                                 ResultModel resultObj = new ResultModel();
-
-
                                 resultObj.subName = jsonObject.getString("subjectName");
                                 resultObj.intMarks = jsonObject.getString("internal");
                                 resultObj.extMarks = jsonObject.getString("external");
@@ -169,30 +175,11 @@ public class Result extends AppCompatActivity {
                             }
 
                             /**
-                             * Saving data to realm
+                             * Saving data to shared prefs
                              */
-//                            if (resultList.size() != 0) {
-//                                realm.executeTransactionAsync(new Realm.Transaction() {
-//                                    @Override
-//                                    public void execute(Realm realm) {
-//                                        //Deleting the previous result to remove repeatity
-//                                        realm.where(ResultModel.class).findAll().deleteAllFromRealm();
-//                                        //Adding the results in the realm database
-//                                        realm.copyToRealmOrUpdate(resultList);
-//                                    }
-//                                }, new Realm.Transaction.OnSuccess() {
-//                                    @Override
-//                                    public void onSuccess() {
-//
-//                                    }
-//                                }, new Realm.Transaction.OnError() {
-//                                    @Override
-//                                    public void onError(Throwable error) {
-//                                        Log.e(TAG, "onError: " + error.toString());
-//                                    }
-//                                });
-//
-//                            }
+                            Gson gson = new Gson();
+                            String resultJson = gson.toJson(resultList);
+                            new saveDataAsync().execute(resultHeader.univRank, resultHeader.colRank, resultHeader.creditPerc, resultHeader.cgpa, String.valueOf(response.get("percentage")), resultJson);
 
                             resultAdapter = new ResultAdapter(resultList, resultHeader);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
@@ -209,19 +196,67 @@ public class Result extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
                 avi.hide();
-                noResultLayout.setVisibility(View.VISIBLE);
-//                results = realm.where(ResultModel.class).findAll();
-//                setting percentage in the CircleView
-//                if (results.size() != 0) {
-//                    mCircleView.setValueAnimated(Float.parseFloat(results.get(1).percentage));
-//                    resultAdapter = new ResultAdapter(results);
-//                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
-//                    recyclerView.setLayoutManager(mLayoutManager);
-//                    recyclerView.setAdapter(resultAdapter);
-//                }
+
+                resultHeader = new ResultHeader();
+                resultHeader.univRank = Preferences.getPrefs("resultUrank", Result.this);
+                resultHeader.colRank = Preferences.getPrefs("resultCrank", Result.this);
+                resultHeader.creditPerc = Preferences.getPrefs("resultCreditPerc", Result.this);
+                resultHeader.cgpa = Preferences.getPrefs("resultCgpa", Result.this);
+
+                mCircleView.setValueAnimated(Float.parseFloat((Preferences.getPrefs("resultPercentage", Result.this))));
+
+                Gson gson = new Gson();
+                String resultStr = Preferences.getPrefs("result", Result.this);
+                Log.d(TAG, "onErrorResponse: " + resultStr);
+                Type type = new TypeToken<ArrayList<ResultModel>>() {
+                }.getType();
+                ArrayList<ResultModel> arrayList = gson.fromJson(resultStr, type);
+                if (arrayList != null) {
+                    try {
+                        String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ResultModel>>() {
+                        }.getType());
+                        JSONArray jsonArray = new JSONArray(listString);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            jsonObject = jsonArray.getJSONObject(i);
+                            ResultModel resultObj = new ResultModel();
+                            resultObj.subName = jsonObject.getString("subName");
+                            resultObj.intMarks = jsonObject.getString("intMarks");
+                            resultObj.extMarks = jsonObject.getString("extMarks");
+                            resultObj.credits = jsonObject.getString("credits");
+                            resultObj.totMarks = jsonObject.getString("totMarks");
+                            resultObj.percentage = Preferences.getPrefs("resultPercentage", Result.this);
+                            resultList.add(resultObj);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    noResultLayout.setVisibility(View.VISIBLE);
+                }
+                resultAdapter = new ResultAdapter(resultList, resultHeader);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(resultAdapter);
 
             }
         });
         requestQueue.add(request);
+    }
+
+    private class saveDataAsync extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            Preferences.setPrefs("resultUrank", params[0], Result.this);
+            Preferences.setPrefs("resultCrank", params[1], Result.this);
+            Preferences.setPrefs("resultCreditPerc", params[2], Result.this);
+            Preferences.setPrefs("resultCgpa", params[3], Result.this);
+            Preferences.setPrefs("resultPercentage", params[4], Result.this);
+            Preferences.setPrefs("result", params[5], Result.this);
+
+            return null;
+        }
     }
 }
