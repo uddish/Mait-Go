@@ -21,4 +21,5 @@
         <attr name="barcode_foreground_color" format="color"/>
         <attr name="barcode_background_color" format="color"/>
     </declare-styleable>
+
 </resources>

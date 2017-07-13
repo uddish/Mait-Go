@@ -3,38 +3,34 @@ package com.example.uddishverma22.mait_go.Activities;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.example.uddishverma22.mait_go.Adapters.AnnouncementAdapter;
 import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
-import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.Models.ResultHeader;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
-import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
-import com.example.uddishverma22.mait_go.Utils.RecyclerScroller;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -45,8 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import at.grabner.circleprogress.CircleProgressView;
@@ -85,6 +81,13 @@ public class Result extends AppCompatActivity {
     //Result Header
     ResultHeader resultHeader;
 
+    BottomSheetBehavior semesterBottomSheetBehavior;
+    NestedScrollView semesterBottomSheet;
+    TextView semTitle, semesterBtn;
+    Typeface tf;
+    TextView first, second, third, fourth, fifth, sixth, seventh, eight;
+    String semester;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +111,26 @@ public class Result extends AppCompatActivity {
 
         noResultLayout = (LinearLayout) findViewById(R.id.no_result_layout);
 
+        semesterBtn = (TextView) findViewById(R.id.semester_btn);
+
+        semesterBottomSheet = (NestedScrollView) findViewById(R.id.semester_bottomsheet);
+        semesterBottomSheetBehavior = BottomSheetBehavior.from(semesterBottomSheet);
+        semesterBottomSheetBehavior.setPeekHeight(0);
+
+        semTitle = (TextView) findViewById(R.id.semester_title);
+
+        tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Light.ttf");
+        semTitle.setTypeface(tf);
+
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
+
+        semesterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                semesterSelector();
+            }
+        });
 
     }
 
@@ -138,13 +159,16 @@ public class Result extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         try {
-
+                            resultList= new ArrayList<>();
                             noResultLayout.setVisibility(View.GONE);
 
                             avi.hide();
 
                             JSONArray jsonArray = response.getJSONArray("marks");
-                            percentage = String.valueOf(Double.parseDouble(String.valueOf((response.get("percentage")))));
+                            percentage = String.valueOf((response.get("percentage")));
+
+//                            Float f = Float.valueOf(decimalFormat.format(response.get("percentage")));
+//                            Float dec = f - Float.parseFloat(percentage.substring(0,2));
 
                             //converting perc and gpa upto 2 decimal places
                             double creditp = (double) response.get("creditp");
@@ -153,7 +177,8 @@ public class Result extends AppCompatActivity {
                             double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
 
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
-                            mCircleView.setValueAnimated(Float.parseFloat((percentage)));
+                            mCircleView.setValueAnimated(Float.parseFloat(percentage));
+
 
                             resultHeader = new ResultHeader();
                             resultHeader.univRank = String.valueOf(response.get("urank"));
@@ -170,7 +195,7 @@ public class Result extends AppCompatActivity {
                                 resultObj.extMarks = jsonObject.getString("external");
                                 resultObj.credits = jsonObject.getString("credits");
                                 resultObj.totMarks = jsonObject.getString("total");
-                                resultObj.percentage = String.valueOf(response.get("percentage"));
+                                resultObj.percentage = percentage;
                                 resultList.add(resultObj);
                             }
 
@@ -258,5 +283,164 @@ public class Result extends AppCompatActivity {
 
             return null;
         }
+    }
+
+    private void semesterSelector() {
+
+        semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        semesterBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        fetchSemData(semester);
+                        Log.d(TAG, "onStateChanged: " + semester);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        first = (TextView) findViewById(R.id.semester_one);
+        second = (TextView) findViewById(R.id.semester_two);
+        third = (TextView) findViewById(R.id.semester_three);
+        fourth = (TextView) findViewById(R.id.semester_four);
+        fifth = (TextView) findViewById(R.id.semester_five);
+        sixth = (TextView) findViewById(R.id.semester_six);
+        seventh = (TextView) findViewById(R.id.semester_seven);
+        eight = (TextView) findViewById(R.id.semester_eight);
+
+        first.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semester = first.getText().toString();
+                semesterBtn.setText(semester);
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        second.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semester = second.getText().toString();
+                semesterBtn.setText(semester);
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        third.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semester = third.getText().toString();
+                semesterBtn.setText(semester);
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        fourth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semesterBtn.setText(fourth.getText().toString());
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        fifth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semesterBtn.setText(fifth.getText().toString());
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        sixth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semesterBtn.setText(sixth.getText().toString());
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        seventh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semesterBtn.setText(seventh.getText().toString());
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        eight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                semesterBtn.setText(eight.getText().toString());
+                semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+    }
+
+    private void fetchSemData(final String semester) {
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "?sem=" + semester, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d(TAG, "URL ********: " + url + "?sem=" + semester);
+                        try {
+
+                            noResultLayout.setVisibility(View.GONE);
+                            avi.hide();
+                            JSONArray jsonArray = response.getJSONArray("marks");
+                            percentage = String.valueOf((response.get("percentage")));
+
+                            //converting perc and gpa upto 2 decimal places
+                            double creditp = (double) response.get("creditp");
+                            double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
+                            double gpa = (double) response.get("gpa");
+                            double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
+
+                            //Setting the percentage in the circleView and the cgpa and creditPercentage
+                            mCircleView.setValueAnimated(Float.parseFloat(percentage));
+
+                            resultHeader = new ResultHeader();
+                            resultHeader.univRank = String.valueOf(response.get("urank"));
+                            resultHeader.colRank = String.valueOf(response.get("crank"));
+                            resultHeader.creditPerc = String.valueOf(roundOffPerc);
+                            resultHeader.cgpa = String.valueOf(roundOffGpa);
+
+                            resultList = new ArrayList<>();
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+
+                                jsonObject = jsonArray.getJSONObject(i);
+                                ResultModel resultObj = new ResultModel();
+                                resultObj.subName = jsonObject.getString("subjectName");
+                                resultObj.intMarks = jsonObject.getString("internal");
+                                resultObj.extMarks = jsonObject.getString("external");
+                                resultObj.credits = jsonObject.getString("credits");
+                                resultObj.totMarks = jsonObject.getString("total");
+                                resultObj.percentage = percentage;
+                                resultList.add(resultObj);
+                            }
+
+                            resultAdapter = new ResultAdapter(resultList, resultHeader);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setAdapter(resultAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "URL ********: " + url + "?sem=" + semester);
+                Log.d(TAG, "onErrorResponse: " + error.toString());
+                avi.hide();
+                noResultLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
+        VolleySingleton.getInstance(this).getRequestQueue().add(request);
     }
 }

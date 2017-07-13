@@ -5,9 +5,9 @@
 
     <stroke
         android:width="2dip"
-        android:color="@color/darkBrown" />
+        android:color="@color/white" />
     <size
-        android:width="50dp"
-        android:height="15dp"/>
+        android:width="30dp"
+        android:height="30dp"/>
 
 </shape>
