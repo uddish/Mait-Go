@@ -81,6 +81,8 @@ public class Result extends AppCompatActivity {
     //Result Header
     ResultHeader resultHeader;
 
+    CoordinatorLayout mainLayout;
+
     BottomSheetBehavior semesterBottomSheetBehavior;
     NestedScrollView semesterBottomSheet;
     TextView semTitle, semesterBtn;
@@ -112,6 +114,8 @@ public class Result extends AppCompatActivity {
         noResultLayout = (LinearLayout) findViewById(R.id.no_result_layout);
 
         semesterBtn = (TextView) findViewById(R.id.semester_btn);
+
+        mainLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 
         semesterBottomSheet = (NestedScrollView) findViewById(R.id.semester_bottomsheet);
         semesterBottomSheetBehavior = BottomSheetBehavior.from(semesterBottomSheet);
@@ -153,13 +157,14 @@ public class Result extends AppCompatActivity {
 
     private void fetchData(RequestQueue requestQueue) {
 
+        resultList = new ArrayList<>();
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
                         try {
-                            resultList= new ArrayList<>();
                             noResultLayout.setVisibility(View.GONE);
 
                             avi.hide();
@@ -294,6 +299,7 @@ public class Result extends AppCompatActivity {
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
+                        avi.show();
                         fetchSemData(semester);
                         Log.d(TAG, "onStateChanged: " + semester);
                 }
@@ -378,12 +384,13 @@ public class Result extends AppCompatActivity {
 
     private void fetchSemData(final String semester) {
 
+        resultList = new ArrayList<>();
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "?sem=" + semester, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        Log.d(TAG, "URL ********: " + url + "?sem=" + semester);
                         try {
 
                             noResultLayout.setVisibility(View.GONE);
@@ -405,8 +412,6 @@ public class Result extends AppCompatActivity {
                             resultHeader.colRank = String.valueOf(response.get("crank"));
                             resultHeader.creditPerc = String.valueOf(roundOffPerc);
                             resultHeader.cgpa = String.valueOf(roundOffGpa);
-
-                            resultList = new ArrayList<>();
 
                             for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -434,9 +439,13 @@ public class Result extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "URL ********: " + url + "?sem=" + semester);
                 Log.d(TAG, "onErrorResponse: " + error.toString());
+                resultList = new ArrayList<>();
+                resultHeader = new ResultHeader();
                 avi.hide();
+                resultAdapter = new ResultAdapter(resultList, resultHeader);
+                recyclerView.setAdapter(resultAdapter);
+                mCircleView.setValue(0);
                 noResultLayout.setVisibility(View.VISIBLE);
 
             }
