@@ -227,7 +227,6 @@ public class Login extends AppCompatActivity {
                 avi.hide();
                 Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
                 // Google Sign In failed, update UI appropriately
-                // .
             }
         }
     }
@@ -243,6 +242,7 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             avi.hide();
                             // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "onComplete:  Studemt NAme ------- " + acct.getDisplayName());
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
                             Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);

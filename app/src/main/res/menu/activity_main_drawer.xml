@@ -6,10 +6,6 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:icon="@drawable/ic_profile"
-            android:id="@+id/nav_profile"
-            android:title="Profile" />
-        <item
             android:icon="@drawable/ic_notice"
             android:id="@+id/nav_notices"
             android:title="Notices"/>
@@ -34,6 +30,11 @@
             android:icon="@drawable/ic_events"
             android:id="@+id/events"
             android:title="Events" />
+
+        <item
+            android:icon="@drawable/settings_ic"
+            android:id="@+id/nav_profile"
+            android:title="Settings" />
     </group>
 
 </menu>

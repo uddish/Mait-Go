@@ -18,6 +18,7 @@ public class ResultModel extends RealmObject{
     public String cgpa;
     public String univRank;
     public String colRank;
+    public String sem;
 
     public ResultModel(String subName, String intMarks, String extMarks, String totMarks, String credits,
                        String percentage, String creditPerc, String cgpa, String univRank, String colRank) {

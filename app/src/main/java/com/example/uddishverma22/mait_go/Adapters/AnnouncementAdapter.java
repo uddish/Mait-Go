@@ -2,6 +2,7 @@ package com.example.uddishverma22.mait_go.Adapters;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import java.util.List;
 public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.detailsViewHolder> {
 
     List<ClassAnnouncementsModel> list;
+
+    public static final String TAG = "AnnouncementAdapter";
 
     public AnnouncementAdapter(ArrayList<ClassAnnouncementsModel> list) {
         this.list = list;

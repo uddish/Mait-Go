@@ -2,6 +2,8 @@ package com.example.uddishverma22.mait_go.Activities;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +24,7 @@ import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
 import com.example.uddishverma22.mait_go.Fragments.FacultyFragment;
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -56,6 +59,8 @@ public class FacultyInformation extends AppCompatActivity {
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/faculty";
 
+    CoordinatorLayout coordinatorLayout;
+
     RequestQueue queue;
 
     @Override
@@ -75,6 +80,13 @@ public class FacultyInformation extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+
+        if (!CheckInternet.isNetworkAvailable(FacultyInformation.this)) {
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
 
 
         //Handling click listeners on TabLayout
@@ -182,7 +194,7 @@ public class FacultyInformation extends AppCompatActivity {
     }
 
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
 
         private final List<Fragment> mFragmentList = new ArrayList<>();//fragment arraylist
         private final List<String> mFragmentTitleList = new ArrayList<>();//title arraylist

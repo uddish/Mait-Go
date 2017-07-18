@@ -237,16 +237,16 @@ public class UserProfile extends AppCompatActivity {
 
         studentPicPath = Preferences.getPrefs("studentImage", getApplicationContext());
         if (!studentPicPath.equals("notfound")) {
-            Log.d(TAG, "onCreate: Profile Pic inside LOOP " + studentPicPath);
             Picasso.with(this).load(studentPicPath).into(profileImage);
-
             //Getting screen's width and height
             display.getSize(size);
             int width = size.x;
             int height = size.y;
 
             Picasso.with(this).load(studentPicPath).resize(width, 1000).centerCrop().into(blurredBackImage);
-
+        }
+        else    {
+            Picasso.with(this).load(R.drawable.ic_account_circle_white_48dp).into(profileImage);
         }
     }
 
@@ -256,16 +256,15 @@ public class UserProfile extends AppCompatActivity {
         studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
         studentBranch = Preferences.getPrefs("studentBranch", getApplicationContext());
         studentSemester = Preferences.getPrefs("studentSemester", getApplicationContext());
-//        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
-//                && !studentSection.equals("notfound") && !studentBranch.equals("notfound")
-//                && !studentSemester.equals("notfound")) {
-        name.setText(studentName);
-        roll.setText(studentRollNo);
-        className.setText(studentSection);
-        Log.d(TAG, "setStudentDetails: " + studentSection);
-        branch.setText("CSE");
-        semester.setText(studentSemester);
-//        }
+        Log.d(TAG, "setStudentDetails:  + " + studentBranch + " " + studentName + " " + studentRollNo);
+        if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
+                && !studentSection.equals("notfound") && !studentSemester.equals("notfound")) {
+            name.setText(studentName);
+            roll.setText(studentRollNo);
+            className.setText(studentSection);
+            branch.setText("CSE");
+            semester.setText(studentSemester);
+        }
     }
 
     @Override

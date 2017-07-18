@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,9 +19,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +37,8 @@ import com.example.uddishverma22.mait_go.Adapters.ResultAdapter;
 import com.example.uddishverma22.mait_go.Models.ResultHeader;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.CheckInternet;
+import com.example.uddishverma22.mait_go.Utils.HideKeyboard;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.gson.Gson;
@@ -41,13 +50,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import at.grabner.circleprogress.CircleProgressView;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class Result extends AppCompatActivity {
 
@@ -55,6 +61,7 @@ public class Result extends AppCompatActivity {
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/result/";
     JSONObject jsonObject;
     public static String percentage = null;
+    public String resultSemester = null;
 
     public static final String TAG = "Result";
 
@@ -68,8 +75,6 @@ public class Result extends AppCompatActivity {
     RecyclerView recyclerView;
     ResultAdapter resultAdapter;
 
-    Realm realm = null;
-    RealmResults<ResultModel> results;
     RequestQueue requestQueue;
 
     LinearLayout noResultLayout;
@@ -90,6 +95,11 @@ public class Result extends AppCompatActivity {
     TextView first, second, third, fourth, fifth, sixth, seventh, eight;
     String semester;
 
+    TextView migrationTitle;
+    EditText migratedRollNo;
+    ImageView migratedSelectDone;
+    LinearLayout migratedLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,8 +108,6 @@ public class Result extends AppCompatActivity {
         rollNumber = Preferences.getPrefs("rollNo", getApplicationContext());
         url = url + rollNumber;
 
-        realm = Realm.getDefaultInstance();
-
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
 
         fetchData(requestQueue);
@@ -107,35 +115,57 @@ public class Result extends AppCompatActivity {
         //Setting text on collapsible toolbar according to screen size
         initCollapsibleToolbar();
 
+        attachViews();
+
+        if (!CheckInternet.isNetworkAvailable(Result.this)) {
+            Snackbar snackbar = Snackbar.make(mainLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        avi.show();
+
+        semesterBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                semesterSelector();
+                return false;
+            }
+        });
+
+
+        migratedSelectDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                migratedRollEnter();
+            }
+        });
+
+    }
+
+    private void attachViews() {
+
         recyclerView = (RecyclerView) findViewById(R.id.result_list);
-
         mCircleView = (CircleProgressView) findViewById(R.id.circle_progress);
-
         noResultLayout = (LinearLayout) findViewById(R.id.no_result_layout);
-
         semesterBtn = (TextView) findViewById(R.id.semester_btn);
-
         mainLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 
         semesterBottomSheet = (NestedScrollView) findViewById(R.id.semester_bottomsheet);
         semesterBottomSheetBehavior = BottomSheetBehavior.from(semesterBottomSheet);
         semesterBottomSheetBehavior.setPeekHeight(0);
 
+        migrationTitle = (TextView) findViewById(R.id.migration_title);
+        migratedRollNo = (EditText) findViewById(R.id.migrated_rollno);
+        migratedSelectDone = (ImageView) findViewById(R.id.migrated_input_done);
+
+        migratedLayout = (LinearLayout) findViewById(R.id.migrated_layout);
+
         semTitle = (TextView) findViewById(R.id.semester_title);
 
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Light.ttf");
         semTitle.setTypeface(tf);
-
-        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        avi.show();
-
-        semesterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                semesterSelector();
-            }
-        });
-
+        migrationTitle.setTypeface(tf);
     }
 
     private void initCollapsibleToolbar() {
@@ -171,9 +201,9 @@ public class Result extends AppCompatActivity {
 
                             JSONArray jsonArray = response.getJSONArray("marks");
                             percentage = String.valueOf((response.get("percentage")));
+                            resultSemester = String.valueOf(response.get("sem"));
 
-//                            Float f = Float.valueOf(decimalFormat.format(response.get("percentage")));
-//                            Float dec = f - Float.parseFloat(percentage.substring(0,2));
+                            semesterBtn.setText(resultSemester);
 
                             //converting perc and gpa upto 2 decimal places
                             double creditp = (double) response.get("creditp");
@@ -183,7 +213,6 @@ public class Result extends AppCompatActivity {
 
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
                             mCircleView.setValueAnimated(Float.parseFloat(percentage));
-
 
                             resultHeader = new ResultHeader();
                             resultHeader.univRank = String.valueOf(response.get("urank"));
@@ -233,36 +262,44 @@ public class Result extends AppCompatActivity {
                 resultHeader.creditPerc = Preferences.getPrefs("resultCreditPerc", Result.this);
                 resultHeader.cgpa = Preferences.getPrefs("resultCgpa", Result.this);
 
-                mCircleView.setValueAnimated(Float.parseFloat((Preferences.getPrefs("resultPercentage", Result.this))));
+                if (!(Preferences.getPrefs("resultPercentage", Result.this).equals("notfound")))
+                    mCircleView.setValueAnimated(Float.parseFloat((Preferences.getPrefs("resultPercentage", Result.this))));
 
                 Gson gson = new Gson();
                 String resultStr = Preferences.getPrefs("result", Result.this);
                 Log.d(TAG, "onErrorResponse: " + resultStr);
                 Type type = new TypeToken<ArrayList<ResultModel>>() {
                 }.getType();
-                ArrayList<ResultModel> arrayList = gson.fromJson(resultStr, type);
-                if (arrayList != null) {
-                    try {
-                        String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ResultModel>>() {
-                        }.getType());
-                        JSONArray jsonArray = new JSONArray(listString);
+                if (!resultStr.equals("notfound")) {
+                    ArrayList<ResultModel> arrayList = gson.fromJson(resultStr, type);
+                    if (arrayList != null) {
+                        try {
+                            String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ResultModel>>() {
+                            }.getType());
+                            JSONArray jsonArray = new JSONArray(listString);
 
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            jsonObject = jsonArray.getJSONObject(i);
-                            ResultModel resultObj = new ResultModel();
-                            resultObj.subName = jsonObject.getString("subName");
-                            resultObj.intMarks = jsonObject.getString("intMarks");
-                            resultObj.extMarks = jsonObject.getString("extMarks");
-                            resultObj.credits = jsonObject.getString("credits");
-                            resultObj.totMarks = jsonObject.getString("totMarks");
-                            resultObj.percentage = Preferences.getPrefs("resultPercentage", Result.this);
-                            resultList.add(resultObj);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                jsonObject = jsonArray.getJSONObject(i);
+                                ResultModel resultObj = new ResultModel();
+                                resultObj.subName = jsonObject.getString("subName");
+                                resultObj.intMarks = jsonObject.getString("intMarks");
+                                resultObj.extMarks = jsonObject.getString("extMarks");
+                                resultObj.credits = jsonObject.getString("credits");
+                                resultObj.totMarks = jsonObject.getString("totMarks");
+                                resultObj.percentage = Preferences.getPrefs("resultPercentage", Result.this);
+                                resultList.add(resultObj);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 } else {
-                    noResultLayout.setVisibility(View.VISIBLE);
+                    if (semester.equals("1") || semester.equals("2")) {
+                        migrationTitle.setVisibility(View.VISIBLE);
+                    } else {
+                        noResultLayout.setVisibility(View.VISIBLE);
+                        migrationTitle.setVisibility(View.GONE);
+                    }
                 }
                 resultAdapter = new ResultAdapter(resultList, resultHeader);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
@@ -290,6 +327,21 @@ public class Result extends AppCompatActivity {
         }
     }
 
+    private void migratedRollEnter() {
+
+        String migratedRoll = migratedRollNo.getText().toString();
+        if (!TextUtils.isEmpty(migratedRoll)) {
+            avi.show();
+            url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/result/" + migratedRoll;
+            fetchSemData(semester);
+        } else {
+            Toast.makeText(this, "Enter the Roll Number", Toast.LENGTH_SHORT).show();
+        }
+        InputMethodManager imm = (InputMethodManager) MainActivity.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(migratedSelectDone.getWindowToken(), 0);
+
+    }
+
     private void semesterSelector() {
 
         semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -300,8 +352,8 @@ public class Result extends AppCompatActivity {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         avi.show();
+                        url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/result/" + rollNumber;
                         fetchSemData(semester);
-                        Log.d(TAG, "onStateChanged: " + semester);
                 }
             }
 
@@ -347,6 +399,7 @@ public class Result extends AppCompatActivity {
         fourth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                semester = fourth.getText().toString();
                 semesterBtn.setText(fourth.getText().toString());
                 semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
@@ -354,6 +407,7 @@ public class Result extends AppCompatActivity {
         fifth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                semester = fifth.getText().toString();
                 semesterBtn.setText(fifth.getText().toString());
                 semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
@@ -361,6 +415,7 @@ public class Result extends AppCompatActivity {
         sixth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                semester = sixth.getText().toString();
                 semesterBtn.setText(sixth.getText().toString());
                 semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
@@ -368,6 +423,7 @@ public class Result extends AppCompatActivity {
         seventh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                semester = seventh.getText().toString();
                 semesterBtn.setText(seventh.getText().toString());
                 semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
@@ -375,6 +431,7 @@ public class Result extends AppCompatActivity {
         eight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                semester = eight.getText().toString();
                 semesterBtn.setText(eight.getText().toString());
                 semesterBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
@@ -385,6 +442,9 @@ public class Result extends AppCompatActivity {
     private void fetchSemData(final String semester) {
 
         resultList = new ArrayList<>();
+        resultHeader = new ResultHeader();
+
+        Log.d(TAG, "fetchSemData: " + url + "?sem=" + semester);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "?sem=" + semester, null,
                 new Response.Listener<JSONObject>() {
@@ -392,8 +452,10 @@ public class Result extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
 
                         try {
-
                             noResultLayout.setVisibility(View.GONE);
+                            migratedLayout.setVisibility(View.GONE);
+                            appBarLayout.setExpanded(true);
+
                             avi.hide();
                             JSONArray jsonArray = response.getJSONArray("marks");
                             percentage = String.valueOf((response.get("percentage")));
@@ -440,13 +502,20 @@ public class Result extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
+                avi.hide();
                 resultList = new ArrayList<>();
                 resultHeader = new ResultHeader();
-                avi.hide();
                 resultAdapter = new ResultAdapter(resultList, resultHeader);
                 recyclerView.setAdapter(resultAdapter);
                 mCircleView.setValue(0);
-                noResultLayout.setVisibility(View.VISIBLE);
+                if (semester.equals("1") || semester.equals("2")) {
+                    appBarLayout.setExpanded(false);
+                    migratedLayout.setVisibility(View.VISIBLE);
+                    noResultLayout.setVisibility(View.GONE);
+                } else {
+                    noResultLayout.setVisibility(View.VISIBLE);
+                    migratedLayout.setVisibility(View.GONE);
+                }
 
             }
         });

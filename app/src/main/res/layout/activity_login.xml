@@ -14,7 +14,7 @@
         android:id="@+id/layout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <TextView
@@ -38,7 +38,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:text="Let's Get Started"
+            android:text="Let's Get You Started For IPU GO"
             android:textAppearance="?android:textAppearanceLarge"
             android:textColor="@color/white"
             android:textSize="20dp" />

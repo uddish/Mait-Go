@@ -1,9 +1,7 @@
 package com.example.uddishverma22.mait_go.Activities;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,7 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +28,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,17 +38,15 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
-import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.Models.TempModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -58,7 +54,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,8 +79,6 @@ public class MainActivity extends AppCompatActivity
 
     private static int IS_LOCAL_DB = 1009;
 
-    private static int IS_NET_AVAIL = 2000;
-
     LinearLayout linearLayout;
     ActionBarDrawerToggle toggle;
 
@@ -95,6 +88,8 @@ public class MainActivity extends AppCompatActivity
     public static View headerView;
     public static TextView navHeaderText;
     public static CircleImageView navHeaderImage;
+
+    CoordinatorLayout coordinatorLayout;
 
     Realm realm = null;
 
@@ -160,6 +155,8 @@ public class MainActivity extends AppCompatActivity
     //Offline objects
     JSONObject monOfflineObject, tueOfflineObject, wedOfflineObject, thuOfflineObject, friOfflineObject;
 
+    RelativeLayout mainLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,8 +195,6 @@ public class MainActivity extends AppCompatActivity
         openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
 
-        realm = Realm.getDefaultInstance();
-
         mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         mAvi.show();
 
@@ -207,6 +202,11 @@ public class MainActivity extends AppCompatActivity
 
         //Attaching all the fields
         attachFields();
+
+        if (!CheckInternet.isNetworkAvailable(MainActivity.this)) {
+            Snackbar snackbar = Snackbar.make(mainLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
 
         currentDate = getCurrentDate();
         currentDay = getCurrentDay();
@@ -376,7 +376,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(final JSONObject response) {
                         try {
-                            IS_NET_AVAIL = 2001;
                             IS_LOCAL_DB = 1009;
                             mAvi.hide();
                             mondayScheduleArray = response.getJSONArray("monday");
@@ -603,6 +602,8 @@ public class MainActivity extends AppCompatActivity
     private void attachFields() {
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mainLayout = (RelativeLayout) findViewById(R.id.main_layout); 
 
         mainSideView = (View) findViewById(R.id.main_view);
 
@@ -1098,8 +1099,7 @@ public class MainActivity extends AppCompatActivity
                         (String) thuOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
                         (String) thuOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
                 thursdaySchedule.add(schedule);
-            }
-            else {
+            } else {
                 DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
                 thursdaySchedule.add(schedule);
                 schedule = new DailySchedule("9:15 - 10:15", (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) thursdayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));
@@ -1160,8 +1160,7 @@ public class MainActivity extends AppCompatActivity
                         (String) friOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("room"),
                         (String) friOfflineObject.getJSONObject("p7").getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs").get("teacher"));
                 fridaySchedule.add(schedule);
-            }
-            else {
+            } else {
                 DailySchedule schedule = new DailySchedule("8:15 - 9:15", (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p1").getJSONObject(0).get("teacher"));
                 fridaySchedule.add(schedule);
                 schedule = new DailySchedule("9:15 - 10:15", (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("subject"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("room"), (String) fridayScheduleObject.getJSONArray("p2").getJSONObject(0).get("teacher"));

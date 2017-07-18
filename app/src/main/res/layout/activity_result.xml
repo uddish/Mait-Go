@@ -70,7 +70,7 @@
                     android:background="@drawable/custom_box_white"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="3"
+                    android:text=""
                     android:textColor="@color/white" />
 
             </RelativeLayout>
@@ -103,8 +103,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:orientation="vertical"
         android:layout_marginTop="20dp"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <ImageView
@@ -204,6 +204,49 @@
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/migrated_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/migration_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:text="Migrated Student?"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/resolutionBlue" />
+
+        <EditText
+            android:id="@+id/migrated_rollno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_box_signin"
+            android:hint="Old Roll Number"
+            android:inputType="number"
+            android:padding="6dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/darkBlue"
+            android:textColorHint="@color/grey" />
+
+        <ImageView
+            android:id="@+id/migrated_input_done"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_done_hollow"
+            android:tint="@color/darkBlue" />
+    </LinearLayout>
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/semester_bottomsheet"
         android:layout_width="match_parent"
@@ -220,11 +263,11 @@
                 android:id="@+id/semester_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select the Semester"
-                android:textAppearance="?android:textAppearanceLarge"
                 android:gravity="center"
                 android:padding="3dp"
-                android:textColor="@color/darkBlue"/>
+                android:text="Select the Semester"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/darkBlue" />
 
             <LinearLayout
                 android:layout_width="match_parent"

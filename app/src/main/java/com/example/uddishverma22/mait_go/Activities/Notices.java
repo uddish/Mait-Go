@@ -1,6 +1,8 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,8 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.Fragments.NoticeFragment;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 
@@ -38,8 +43,6 @@ public class Notices extends AppCompatActivity {
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/notices";
     Notice noticeObj, examNoticeObj;
 
-    private static int IS_INTERNET_AVAILABLE = 2000;
-
     Realm realm = null;
 
     public static final String TAG = "Notices";
@@ -54,12 +57,13 @@ public class Notices extends AppCompatActivity {
     private TabLayout tabLayout;
     JSONObject jsonNoticeObject, jsonExamNoticeObject;
 
+    CoordinatorLayout coordinatorLayout;
+    LinearLayout errorLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notices);
-
-        realm = Realm.getDefaultInstance();
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
@@ -71,6 +75,9 @@ public class Notices extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_layout);
+        errorLayout = (LinearLayout) findViewById(R.id.error_layout);
 
         tabLayout.setTabTextColors(Color.parseColor("#3D5392"), Color.parseColor("#23283D"));
 
@@ -101,6 +108,13 @@ public class Notices extends AppCompatActivity {
             }
         });
 
+        if (!CheckInternet.isNetworkAvailable(Notices.this)) {
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
+            snackbar.setActionTextColor(Color.WHITE);
+            snackbar.show();
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void fetchData(RequestQueue queue) {
@@ -109,8 +123,6 @@ public class Notices extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(final JSONObject response) {
-
-                        IS_INTERNET_AVAILABLE = 2009;
 
                         try {
 
@@ -139,35 +151,6 @@ public class Notices extends AppCompatActivity {
                             setupViewPager(viewPager);
 
 
-                            /**
-                             * ************************** Saving data to Realm **************************
-                             */
-                            if (noticeList.size() != 0) {
-
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        //Deleting the previous result to remove repeatity
-                                        realm.where(Notice.class).findAll().deleteAllFromRealm();
-                                        //Adding the results in the realm database
-                                        realm.copyToRealmOrUpdate(noticeList);
-                                    }
-                                }, new Realm.Transaction.OnSuccess() {
-                                    @Override
-                                    public void onSuccess() {
-                                    }
-                                }, new Realm.Transaction.OnError() {
-                                    @Override
-                                    public void onError(Throwable error) {
-                                        Log.e(TAG, "onError: " + error.toString());
-                                    }
-                                });
-                            }
-
-                            /**
-                             * ***************************************************************************
-                             */
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -176,19 +159,7 @@ public class Notices extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                IS_INTERNET_AVAILABLE = 2000;
-
                 Log.d(TAG, "onErrorResponse: " + error.toString());
-                /**If internet connectivity is not available
-                 * Showing data from the realm database
-                 */
-//                indicatorView.hide();
-//                results = realm.where(Notice.class).findAll();
-//                Log.d(TAG, "onErrorResponse: RESULT REALM SIZE " + results.size());
-//                noticeAdapter = new NoticeAdapter(results);
-//                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Notices.this);
-//                recyclerView.setLayoutManager(mLayoutManager);
-//                recyclerView.setAdapter(noticeAdapter);
 
             }
         });
@@ -200,9 +171,6 @@ public class Notices extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-//        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-//        upArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-//        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     @Override

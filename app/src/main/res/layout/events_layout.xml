@@ -35,7 +35,7 @@
                         android:id="@+id/event_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
+                        android:padding="10dp"
                         android:text="Blind Coding"
                         android:textAppearance="?android:textAppearanceLarge"
                         android:textColor="@color/white" />

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mait-Go</string>
+    <string name="app_name">IPU Go</string>
     <string name="notice_activity">Notices</string>
     <string name="result_activity">Result</string>
     <string name="schedule_activity">Schedule</string>

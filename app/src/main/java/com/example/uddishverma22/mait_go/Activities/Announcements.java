@@ -1,12 +1,20 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,6 +24,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.uddishverma22.mait_go.Adapters.AnnouncementAdapter;
 import com.example.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.gson.Gson;
@@ -28,7 +37,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class Announcements extends AppCompatActivity {
 
@@ -46,6 +60,8 @@ public class Announcements extends AppCompatActivity {
 
     AVLoadingIndicatorView avi;
     Toolbar toolbar;
+    CoordinatorLayout coordinatorLayout;
+    LinearLayout errorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +71,20 @@ public class Announcements extends AppCompatActivity {
         if (!requestClassEndpoint.equals("notfound"))
             url = url + requestClassEndpoint;
 
-
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.announcement_main_layout);
+        errorLayout = (LinearLayout) findViewById(R.id.error_layout);
 
         fetchData(queue);
 
         setToolbar();
+
+        if (!CheckInternet.isNetworkAvailable(Announcements.this)) {
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
@@ -94,6 +116,11 @@ public class Announcements extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                        if (list.size() == 0) {
+                            errorLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            errorLayout.setVisibility(View.GONE);
+                        }
                         mAdapter = new AnnouncementAdapter(list);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Announcements.this);
                         recyclerView.setLayoutManager(mLayoutManager);
@@ -104,18 +131,22 @@ public class Announcements extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                avi.hide();
+
                 Gson gson = new Gson();
                 String announcementStr = Preferences.getPrefs("announcements", Announcements.this);
                 Type type = new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
                 }.getType();
                 ArrayList<ClassAnnouncementsModel> arrayList = gson.fromJson(announcementStr, type);
 
-                if (arrayList != null) {
+                if (arrayList.size() == 0) {
+                    errorLayout.setVisibility(View.VISIBLE);
+                }
+                if (arrayList.size() != 0) {
                     try {
                         String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
                         }.getType());
                         JSONArray jsonArray = new JSONArray(listString);
-                        Log.d(TAG, "JSONArray: " + jsonArray);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             object = jsonArray.getJSONObject(i);
                             announcement = new ClassAnnouncementsModel();
@@ -145,4 +176,5 @@ public class Announcements extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
+
 }

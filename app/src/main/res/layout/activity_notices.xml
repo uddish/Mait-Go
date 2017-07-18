@@ -1,86 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativelayout"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkBlue"
     android:orientation="vertical"
     tools:context="com.example.uddishverma22.mait_go.Activities.Notices">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_notice"
-        android:layout_width="fill_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#00000000"
-        android:backgroundTint="#00000000"
-        android:elevation="0dp"
-        app:theme="@style/ToolbarStyle" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_notice"
+            android:layout_width="fill_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#00000000"
+            android:backgroundTint="#00000000"
+            android:elevation="0dp"
+            app:theme="@style/ToolbarStyle" />
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_view"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="40dp"
-            app:cardCornerRadius="4dp">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="40dp"
+                app:cardCornerRadius="4dp">
 
-                <android.support.design.widget.AppBarLayout
-                    android:id="@+id/appBarLayout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:orientation="vertical">
 
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tabLayout"
+                    <android.support.design.widget.AppBarLayout
+                        android:id="@+id/appBarLayout"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                        <android.support.design.widget.TabLayout
+                            android:id="@+id/tabLayout"
+                            style="@style/AppTabLayout"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            app:tabIndicatorColor="@color/darkBlue"
+                            app:tabTextAppearance="@style/YourTextAppareance" />
+                    </android.support.design.widget.AppBarLayout>
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
                         android:background="@color/white"
-                        style="@style/AppTabLayout"
-                        app:tabTextAppearance="@style/YourTextAppareance"
-                        app:tabIndicatorColor="@color/darkBlue" />
-                </android.support.design.widget.AppBarLayout>
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@color/white"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                </LinearLayout>
 
+            </android.support.v7.widget.CardView>
+
+            <ImageView
+                android:id="@+id/img_notice_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@drawable/circular_blue"
+                android:elevation="3dp"
+                android:padding="15dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_notice_blue"
+                app:layout_anchorGravity="top|center_horizontal" />
+
+            <LinearLayout
+                android:id="@+id/error_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:elevation="3dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_error"
+                    android:layout_gravity="center" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Internet Connection"
+                    android:padding="5dp"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/darkBlue"/>
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/img_notice_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:background="@drawable/circular_blue"
-            android:elevation="3dp"
-            android:padding="15dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_notice_blue"
-            app:layout_anchorGravity="top|center_horizontal" />
+    </LinearLayout>
 
-    </RelativeLayout>
-
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
