@@ -1,13 +1,15 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +18,6 @@ import com.example.uddishverma22.mait_go.R;
 import com.squareup.picasso.Picasso;
 
 import static com.example.uddishverma22.mait_go.R.id.event_image;
-import static com.example.uddishverma22.mait_go.R.id.event_img;
 
 public class EventsDetailsPage extends AppCompatActivity {
 
@@ -29,6 +30,8 @@ public class EventsDetailsPage extends AppCompatActivity {
 
     Typeface openSansReg, openSansBold;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,8 @@ public class EventsDetailsPage extends AppCompatActivity {
         attachViews();
 
         Intent i = getIntent();
+
+        setToolbar();
 
         if (i != null) {
             Picasso.with(getApplicationContext()).load(i.getStringExtra("imageUrl")).into(eventImg);
@@ -117,5 +122,12 @@ public class EventsDetailsPage extends AppCompatActivity {
         emailTitle.setTypeface(openSansBold);
         numberTitle.setTypeface(openSansBold);
         societyTitle.setTypeface(openSansBold);
+    }
+
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_events);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 }

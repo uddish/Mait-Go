@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
@@ -12,7 +13,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +38,6 @@ import com.example.uddishverma22.mait_go.Models.ResultHeader;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
-import com.example.uddishverma22.mait_go.Utils.HideKeyboard;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.gson.Gson;
@@ -93,7 +92,7 @@ public class Result extends AppCompatActivity {
     TextView semTitle, semesterBtn;
     Typeface tf;
     TextView first, second, third, fourth, fifth, sixth, seventh, eight;
-    String semester;
+    String semester = null;
 
     TextView migrationTitle;
     EditText migratedRollNo;
@@ -201,9 +200,9 @@ public class Result extends AppCompatActivity {
 
                             JSONArray jsonArray = response.getJSONArray("marks");
                             percentage = String.valueOf((response.get("percentage")));
-                            resultSemester = String.valueOf(response.get("sem"));
+                            semester = String.valueOf(response.get("sem"));
 
-                            semesterBtn.setText(resultSemester);
+                            semesterBtn.setText(semester);
 
                             //converting perc and gpa upto 2 decimal places
                             double creditp = (double) response.get("creditp");
@@ -294,12 +293,16 @@ public class Result extends AppCompatActivity {
                         }
                     }
                 } else {
-                    if (semester.equals("1") || semester.equals("2")) {
-                        migrationTitle.setVisibility(View.VISIBLE);
+
+                    if (semester != null) {
+                        if (semester.equals("1") || semester.equals("2")) {
+                            migrationTitle.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         noResultLayout.setVisibility(View.VISIBLE);
                         migrationTitle.setVisibility(View.GONE);
                     }
+
                 }
                 resultAdapter = new ResultAdapter(resultList, resultHeader);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
