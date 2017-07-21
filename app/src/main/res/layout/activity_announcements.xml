@@ -39,13 +39,14 @@
                 android:src="@drawable/icon_error"
                 android:layout_gravity="center"
                 android:tint="@color/white" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No Announcements"
                 android:padding="5dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
         </LinearLayout>
 
         <LinearLayout

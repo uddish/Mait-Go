@@ -43,7 +43,7 @@
                 android:padding="10dp"
                 android:text="Uddish Verma"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:textColor="@color/darkBlue"/>
+                android:textColor="@color/darkBlue" />
 
             <View
                 android:layout_width="match_parent"

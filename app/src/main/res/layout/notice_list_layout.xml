@@ -16,20 +16,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/darkblue_circle_notice"/>
+            android:background="@drawable/darkblue_circle_notice" />
+
         <TextView
             android:layout_marginLeft="3dp"
             android:id="@+id/notice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Notices"/>
+            android:text="Notices" />
     </LinearLayout>
 
 
     <!--<View-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_width="250dp"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="#9A85A7"/>-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_width="250dp"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:background="#9A85A7"/>-->
 
 </LinearLayout>

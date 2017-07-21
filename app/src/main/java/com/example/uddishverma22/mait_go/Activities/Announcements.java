@@ -1,20 +1,16 @@
 package com.example.uddishverma22.mait_go.Activities;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +24,6 @@ import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -37,12 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
 
 public class Announcements extends AppCompatActivity {
 
@@ -137,12 +127,18 @@ public class Announcements extends AppCompatActivity {
                 String announcementStr = Preferences.getPrefs("announcements", Announcements.this);
                 Type type = new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
                 }.getType();
-                ArrayList<ClassAnnouncementsModel> arrayList = gson.fromJson(announcementStr, type);
+
+                ArrayList<ClassAnnouncementsModel> arrayList;
+                if (!announcementStr.equals("notfound"))
+                    arrayList = gson.fromJson(announcementStr, type);
+                else
+                    arrayList = new ArrayList<>();
 
                 if (arrayList.size() == 0) {
                     errorLayout.setVisibility(View.VISIBLE);
                 }
                 if (arrayList.size() != 0) {
+                    Log.d(TAG, "onErrorResponse: " + arrayList.size());
                     try {
                         String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
                         }.getType());

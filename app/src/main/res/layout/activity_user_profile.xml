@@ -31,7 +31,7 @@
                     android:backgroundTint="#00000000"
                     app:layout_scrollFlags="scroll|enterAlways"
                     android:elevation="2dp"
-                    app:theme="@style/ToolbarStyle"/>
+                    app:theme="@style/ToolbarStyle" />
 
                 <ImageView
                     android:id="@+id/profile_blur_img"
@@ -280,7 +280,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
                 android:background="@drawable/custom_box_blue"
-                android:textAppearance="?android:textAppearanceLarge"/>
+                android:textAppearance="?android:textAppearanceLarge" />
 
         </LinearLayout>
 
@@ -652,52 +652,53 @@
             android:orientation="vertical"
             android:padding="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter your class"
-            android:layout_gravity="center"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textColor="@color/white"
-            android:padding="10dp"/>
-
-        <LinearLayout
-            android:id="@+id/linearlayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <EditText
-                android:id="@+id/class_char"
-                android:inputType="textCapCharacters"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:maxLength="1"
-                android:background="@drawable/event_card_box"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:gravity="center"/>
-
             <TextView
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="-"
+                android:text="Enter your class"
+                android:layout_gravity="center"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:padding="10dp" />
 
-            <EditText
-                android:id="@+id/class_no"
-                android:inputType="number"
-                android:maxLength="1"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/event_card_box"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:gravity="center"/>
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/class_char"
+                    android:inputType="textCapCharacters"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:maxLength="1"
+                    android:background="@drawable/event_card_box"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/class_no"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/event_card_box"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:gravity="center" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/class_done"
                 android:layout_width="50dp"

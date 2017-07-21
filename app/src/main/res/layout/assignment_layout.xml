@@ -56,7 +56,7 @@
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
                         android:text="Subject"
-                        android:textColor="@color/darkBlue"/>
+                        android:textColor="@color/darkBlue" />
 
                     <TextView
                         android:id="@+id/assign_subject"
@@ -65,7 +65,7 @@
                         android:layout_weight="1"
                         android:text="COA"
                         android:maxLines="1"
-                        android:textColor="@color/resolutionBlue"/>
+                        android:textColor="@color/resolutionBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -82,7 +82,7 @@
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
                         android:text="Marks"
-                        android:textColor="@color/darkBlue"/>
+                        android:textColor="@color/darkBlue" />
 
                     <TextView
                         android:id="@+id/assign_marks"
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="10"
-                        android:textColor="@color/resolutionBlue"/>
+                        android:textColor="@color/resolutionBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,7 +107,7 @@
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
                         android:text="Teacher"
-                        android:textColor="@color/darkBlue"/>
+                        android:textColor="@color/darkBlue" />
 
                     <TextView
                         android:id="@+id/assign_teacher"
@@ -116,7 +116,7 @@
                         android:layout_weight="1"
                         android:text="Mr. Uddish"
                         android:maxLines="1"
-                        android:textColor="@color/resolutionBlue"/>
+                        android:textColor="@color/resolutionBlue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -133,7 +133,7 @@
                         android:gravity="center|left"
                         android:paddingLeft="5dp"
                         android:text="Last Date"
-                        android:textColor="@color/darkBlue"/>
+                        android:textColor="@color/darkBlue" />
 
                     <TextView
                         android:id="@+id/assign_lastdate"
@@ -141,7 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="20/05/17"
-                        android:textColor="@color/resolutionBlue"/>
+                        android:textColor="@color/resolutionBlue" />
                 </LinearLayout>
 
             </LinearLayout>

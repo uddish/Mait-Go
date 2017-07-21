@@ -81,7 +81,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/toryBlue"/>
+        android:background="@color/toryBlue" />
 
     <LinearLayout
         android:id="@+id/rank_ll"
@@ -151,8 +151,6 @@
 
 
     </LinearLayout>
-
-
 
 
     <!--<LinearLayout-->

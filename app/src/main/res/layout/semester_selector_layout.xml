@@ -23,6 +23,7 @@
             android:gravity="center"
             android:text="I"
             android:textSize="25dp" />
+
         <TextView
             android:id="@+id/alert_second"
             android:layout_width="0dp"
@@ -32,6 +33,7 @@
             android:gravity="center"
             android:text="II"
             android:textSize="25dp" />
+
         <TextView
             android:id="@+id/alert_third"
             android:layout_width="0dp"
@@ -41,6 +43,7 @@
             android:gravity="center"
             android:text="III"
             android:textSize="25dp" />
+
         <TextView
             android:id="@+id/alert_fourth"
             android:layout_width="0dp"
@@ -63,6 +66,7 @@
         android:background="#fff"
         android:orientation="horizontal"
         android:padding="20dp">
+
         <TextView
             android:id="@+id/alert_fifth"
             android:layout_width="0dp"
@@ -82,6 +86,7 @@
             android:gravity="center"
             android:text="VI"
             android:textSize="25dp" />
+
         <TextView
             android:id="@+id/alert_seventh"
             android:layout_width="0dp"
