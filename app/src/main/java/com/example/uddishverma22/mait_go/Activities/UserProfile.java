@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.zxing.BarcodeFormat;
@@ -54,7 +55,7 @@ public class UserProfile extends AppCompatActivity {
     TextView name, roll, branch, semester, className, branchHeading, classHeading, semesterHeading;
     public static int themeColor = 0;
     LinearLayout branchSelector, semesterSelector, classSelector;
-    Typeface tf;
+    Typeface tf, tfLight;
     Button signOut;
     Toolbar toolbar;
 
@@ -83,6 +84,7 @@ public class UserProfile extends AppCompatActivity {
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
 
+    TextView aboutUs, license, moreTitle, buildVersion, buildTitle;
 
     AlertDialog.Builder alert;
     TextView branchCs, branchIt, branchEce, branchEee, branchMae;            //tv for the branch bottomsheet
@@ -115,10 +117,10 @@ public class UserProfile extends AppCompatActivity {
         semesterBottomSheetBehavior.setPeekHeight(0);
 
 
-        //Barcode generation function
-        barcodeImg = (ImageView) findViewById(R.id.barcode_img);
-        leftCircle = (ImageView) findViewById(R.id.left_ticket_circle);
-        rightCircle = (ImageView) findViewById(R.id.right_ticket_circle);
+//        //Barcode generation function
+//        barcodeImg = (ImageView) findViewById(R.id.barcode_img);
+//        leftCircle = (ImageView) findViewById(R.id.left_ticket_circle);
+//        rightCircle = (ImageView) findViewById(R.id.right_ticket_circle);
 
         //************************ LOADING IMAGE VIA ASYNCTASK INTO TICKET ***************************************
         String barcodeData = "2CS131";
@@ -134,7 +136,7 @@ public class UserProfile extends AppCompatActivity {
 //        } catch (ExecutionException e) {
 //            e.printStackTrace();
 //        }
-        barcodeImg.setImageBitmap(bitmap);
+//        barcodeImg.setImageBitmap(bitmap);
 
         //*********************************************************************************************************
 
@@ -182,24 +184,38 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
-        branchSelector.setOnClickListener(new View.OnClickListener() {
+        aboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                branchSelector();
+                startActivity(new Intent(UserProfile.this, AboutUs.class));
             }
         });
-        semesterSelector.setOnClickListener(new View.OnClickListener() {
+
+        license.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                semesterSelector();
+                startActivity(new Intent(UserProfile.this, OpenSourceLicense.class));
             }
         });
-        classSelector.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                classSelector();
-            }
-        });
+
+//        branchSelector.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                branchSelector();
+//            }
+//        });
+//        semesterSelector.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                semesterSelector();
+//            }
+//        });
+//        classSelector.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                classSelector();
+//            }
+//        });
 
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
         name.setTypeface(tf);
@@ -219,6 +235,7 @@ public class UserProfile extends AppCompatActivity {
         size = new Point();
 
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Regular.ttf");
+        tfLight = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Light.ttf");
         branch = (TextView) findViewById(R.id.branch_tv);
         semester = (TextView) findViewById(R.id.semester_tv);
         className = (TextView) findViewById(R.id.class_tv);
@@ -229,6 +246,20 @@ public class UserProfile extends AppCompatActivity {
         branchSelector = (LinearLayout) findViewById(R.id.branch_selector);
         semesterSelector = (LinearLayout) findViewById(R.id.semester_selector);
         classSelector = (LinearLayout) findViewById(R.id.class_selector);
+
+        aboutUs = (TextView) findViewById(R.id.about_us);
+        license = (TextView) findViewById(R.id.license);
+        moreTitle = (TextView) findViewById(R.id.more_title);
+        buildVersion = (TextView) findViewById(R.id.build_version);
+        buildTitle = (TextView) findViewById(R.id.build_title);
+
+        aboutUs.setTypeface(tfLight);
+        license.setTypeface(tfLight);
+        moreTitle.setTypeface(tf);
+        buildVersion.setTypeface(tf);
+        buildTitle.setTypeface(tfLight);
+
+        buildVersion.setText(Globals.BUILD_VERSION);
 
     }
 
@@ -243,8 +274,7 @@ public class UserProfile extends AppCompatActivity {
             int height = size.y;
 
             Picasso.with(this).load(studentPicPath).resize(width, 1000).centerCrop().into(blurredBackImage);
-        }
-        else    {
+        } else {
             Picasso.with(this).load(R.drawable.ic_account_circle_white_48dp).into(profileImage);
         }
     }

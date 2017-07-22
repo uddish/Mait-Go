@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="com.example.uddishverma22.mait_go.Activities.AboutUs">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_aboutus"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/darkBlue"
+        android:backgroundTint="@color/darkBlue"
+        android:elevation="0dp"
+        app:theme="@style/ToolbarStyle" />
+
+    <TextView
+        android:id="@+id/developer_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="Developers"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@color/darkBlue" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/darkBlueTrans" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/dot_design"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_circle"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/dev_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Uddish Verma"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/one_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="uddishverma22@gmail.com"
+                android:textAppearance="?android:textAppearanceMedium" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_circle"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/dev_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dhruv Mongia"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/two_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dhruv.mongia@gmail.com"
+                android:textAppearance="?android:textAppearanceMedium" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

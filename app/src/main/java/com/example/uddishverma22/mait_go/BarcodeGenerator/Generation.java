@@ -38,7 +38,7 @@ public class Generation extends Activity {
 
         setContentView(R.layout.result_head);
 
-        barcodeImg = (ImageView) findViewById(R.id.barcode_img);
+//        barcodeImg = (ImageView) findViewById(R.id.barcode_img);
 
         String barcodeData = "123456";
 

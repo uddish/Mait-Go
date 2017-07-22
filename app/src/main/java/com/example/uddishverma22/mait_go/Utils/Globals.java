@@ -4,13 +4,14 @@ import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.Models.Notice;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * Created by uddishverma on 24/06/17.
  */
 
 public class Globals {
+
+    public static String BUILD_VERSION = "1.1";
 
     public static ArrayList<Faculty> itFacList = new ArrayList<>();
     public static ArrayList<Faculty> cseFacList = new ArrayList<>();

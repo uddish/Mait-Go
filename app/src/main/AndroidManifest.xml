@@ -41,10 +41,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.NoticeWebView"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/notice_activity"
-            android:parentActivityName=".Activities.Notices"/>
+            android:parentActivityName=".Activities.Notices"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.UserProfile"
             android:label=""
@@ -95,7 +95,7 @@
             android:label="@string/events_activity"
             android:parentActivityName=".Activities.UpcomingEvents"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".Service.MyFirebaseMessagingService">
             <intent-filter>
@@ -110,7 +110,19 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Utils.Splash"></activity>
+        <activity android:name=".Utils.Splash" />
+        <activity
+            android:name=".Activities.AboutUs"
+            android:label="@string/aboutus_activity"
+            android:parentActivityName=".Activities.UserProfile"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.OpenSourceLicense"
+            android:label="@string/license_activity"
+            android:parentActivityName=".Activities.UserProfile"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

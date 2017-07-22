@@ -8,6 +8,8 @@
     <string name="assignments_activity">Assignments</string>
     <string name="announcements_activity">Announcements</string>
     <string name="profile_activity">Profile</string>
+    <string name="aboutus_activity">About Us</string>
+    <string name="license_activity">Open Source Licenses</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
