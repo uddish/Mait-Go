@@ -2,10 +2,10 @@ package com.example.uddishverma22.mait_go.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,9 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.uddishverma22.mait_go.Adapters.AssignmentAdapter;
-import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.AssignmentModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
@@ -140,6 +138,7 @@ public class Assignments extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
+                errorLayout.setVisibility(View.VISIBLE);
             }
         });
         queue.add(request);

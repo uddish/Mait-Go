@@ -129,32 +129,33 @@ public class Announcements extends AppCompatActivity {
                 }.getType();
 
                 ArrayList<ClassAnnouncementsModel> arrayList;
-                if (!announcementStr.equals("notfound"))
+                if (!announcementStr.equals("notfound")) {
                     arrayList = gson.fromJson(announcementStr, type);
-                else
-                    arrayList = new ArrayList<>();
+//
 
-                if (arrayList.size() == 0) {
-                    errorLayout.setVisibility(View.VISIBLE);
-                }
-                if (arrayList.size() != 0) {
-                    Log.d(TAG, "onErrorResponse: " + arrayList.size());
-                    try {
-                        String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
-                        }.getType());
-                        JSONArray jsonArray = new JSONArray(listString);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            object = jsonArray.getJSONObject(i);
-                            announcement = new ClassAnnouncementsModel();
-                            announcement.teacherName = object.getString("teacherName");
-                            announcement.announcement = object.getString("announcement");
-                            announcement.msgDate = object.getString("msgDate");
-                            list.add(announcement);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    if (arrayList.size() == 0) {
+                        errorLayout.setVisibility(View.VISIBLE);
                     }
-                }
+                    if (arrayList.size() != 0) {
+                        Log.d(TAG, "onErrorResponse: " + arrayList.size());
+                        try {
+                            String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ClassAnnouncementsModel>>() {
+                            }.getType());
+                            JSONArray jsonArray = new JSONArray(listString);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                object = jsonArray.getJSONObject(i);
+                                announcement = new ClassAnnouncementsModel();
+                                announcement.teacherName = object.getString("teacherName");
+                                announcement.announcement = object.getString("announcement");
+                                announcement.msgDate = object.getString("msgDate");
+                                list.add(announcement);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else
+                    arrayList = new ArrayList<>();
                 mAdapter = new AnnouncementAdapter(list);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Announcements.this);
                 recyclerView.setLayoutManager(mLayoutManager);

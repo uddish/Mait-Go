@@ -308,14 +308,6 @@ public class UserProfile extends AppCompatActivity {
 //        }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        Intent i = new Intent(this, MainActivity.class);
-//        startActivity(i);
-//        finish();
-//        return true;
-//    }
-
     private void setToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar_profile);
         setSupportActionBar(toolbar);

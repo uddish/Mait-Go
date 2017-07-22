@@ -2,7 +2,6 @@ package com.example.uddishverma22.mait_go.Adapters;
 
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +59,8 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         holder.teacherName.setText(model.teacherName);
         holder.announ.setText(model.announcement);
         holder.imageLetter.setText(model.teacherName.substring(0, 1));
-        holder.date.setText(model.msgDate.substring(0, 10));
-        holder.time.setText(model.msgDate.substring(11, 16));
+        holder.date.setText(model.msgDate.substring(0, 3) + ", " + model.msgDate.substring(4, 10));
+        holder.time.setText(model.msgDate.substring(16, 21));
 
         holder.teacherName.setTypeface(holder.openSansBold);
         holder.announ.setTypeface(holder.openSansReg);
