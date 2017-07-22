@@ -10,21 +10,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,7 +40,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.crashlytics.android.Crashlytics;
 import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
-import com.example.uddishverma22.mait_go.Models.TempModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.Globals;
@@ -66,8 +66,6 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -91,13 +89,7 @@ public class MainActivity extends AppCompatActivity
 
     CoordinatorLayout coordinatorLayout;
 
-    Realm realm = null;
-
     public static NavigationView navigationView;
-
-    //List to add all the week's list
-    DailySchedule mSchedule;
-    RealmResults<TempModel> result;
 
     Typeface tfThin;
     Typeface tfLight;
@@ -125,6 +117,7 @@ public class MainActivity extends AppCompatActivity
     JSONObject fridayScheduleObject = null;
 
     AVLoadingIndicatorView mAvi;
+    TextView fetchingText;
 
     RequestQueue queue;
 
@@ -195,13 +188,12 @@ public class MainActivity extends AppCompatActivity
         openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
 
-        mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        mAvi.show();
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
         //Attaching all the fields
         attachFields();
+
+        startLoading();
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         if (!CheckInternet.isNetworkAvailable(MainActivity.this)) {
             Snackbar snackbar = Snackbar.make(mainLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
@@ -368,6 +360,21 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void startLoading() {
+        mainLayout.setBackgroundColor(Color.parseColor("#949494"));
+        mAvi.show();
+        fetchingText.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void stopLoading() {
+        mainLayout.setBackgroundColor(Color.WHITE);
+        mAvi.hide();
+        fetchingText.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
     private void fetchData(RequestQueue queue) {
 
 
@@ -377,7 +384,8 @@ public class MainActivity extends AppCompatActivity
                     public void onResponse(final JSONObject response) {
                         try {
                             IS_LOCAL_DB = 1009;
-                            mAvi.hide();
+//                            mAvi.hide();
+                            stopLoading();
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
                             wednesdayScheduleArray = response.getJSONArray("wednesday");
@@ -456,7 +464,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 IS_LOCAL_DB = 1008;
-                mAvi.hide();
+//                mAvi.hide();
+                stopLoading();
 
                 String mondayStr = Preferences.getPrefs("mondaySchedule", MainActivity.this);
                 String tuesdayStr = Preferences.getPrefs("tuesdaySchedule", MainActivity.this);
@@ -603,9 +612,13 @@ public class MainActivity extends AppCompatActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        mainLayout = (RelativeLayout) findViewById(R.id.main_layout); 
+        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
+
+        mAvi = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         mainSideView = (View) findViewById(R.id.main_view);
+
+        fetchingText = (TextView) findViewById(R.id.fetching_timetable);
 
         date = (TextView) findViewById(R.id.date_tv);
         day = (TextView) findViewById(R.id.day_tv);

@@ -3,11 +3,14 @@ package com.example.uddishverma22.mait_go.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,6 +21,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.uddishverma22.mait_go.Adapters.UpcomingEventsAdapter;
 import com.example.uddishverma22.mait_go.Models.UpcomingEventsModel;
 import com.example.uddishverma22.mait_go.R;
+import com.example.uddishverma22.mait_go.Utils.CheckInternet;
 import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -41,21 +45,29 @@ public class UpcomingEvents extends AppCompatActivity {
     private RecyclerView recyclerView;
     private UpcomingEventsAdapter eventsAdapter;
     Toolbar toolbar;
+    LinearLayout errorLayout;
+    CoordinatorLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upcoming_events);
 
-        recyclerView = (RecyclerView) findViewById(R.id.event_recycler_view);
+        attachViews();
 
-        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
         indicatorView.show();
 
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
         fetchData(queue);
 
         setToolbar();
+
+        if (!CheckInternet.isNetworkAvailable(UpcomingEvents.this)) {
+            Snackbar snackbar = Snackbar.make(mainLayout, "No Internet Connection!", Snackbar.LENGTH_LONG);
+            snackbar.show();
+            indicatorView.hide();
+            errorLayout.setVisibility(View.VISIBLE);
+        }
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerView,
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -83,12 +95,20 @@ public class UpcomingEvents extends AppCompatActivity {
 
     }
 
+    private void attachViews() {
+        mainLayout = (CoordinatorLayout) findViewById(R.id.main_layout);
+        recyclerView = (RecyclerView) findViewById(R.id.event_recycler_view);
+        errorLayout = (LinearLayout) findViewById(R.id.no_event_layout);
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+    }
+
     private void fetchData(RequestQueue queue) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         indicatorView.hide();
+                        errorLayout.setVisibility(View.GONE);
                         Toast.makeText(UpcomingEvents.this, "Click to expand", Toast.LENGTH_SHORT).show();
                         try {
                             for (int i = 0; i < response.length(); i++) {
@@ -117,6 +137,7 @@ public class UpcomingEvents extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                errorLayout.setVisibility(View.VISIBLE);
             }
         });
         queue.add(request);

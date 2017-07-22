@@ -1,6 +1,7 @@
 package com.example.uddishverma22.mait_go.Activities;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -9,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -35,15 +35,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class Notices extends AppCompatActivity {
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/scrape/notices";
     Notice noticeObj, examNoticeObj;
-
-    Realm realm = null;
 
     public static final String TAG = "Notices";
 
@@ -214,5 +211,6 @@ public class Notices extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
 
 }

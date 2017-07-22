@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -52,6 +54,8 @@ public class Announcements extends AppCompatActivity {
     Toolbar toolbar;
     CoordinatorLayout coordinatorLayout;
     LinearLayout errorLayout;
+    TextView fetchingText;
+    RelativeLayout fetchLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class Announcements extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.announcement_main_layout);
         errorLayout = (LinearLayout) findViewById(R.id.error_layout);
+        fetchLayout = (RelativeLayout) findViewById(R.id.fetch_layout);
 
         fetchData(queue);
 
@@ -77,7 +82,7 @@ public class Announcements extends AppCompatActivity {
         }
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
-        avi.show();
+        startLoading();
 
     }
 
@@ -86,7 +91,7 @@ public class Announcements extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        avi.hide();
+                        stopLoading();
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 object = response.getJSONObject(i);
@@ -121,7 +126,7 @@ public class Announcements extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                avi.hide();
+                stopLoading();
 
                 Gson gson = new Gson();
                 String announcementStr = Preferences.getPrefs("announcements", Announcements.this);
@@ -165,6 +170,14 @@ public class Announcements extends AppCompatActivity {
 
         });
         queue.add(request);
+    }
+
+    private void startLoading() {
+        avi.show();
+    }
+
+    private void stopLoading() {
+        avi.hide();
     }
 
     private void setToolbar() {

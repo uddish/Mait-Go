@@ -6,18 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.example.uddishverma22.mait_go.Activities.NoticeWebView;
-import com.example.uddishverma22.mait_go.Adapters.FacultyListAdapter;
 import com.example.uddishverma22.mait_go.Adapters.NoticeAdapter;
 import com.example.uddishverma22.mait_go.Models.Notice;
 import com.example.uddishverma22.mait_go.R;
-import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -89,5 +85,6 @@ public class NoticeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
     }
+
 
 }

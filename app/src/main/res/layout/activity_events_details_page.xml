@@ -212,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="5dp"
-                        android:text="Registration Fees"
+                        android:text="Fees"
                         android:textAppearance="?android:textAppearanceMedium"
                         android:textColor="@color/resolutionBlue" />
 
