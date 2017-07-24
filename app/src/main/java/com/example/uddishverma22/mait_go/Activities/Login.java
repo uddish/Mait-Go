@@ -103,6 +103,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkForNullRollNo() && checkForNullSection()) {
+                    fetchBranch();
                     signIn();
                     avi.show();
                     InputMethodManager imm = (InputMethodManager) Login.this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -244,7 +245,6 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            fetchBranch();
                             avi.hide();
                             // Sign in success, update UI with the signed-in user's information
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
