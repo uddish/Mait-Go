@@ -58,10 +58,15 @@ public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapte
         ClassAnnouncementsModel model = list.get(position);
         holder.teacherName.setText(model.teacherName);
         holder.announ.setText(model.announcement);
-        holder.imageLetter.setText(model.teacherName.substring(0, 1));
-        holder.date.setText(model.msgDate.substring(0, 3) + ", " + model.msgDate.substring(4, 10));
-        holder.time.setText(model.msgDate.substring(16, 21));
+        try {
 
+            holder.imageLetter.setText(model.teacherName.substring(0, 1));
+            holder.date.setText(model.msgDate.substring(0, 9));
+            holder.time.setText(model.msgDate.substring(11, 17));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         holder.teacherName.setTypeface(holder.openSansBold);
         holder.announ.setTypeface(holder.openSansReg);
         holder.imageLetter.setTypeface(holder.openSansBold);

@@ -3,16 +3,14 @@ package com.example.uddishverma22.mait_go.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.provider.Settings;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -21,11 +19,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
@@ -48,9 +46,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Login extends AppCompatActivity {
 
     GoogleApiClient mGoogleApiClient;
@@ -66,6 +61,10 @@ public class Login extends AppCompatActivity {
     TextInputLayout rollnoLayout, sectionLayout, semesterLayout;
     AVLoadingIndicatorView avi;
 
+    RequestQueue queue;
+
+    String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/info/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +74,8 @@ public class Login extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+        queue = VolleySingleton.getInstance(this).getRequestQueue();
 
         attachViews();
 
@@ -101,13 +102,15 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkForNullRollNo() && checkForNullSection() && checkForNullSemester()) {
+                if (checkForNullRollNo() && checkForNullSection()) {
                     signIn();
                     avi.show();
                     InputMethodManager imm = (InputMethodManager) Login.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);
 
                 }
+
+
             }
         });
 
@@ -150,13 +153,13 @@ public class Login extends AppCompatActivity {
         subHeading = (TextView) findViewById(R.id.subhead);
         rollNo = (EditText) findViewById(R.id.input_rollno);
         section = (EditText) findViewById(R.id.input_class);
-        semester = (EditText) findViewById(R.id.input_semester);
+//        semester = (EditText) findViewById(R.id.input_semester);
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         rollnoLayout = (TextInputLayout) findViewById(R.id.input_layout_rollno);
         sectionLayout = (TextInputLayout) findViewById(R.id.input_layout_class);
-        semesterLayout = (TextInputLayout) findViewById(R.id.input_layout_semester);
+//        semesterLayout = (TextInputLayout) findViewById(R.id.input_layout_semester);
 
         heading.setTypeface(tfBold);
         subHeading.setTypeface(tf);
@@ -168,6 +171,7 @@ public class Login extends AppCompatActivity {
             requestFocus(rollNo);
             return false;
         } else {
+            url = url + rollNo.getText().toString();
             Globals.rollNo = rollNo.getText().toString();
             Preferences.setPrefs("rollNo", rollNo.getText().toString(), getApplicationContext());
             rollnoLayout.setErrorEnabled(false);
@@ -188,18 +192,18 @@ public class Login extends AppCompatActivity {
         return true;
     }
 
-    private boolean checkForNullSemester() {
-        if (TextUtils.isEmpty(semester.getText().toString())) {
-            semesterLayout.setError(getString(R.string.semester_error));
-            requestFocus(semester);
-            return false;
-        } else {
-            Globals.semester = semester.getText().toString();
-            Preferences.setPrefs("studentSemester", Globals.semester, getApplicationContext());
-            semesterLayout.setErrorEnabled(false);
-        }
-        return true;
-    }
+//    private boolean checkForNullSemester() {
+//        if (TextUtils.isEmpty(semester.getText().toString())) {
+//            semesterLayout.setError(getString(R.string.semester_error));
+//            requestFocus(semester);
+//            return false;
+//        } else {
+//            Globals.semester = semester.getText().toString();
+//            Preferences.setPrefs("studentSemester", Globals.semester, getApplicationContext());
+//            semesterLayout.setErrorEnabled(false);
+//        }
+//        return true;
+//    }
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
@@ -240,12 +244,12 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            fetchBranch();
                             avi.hide();
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "onComplete:  Studemt NAme ------- " + acct.getDisplayName());
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
-                            Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);
+//                            Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             finish();
                         } else {
@@ -266,6 +270,33 @@ public class Login extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    private void fetchBranch() {
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            Globals.semester = String.valueOf(response.get("sem"));
+
+                            if (Globals.semester != null && response.get("branch") != null) {
+                                Preferences.setPrefs("studentSemester", Globals.semester, getApplicationContext());
+                                Preferences.setPrefs("studentBranch", String.valueOf(response.get("branch")), getApplicationContext());
+                                Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        queue.add(objectRequest);
     }
 
 

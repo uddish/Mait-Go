@@ -274,7 +274,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="50dp"
                 android:visibility="visible"
-                app:indicatorColor="@color/midnightBlue"
+                app:indicatorColor="@color/white"
                 app:indicatorName="BallPulseIndicator" />
             <TextView
                 android:visibility="gone"
@@ -282,8 +282,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Fetching Timetable"
-                android:textAppearance="?android:textAppearanceLarge"/>
+                android:text="Fetching Timetable..."
+                android:textColor="@color/white"
+                android:textAppearance="?android:textAppearanceMedium"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"

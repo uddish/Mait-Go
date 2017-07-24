@@ -111,8 +111,13 @@ public class Assignments extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         indicatorView.hide();
-                        errorLayout.setVisibility(View.GONE);
+
                         try {
+                            if (response.length() == 0) {
+                                errorLayout.setVisibility(View.VISIBLE);
+                            } else
+                                errorLayout.setVisibility(View.GONE);
+
                             for (int i = 0; i < response.length(); i++) {
                                 object = response.getJSONObject(i);
                                 assignmentObj = new AssignmentModel();

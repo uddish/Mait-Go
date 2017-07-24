@@ -291,7 +291,7 @@ public class UserProfile extends AppCompatActivity {
             name.setText(studentName);
             roll.setText(studentRollNo);
             className.setText(studentSection);
-            branch.setText("CSE");
+            branch.setText(studentBranch);
             semester.setText(studentSemester);
         }
     }

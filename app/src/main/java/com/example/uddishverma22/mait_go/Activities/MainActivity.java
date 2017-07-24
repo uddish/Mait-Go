@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -42,7 +41,6 @@ import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
-import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -86,8 +84,6 @@ public class MainActivity extends AppCompatActivity
     public static View headerView;
     public static TextView navHeaderText;
     public static CircleImageView navHeaderImage;
-
-    CoordinatorLayout coordinatorLayout;
 
     public static NavigationView navigationView;
 
@@ -149,6 +145,8 @@ public class MainActivity extends AppCompatActivity
     JSONObject monOfflineObject, tueOfflineObject, wedOfflineObject, thuOfflineObject, friOfflineObject;
 
     RelativeLayout mainLayout;
+
+    String shift;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -377,15 +375,14 @@ public class MainActivity extends AppCompatActivity
 
     private void fetchData(RequestQueue queue) {
 
-
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(final JSONObject response) {
                         try {
                             IS_LOCAL_DB = 1009;
-//                            mAvi.hide();
                             stopLoading();
+                            shift = String.valueOf(response.get("shift"));
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
                             wednesdayScheduleArray = response.getJSONArray("wednesday");
@@ -1295,7 +1292,7 @@ public class MainActivity extends AppCompatActivity
 
                 try {
                     params.put("_id", deviceID);
-                    params.put("class", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2));
+                    params.put("class", Preferences.getPrefs("class and section", getApplicationContext()));
                     params.put("token", FirebaseInstanceId.getInstance().getToken());
                     JSONObject jsonObject = new JSONObject(params);
                     jsonObject.toString();

@@ -92,7 +92,14 @@ public class Announcements extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         stopLoading();
+                        Log.d(TAG, "onResponse: " + url);
                         try {
+
+                            if (response.length() == 0) {
+                                errorLayout.setVisibility(View.VISIBLE);
+                            } else
+                                errorLayout.setVisibility(View.GONE);
+
                             for (int i = 0; i < response.length(); i++) {
                                 object = response.getJSONObject(i);
                                 announcement = new ClassAnnouncementsModel();
@@ -111,11 +118,6 @@ public class Announcements extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
-                        if (list.size() == 0) {
-                            errorLayout.setVisibility(View.VISIBLE);
-                        } else {
-                            errorLayout.setVisibility(View.GONE);
-                        }
                         mAdapter = new AnnouncementAdapter(list);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Announcements.this);
                         recyclerView.setLayoutManager(mLayoutManager);

@@ -123,6 +123,7 @@
             android:parentActivityName=".Activities.UserProfile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.SplashIntroActivity"></activity>
     </application>
 
 </manifest>
