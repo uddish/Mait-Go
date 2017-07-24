@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity
     RelativeLayout mainLayout;
 
     String shift;
+    String notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -382,6 +384,10 @@ public class MainActivity extends AppCompatActivity
                         try {
                             IS_LOCAL_DB = 1009;
                             stopLoading();
+                            notification = String.valueOf(response.get("notification"));
+                            if(!notification.equals("found"))   {
+                                showNotification();
+                            }
                             shift = String.valueOf(response.get("shift"));
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
@@ -1337,5 +1343,13 @@ public class MainActivity extends AppCompatActivity
 
             return null;
         }
+    }
+
+    private void showNotification() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Information");
+        builder.setMessage(notification);
+        builder.setPositiveButton("OK", null);
+        builder.show();
     }
 }
