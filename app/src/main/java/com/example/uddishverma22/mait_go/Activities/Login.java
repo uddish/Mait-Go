@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -57,13 +58,22 @@ public class Login extends AppCompatActivity {
     Typeface tf, tfBold;
 
     TextView heading, subHeading;
-    EditText rollNo, section, semester;
-    TextInputLayout rollnoLayout, sectionLayout, semesterLayout;
+    EditText rollNo, section;
+    TextInputLayout rollnoLayout, sectionLayout;
     AVLoadingIndicatorView avi;
 
     RequestQueue queue;
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/info/";
+
+    private final Handler waitHandler = new Handler();
+    private final Runnable waitCallback = new Runnable() {
+        @Override
+        public void run() {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,13 +164,11 @@ public class Login extends AppCompatActivity {
         subHeading = (TextView) findViewById(R.id.subhead);
         rollNo = (EditText) findViewById(R.id.input_rollno);
         section = (EditText) findViewById(R.id.input_class);
-//        semester = (EditText) findViewById(R.id.input_semester);
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         rollnoLayout = (TextInputLayout) findViewById(R.id.input_layout_rollno);
         sectionLayout = (TextInputLayout) findViewById(R.id.input_layout_class);
-//        semesterLayout = (TextInputLayout) findViewById(R.id.input_layout_semester);
 
         heading.setTypeface(tfBold);
         subHeading.setTypeface(tf);
@@ -193,18 +201,6 @@ public class Login extends AppCompatActivity {
         return true;
     }
 
-//    private boolean checkForNullSemester() {
-//        if (TextUtils.isEmpty(semester.getText().toString())) {
-//            semesterLayout.setError(getString(R.string.semester_error));
-//            requestFocus(semester);
-//            return false;
-//        } else {
-//            Globals.semester = semester.getText().toString();
-//            Preferences.setPrefs("studentSemester", Globals.semester, getApplicationContext());
-//            semesterLayout.setErrorEnabled(false);
-//        }
-//        return true;
-//    }
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
@@ -245,13 +241,17 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            avi.hide();
                             // Sign in success, update UI with the signed-in user's information
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
-//                            Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
+                            if (!Preferences.getPrefs("class and section", Login.this).equals("notfound")) {
+                                avi.hide();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            } else {
+                                waitHandler.postDelayed(waitCallback, 2000);
+                            }
+
                         } else {
                             avi.hide();
                             // If sign in fails, display a message to the user.

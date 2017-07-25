@@ -6,12 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.uddishverma22.mait_go.Activities.Announcements;
 import com.example.uddishverma22.mait_go.Activities.Assignments;
-import com.example.uddishverma22.mait_go.Activities.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -46,8 +43,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Notification.Builder notificationBuilder = new Notification.Builder(this);
                 notificationBuilder.setContentTitle(remoteMessage.getData().get("title"));
                 notificationBuilder.setAutoCancel(true);
-                notificationBuilder.setSmallIcon(R.drawable.icon_error);
-                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_error));
+                notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+                notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
                 notificationBuilder.setContentText(remoteMessage.getData().get("body"));
                 notificationBuilder.setContentIntent(pendingIntent);
                 notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
@@ -70,8 +67,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Notification.Builder notificationBuilder = new Notification.Builder(this);
             notificationBuilder.setContentTitle(remoteMessage.getData().get("title"));
             notificationBuilder.setAutoCancel(true);
-            notificationBuilder.setSmallIcon(R.drawable.icon_error);
-            notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_error));
+            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+            notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
             notificationBuilder.setContentText(remoteMessage.getData().get("body"));
             notificationBuilder.setContentIntent(pendingIntent);
             notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
