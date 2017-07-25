@@ -26,6 +26,7 @@ import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -141,45 +142,52 @@ public class AssignmentImageViewer extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap bitmap, String url) {
-//        String root = Environment.getExternalStorageDirectory().toString();
-//        File myDir = new File(root);
-//        myDir.mkdirs();
-//        String fname = "Image-" + url.substring(41) + ".jpg";
-//        File file = new File(myDir, fname);
-//        if (file.exists()) file.delete();
-//        Log.i("LOAD", root + fname);
+
+//        FileOutputStream outStream = null;
+//        File sdCard = Environment.getExternalStorageDirectory();
+//        File dir = new File(sdCard.getAbsolutePath() + "/ipugo");
+//        dir.mkdirs();
+//        String fileName = String.format("%d.jpg", System.currentTimeMillis());
+//        File outFile = new File(dir, fileName);
+//        if (outFile.exists ()) outFile.delete ();
+//
 //        try {
-//            FileOutputStream out = new FileOutputStream(file);
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-//            out.flush();
-//            out.close();
+//            outFile.createNewFile();
+//            outStream = new FileOutputStream(outFile);
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+//            outStream.flush();
+//            outStream.close();
+//            refreshGallery(outFile);
 //            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Image Downloaded!", Snackbar.LENGTH_SHORT);
 //            snackbar.show();
-//        } catch (Exception e) {
+//        } catch (java.io.IOException e) {
 //            e.printStackTrace();
 //        }
+        ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
 
         FileOutputStream outStream = null;
+
+        bitmap.compress(Bitmap.CompressFormat.PNG, 60, bytearrayoutputstream);
+        String fileName = String.format("%d.jpg", System.currentTimeMillis());
         File sdCard = Environment.getExternalStorageDirectory();
         File dir = new File(sdCard.getAbsolutePath() + "/ipugo");
         dir.mkdirs();
-        String fileName = String.format("%d.jpg", System.currentTimeMillis());
-        File outFile = new File(dir, fileName);
+        File file = new File(dir + fileName);
         try {
-            outStream = new FileOutputStream(outFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-            outStream.flush();
+            file.createNewFile();
+            outStream = new FileOutputStream(file);
+            outStream.write(bytearrayoutputstream.toByteArray());
             outStream.close();
-            refreshGallery(outFile);
+            refreshGallery(file);
             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Image Downloaded!", Snackbar.LENGTH_SHORT);
             snackbar.show();
-        } catch (java.io.IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public void refreshGallery(File file){
+
+    public void refreshGallery(File file) {
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intent.setData(Uri.fromFile(file));
         sendBroadcast(intent);
