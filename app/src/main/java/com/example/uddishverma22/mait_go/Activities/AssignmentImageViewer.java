@@ -1,23 +1,18 @@
 package com.example.uddishverma22.mait_go.Activities;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,9 +27,7 @@ import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class AssignmentImageViewer extends AppCompatActivity {
@@ -46,6 +39,7 @@ public class AssignmentImageViewer extends AppCompatActivity {
     DetailsListAdapter adapter;
     RequestQueue requestQueue;
     CoordinatorLayout coordinatorLayout;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +53,8 @@ public class AssignmentImageViewer extends AppCompatActivity {
         ArrayList<String> myList = (ArrayList<String>) i.getSerializableExtra("imageUrl");
 
         requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+
+        setToolbar();
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.assign_coord_layout);
 
@@ -145,22 +141,54 @@ public class AssignmentImageViewer extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap bitmap, String url) {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root);
-        myDir.mkdirs();
-        String fname = "Image-" + url.substring(41) + ".jpg";
-        File file = new File(myDir, fname);
-        if (file.exists()) file.delete();
-        Log.i("LOAD", root + fname);
+//        String root = Environment.getExternalStorageDirectory().toString();
+//        File myDir = new File(root);
+//        myDir.mkdirs();
+//        String fname = "Image-" + url.substring(41) + ".jpg";
+//        File file = new File(myDir, fname);
+//        if (file.exists()) file.delete();
+//        Log.i("LOAD", root + fname);
+//        try {
+//            FileOutputStream out = new FileOutputStream(file);
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+//            out.flush();
+//            out.close();
+//            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Image Downloaded!", Snackbar.LENGTH_SHORT);
+//            snackbar.show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        FileOutputStream outStream = null;
+        File sdCard = Environment.getExternalStorageDirectory();
+        File dir = new File(sdCard.getAbsolutePath() + "/ipugo");
+        dir.mkdirs();
+        String fileName = String.format("%d.jpg", System.currentTimeMillis());
+        File outFile = new File(dir, fileName);
         try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
+            outStream = new FileOutputStream(outFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+            refreshGallery(outFile);
             Snackbar snackbar = Snackbar.make(coordinatorLayout, "Image Downloaded!", Snackbar.LENGTH_SHORT);
             snackbar.show();
-        } catch (Exception e) {
+        } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void refreshGallery(File file){
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        intent.setData(Uri.fromFile(file));
+        sendBroadcast(intent);
+    }
+
+    private void setToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar_assign);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
     }
 }

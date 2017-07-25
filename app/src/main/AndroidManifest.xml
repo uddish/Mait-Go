@@ -89,7 +89,10 @@
             android:parentActivityName=".Activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.AssignmentImageViewer" />
+        <activity android:name=".Activities.AssignmentImageViewer"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Activities.Assignments"/>
         <activity
             android:name=".Activities.EventsDetailsPage"
             android:label="@string/events_activity"
