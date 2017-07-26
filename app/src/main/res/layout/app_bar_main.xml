@@ -8,9 +8,9 @@
     tools:context="com.example.uddishverma22.mait_go.Activities.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/main_layout">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/nope"
@@ -276,15 +276,16 @@
                 android:visibility="visible"
                 app:indicatorColor="@color/white"
                 app:indicatorName="BallPulseIndicator" />
+
             <TextView
-                android:visibility="gone"
                 android:id="@+id/fetching_timetable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Fetching Timetable..."
+                android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/white"
-                android:textAppearance="?android:textAppearanceMedium"/>
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -292,7 +293,7 @@
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:scrollbars="none"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
         </LinearLayout>
     </RelativeLayout>

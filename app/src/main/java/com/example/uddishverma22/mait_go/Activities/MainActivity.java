@@ -42,6 +42,7 @@ import com.example.uddishverma22.mait_go.Adapters.DailyScheduleListAdapter;
 import com.example.uddishverma22.mait_go.Models.DailySchedule;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -169,17 +170,20 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         requestClassEndpoint = Preferences.getPrefs("class and section", MainActivity.this);
-        Log.d(TAG, "onCreate: " + requestClassEndpoint);
+
         if (!requestClassEndpoint.equals("notfound")) {
             url = url + requestClassEndpoint;
         }
 
         queue = VolleySingleton.getInstance(this).getRequestQueue();
 
+        currentDay = getCurrentDay();
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         headerView = navigationView.getHeaderView(0);
         navHeaderText = (TextView) headerView.findViewById(R.id.nav_textview);
         navHeaderImage = (CircleImageView) headerView.findViewById(R.id.nav_image);
+
         if (!Preferences.getPrefs("studentImage", getApplicationContext()).equals("notfound")) {
             Picasso.with(this).load(Preferences.getPrefs("studentImage", getApplicationContext())).into(navHeaderImage);
         }
@@ -188,7 +192,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         //fetching data from API
-        fetchData(queue);
+        if (Globals.IS_OPENED_FIRST_TIME == 1998) {
+            fetchData(queue);
+            Globals.IS_OPENED_FIRST_TIME = 1997;
+            Log.d(TAG, "onCreate: Loading from api " + currentDay);
+        }
+
 
         //Setting the fonts
         tfThin = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/Raleway-Thin.ttf");
@@ -209,12 +218,20 @@ public class MainActivity extends AppCompatActivity
         }
 
         currentDate = getCurrentDate();
-        currentDay = getCurrentDay();
         currentYear = getCurrentYear();
         currentMonth = getCurrentMonth();
         date.setText(currentDate);
         day.setText(currentDay);
         month.setText(currentMonth.substring(0, 3) + " " + currentYear);
+
+        if (Globals.IS_OPENED_FIRST_TIME == 1997) {
+            if (!Preferences.getPrefs("mondaySchedule", MainActivity.this).equals("notfound")) {
+                IS_LOCAL_DB = 1008;
+                loadDataFromSharedPref();
+                stopLoading();
+                Log.d(TAG, "onCreate: load from LOCAL DB " + currentDay);
+            }
+        }
 
 //        Setting the actual details in all the fields
         attachDateToDays();
@@ -390,14 +407,17 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(final JSONObject response) {
 
+                        stopLoading();
+
                         try {
 
                             IS_LOCAL_DB = 1009;
-//                            notification = String.valueOf(response.get("notification"));
-//                            if (!notification.equals("found")) {
+                            notification = String.valueOf(response.get("notification"));
+//                            if (!notification.equals("found") && Globals.IS_OPENED_FIRST_TIME == 1998) {
 //                                showNotification();
+//                                Globals.IS_OPENED_FIRST_TIME = 1997;
+//                                stopLoading();
 //                            }
-//                            shift = String.valueOf(response.get("shift"));
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
                             wednesdayScheduleArray = response.getJSONArray("wednesday");
@@ -408,8 +428,6 @@ public class MainActivity extends AppCompatActivity
                             wednesdayScheduleObject = wednesdayScheduleArray.getJSONObject(0);
                             thursdayScheduleObject = thursdayScheduleArray.getJSONObject(0);
                             fridayScheduleObject = fridayScheduleArray.getJSONObject(0);
-
-                            stopLoading();
 
                             switch (currentDay) {
 
@@ -481,93 +499,99 @@ public class MainActivity extends AppCompatActivity
             public void onErrorResponse(VolleyError error) {
 
                 IS_LOCAL_DB = 1008;
-//                mAvi.hide();
+
+                loadDataFromSharedPref();
+
                 stopLoading();
-
-                String mondayStr = Preferences.getPrefs("mondaySchedule", MainActivity.this);
-                String tuesdayStr = Preferences.getPrefs("tuesdaySchedule", MainActivity.this);
-                String wednesdayStr = Preferences.getPrefs("wednesdaySchedule", MainActivity.this);
-                String thursdayStr = Preferences.getPrefs("thursdaySchedule", MainActivity.this);
-                String fridayStr = Preferences.getPrefs("fridaySchedule", MainActivity.this);
-                JSONObject monObj, tueObj, wedObj, thuObj, friObj;
-                new loadDataOffline().execute();
-
-                switch (currentDay) {
-
-                    case "Monday":
-                        try {
-                            monObj = new JSONObject(mondayStr);
-                            monOfflineObject = monObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        mondayScheduleFunction();
-                        monTv.setBackgroundResource(R.drawable.circular_image);
-                        monTv.setTextColor(Color.BLACK);
-                        scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
-                        recyclerView.setAdapter(scheduleListAdapter);
-                        break;
-                    case "Tuesday":
-                        try {
-                            tueObj = new JSONObject(tuesdayStr);
-                            tueOfflineObject = tueObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        tuesdayScheduleFunction();
-                        tueTv.setBackgroundResource(R.drawable.circular_image);
-                        tueTv.setTextColor(Color.BLACK);
-                        scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
-                        recyclerView.setAdapter(scheduleListAdapter);
-                        break;
-                    case "Wednesday":
-                        try {
-                            wedObj = new JSONObject(wednesdayStr);
-                            wedOfflineObject = wedObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        wednesdayScheduleFunction();
-                        wedTv.setBackgroundResource(R.drawable.circular_image);
-                        wedTv.setTextColor(Color.BLACK);
-                        scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
-                        recyclerView.setAdapter(scheduleListAdapter);
-                        break;
-                    case "Thursday":
-                        try {
-                            thuObj = new JSONObject(thursdayStr);
-                            thuOfflineObject = thuObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        thursdayScheduleFunction();
-                        thuTv.setBackgroundResource(R.drawable.circular_image);
-                        thuTv.setTextColor(Color.BLACK);
-                        scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
-                        recyclerView.setAdapter(scheduleListAdapter);
-                        break;
-                    case "Friday":
-                        try {
-                            friObj = new JSONObject(fridayStr);
-                            friOfflineObject = friObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        fridayScheduleFunction();
-                        friTv.setBackgroundResource(R.drawable.circular_image);
-                        friTv.setTextColor(Color.BLACK);
-                        scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
-                        recyclerView.setAdapter(scheduleListAdapter);
-                        break;
-                    default:
-                        noClassLayout.setVisibility(View.VISIBLE);
-                        break;
-                }
 
             }
         });
         queue.add(request);
+    }
+
+    //Load data everytime if the local db is not empty
+    private void loadDataFromSharedPref() {
+
+        String mondayStr = Preferences.getPrefs("mondaySchedule", MainActivity.this);
+        String tuesdayStr = Preferences.getPrefs("tuesdaySchedule", MainActivity.this);
+        String wednesdayStr = Preferences.getPrefs("wednesdaySchedule", MainActivity.this);
+        String thursdayStr = Preferences.getPrefs("thursdaySchedule", MainActivity.this);
+        String fridayStr = Preferences.getPrefs("fridaySchedule", MainActivity.this);
+        JSONObject monObj, tueObj, wedObj, thuObj, friObj;
+        new loadDataOffline().execute();
+
+        switch (currentDay) {
+
+            case "Monday":
+                try {
+                    monObj = new JSONObject(mondayStr);
+                    monOfflineObject = monObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                mondayScheduleFunction();
+                monTv.setBackgroundResource(R.drawable.circular_image);
+                monTv.setTextColor(Color.BLACK);
+                scheduleListAdapter = new DailyScheduleListAdapter(mondaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                break;
+            case "Tuesday":
+                try {
+                    tueObj = new JSONObject(tuesdayStr);
+                    tueOfflineObject = tueObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                tuesdayScheduleFunction();
+                tueTv.setBackgroundResource(R.drawable.circular_image);
+                tueTv.setTextColor(Color.BLACK);
+                scheduleListAdapter = new DailyScheduleListAdapter(tuesdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                break;
+            case "Wednesday":
+                try {
+                    wedObj = new JSONObject(wednesdayStr);
+                    wedOfflineObject = wedObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                wednesdayScheduleFunction();
+                wedTv.setBackgroundResource(R.drawable.circular_image);
+                wedTv.setTextColor(Color.BLACK);
+                scheduleListAdapter = new DailyScheduleListAdapter(wednesdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                break;
+            case "Thursday":
+                try {
+                    thuObj = new JSONObject(thursdayStr);
+                    thuOfflineObject = thuObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                thursdayScheduleFunction();
+                thuTv.setBackgroundResource(R.drawable.circular_image);
+                thuTv.setTextColor(Color.BLACK);
+                scheduleListAdapter = new DailyScheduleListAdapter(thursdaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                break;
+            case "Friday":
+                try {
+                    friObj = new JSONObject(fridayStr);
+                    friOfflineObject = friObj.getJSONArray("values").getJSONObject(0).getJSONObject("nameValuePairs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                fridayScheduleFunction();
+                friTv.setBackgroundResource(R.drawable.circular_image);
+                friTv.setTextColor(Color.BLACK);
+                scheduleListAdapter = new DailyScheduleListAdapter(fridaySchedule);
+                recyclerView.setAdapter(scheduleListAdapter);
+                break;
+            default:
+                noClassLayout.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override

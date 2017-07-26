@@ -1,5 +1,6 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.uddishverma22.mait_go.R;
@@ -46,6 +47,10 @@ public class SplashIntroActivity extends com.heinrichreimersoftware.materialintr
 
     @Override
     public void onBackPressed() {
-        finishAffinity();
+//        finishAffinity();
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 }

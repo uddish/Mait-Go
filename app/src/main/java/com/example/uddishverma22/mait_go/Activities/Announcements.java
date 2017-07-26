@@ -92,7 +92,6 @@ public class Announcements extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         stopLoading();
-                        Log.d(TAG, "onResponse: " + url);
                         try {
 
                             if (response.length() == 0) {
@@ -161,12 +160,15 @@ public class Announcements extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                } else
+                } else {
                     arrayList = new ArrayList<>();
+                    errorLayout.setVisibility(View.VISIBLE);
+                }
                 mAdapter = new AnnouncementAdapter(list);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Announcements.this);
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setAdapter(mAdapter);
+
             }
 
 

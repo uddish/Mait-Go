@@ -13,6 +13,8 @@ public class Globals {
 
     public static String BUILD_VERSION = "1.1";
 
+    public static int IS_OPENED_FIRST_TIME = 1998;
+
     public static ArrayList<Faculty> itFacList = new ArrayList<>();
     public static ArrayList<Faculty> cseFacList = new ArrayList<>();
     public static ArrayList<Faculty> eceFacList = new ArrayList<>();
