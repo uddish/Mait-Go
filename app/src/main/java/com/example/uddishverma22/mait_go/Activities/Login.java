@@ -80,6 +80,8 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        startActivity(new Intent(Login.this, SplashIntroActivity.class));
+
         signInButton = (Button) findViewById(R.id.sign_in_button);
 
         mAuth = FirebaseAuth.getInstance();
