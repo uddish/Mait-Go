@@ -1,12 +1,10 @@
 package com.example.uddishverma22.mait_go.Models;
 
-import io.realm.RealmObject;
-
 /**
  * Created by uddishverma22 on 07/05/17.
  */
 
-public class UpcomingEventsModel extends RealmObject {
+public class UpcomingEventsModel{
 
     public String eventName;
     public String organiser;

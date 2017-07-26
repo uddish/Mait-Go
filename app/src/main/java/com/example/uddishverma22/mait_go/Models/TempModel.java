@@ -1,12 +1,10 @@
 package com.example.uddishverma22.mait_go.Models;
 
-import io.realm.RealmObject;
-
 /**
  * Created by uddishverma22 on 05/05/17.
  */
 
-public class TempModel extends RealmObject {
+public class TempModel {
 
     String monday;
     String tuesday;

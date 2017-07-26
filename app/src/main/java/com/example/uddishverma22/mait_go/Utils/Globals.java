@@ -15,6 +15,8 @@ public class Globals {
 
     public static int IS_OPENED_FIRST_TIME = 1998;
 
+    public static String X_ACCESS_TOKEN = "6SFsbxfypf2o5FyIy0ug";
+
     public static ArrayList<Faculty> itFacList = new ArrayList<>();
     public static ArrayList<Faculty> cseFacList = new ArrayList<>();
     public static ArrayList<Faculty> eceFacList = new ArrayList<>();

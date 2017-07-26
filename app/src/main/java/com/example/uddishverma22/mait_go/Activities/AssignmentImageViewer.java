@@ -1,15 +1,20 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +46,7 @@ public class AssignmentImageViewer extends AppCompatActivity {
     RequestQueue requestQueue;
     CoordinatorLayout coordinatorLayout;
     Toolbar toolbar;
+    String thisDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +114,15 @@ public class AssignmentImageViewer extends AppCompatActivity {
                 detailsViewHolder = (DetailsViewHolder) convertView.getTag();
             }
 
-            final String thisDetails = (String) getItem(position);
+            thisDetails = (String) getItem(position);
 
             detailsViewHolder.downloadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    downloadImage(thisDetails);
-                    Toast.makeText(AssignmentImageViewer.this, "Downloading", Toast.LENGTH_SHORT).show();
+                    if(isReadStoragePermissionGranted() && isWriteStoragePermissionGranted()) {
+                        downloadImage(thisDetails);
+                        Toast.makeText(AssignmentImageViewer.this, "Downloading", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -143,26 +151,6 @@ public class AssignmentImageViewer extends AppCompatActivity {
 
     private void saveImage(Bitmap bitmap, String url) {
 
-//        FileOutputStream outStream = null;
-//        File sdCard = Environment.getExternalStorageDirectory();
-//        File dir = new File(sdCard.getAbsolutePath() + "/ipugo");
-//        dir.mkdirs();
-//        String fileName = String.format("%d.jpg", System.currentTimeMillis());
-//        File outFile = new File(dir, fileName);
-//        if (outFile.exists ()) outFile.delete ();
-//
-//        try {
-//            outFile.createNewFile();
-//            outStream = new FileOutputStream(outFile);
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-//            outStream.flush();
-//            outStream.close();
-//            refreshGallery(outFile);
-//            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Image Downloaded!", Snackbar.LENGTH_SHORT);
-//            snackbar.show();
-//        } catch (java.io.IOException e) {
-//            e.printStackTrace();
-//        }
         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
 
         FileOutputStream outStream = null;
@@ -198,5 +186,63 @@ public class AssignmentImageViewer extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+    }
+
+    public boolean isReadStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Read Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG, "Read Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Read Permission is granted");
+            return true;
+        }
+    }
+
+    public boolean isWriteStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Write Permission is granted");
+                return true;
+            } else {
+                Log.v(TAG, "Write Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Write Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 2:
+                Log.d(TAG, "External storage2");
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+                }
+                break;
+
+            case 3:
+                Log.d(TAG, "External storage1");
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+                    downloadImage(thisDetails);
+                    Toast.makeText(AssignmentImageViewer.this, "Downloading", Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+        }
     }
 }

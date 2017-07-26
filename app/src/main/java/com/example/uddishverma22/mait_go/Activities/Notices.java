@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -33,9 +34,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import io.realm.RealmResults;
 
 public class Notices extends AppCompatActivity {
 
@@ -47,7 +49,6 @@ public class Notices extends AppCompatActivity {
     public ArrayList<Notice> noticeList = new ArrayList<>();
     public ArrayList<Notice> examNoticeList = new ArrayList<>();
     public RecyclerView recyclerView;
-    RealmResults<Notice> results;
     Toolbar toolbar;
 
     private ViewPager viewPager;
@@ -159,7 +160,19 @@ public class Notices extends AppCompatActivity {
                 Log.d(TAG, "onErrorResponse: " + error.toString());
 
             }
-        });
+        }) {
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("x-access-token", Globals.X_ACCESS_TOKEN);
+                return headers;
+            }
+
+        };
         queue.add(jsonObjReq);
     }
 

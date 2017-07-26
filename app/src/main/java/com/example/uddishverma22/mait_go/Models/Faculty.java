@@ -1,12 +1,10 @@
 package com.example.uddishverma22.mait_go.Models;
 
-import io.realm.RealmObject;
-
 /**
  * Created by uddishverma22 on 02/05/17.
  */
 
-public class Faculty extends RealmObject {
+public class Faculty{
 
     public String name;
     public String designation;

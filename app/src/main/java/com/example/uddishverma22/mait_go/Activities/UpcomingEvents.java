@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -22,6 +23,7 @@ import com.example.uddishverma22.mait_go.Adapters.UpcomingEventsAdapter;
 import com.example.uddishverma22.mait_go.Models.UpcomingEventsModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -31,7 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UpcomingEvents extends AppCompatActivity {
 
@@ -137,9 +141,23 @@ public class UpcomingEvents extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                indicatorView.hide();
                 errorLayout.setVisibility(View.VISIBLE);
             }
-        });
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("x-access-token", Globals.X_ACCESS_TOKEN);
+                return headers;
+            }
+
+        };
         queue.add(request);
     }
 

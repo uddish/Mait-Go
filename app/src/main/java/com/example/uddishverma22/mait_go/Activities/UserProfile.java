@@ -1,8 +1,10 @@
 package com.example.uddishverma22.mait_go.Activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -13,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -165,20 +168,23 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setType("*/*");
-                    startActivityForResult(intent, KITKAT_VALUE);
-                } else {
-                    intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setType("*/*");
-                    startActivityForResult(intent, KITKAT_VALUE);
+                if (isReadStoragePermissionGranted() && isWriteStoragePermissionGranted()) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setType("*/*");
+                        startActivityForResult(intent, KITKAT_VALUE);
+                    } else {
+                        intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setType("*/*");
+                        startActivityForResult(intent, KITKAT_VALUE);
+                    }
                 }
 
             }
@@ -319,23 +325,6 @@ public class UserProfile extends AppCompatActivity {
 
             }
         }
-//        else {
-//            Log.d(TAG, "onActivityResult: Request code is NOT INSIDE KITKAT");
-//            profilePicUri = data.getData();
-//            //setting profile pic in shared prefs
-//            Preferences.setPrefs("studentImage", String.valueOf(profilePicUri), getApplicationContext());
-//            Picasso.with(this).load(profilePicUri).into(profileImage);
-//
-//            //Updating the image in nav header in navigation drawer
-//            Picasso.with(this).load(profilePicUri).into(MainActivity.navHeaderImage);
-//
-//            //Getting screen's width and height
-//            display.getSize(size);
-//            int width = size.x;
-//            int height = size.y;
-//            //Loading the blurred image
-//            Picasso.with(this).load(profilePicUri).resize(width, 1000).centerCrop().into(blurredBackImage);
-//        }
     }
 
     private void setToolbar() {
@@ -593,6 +582,78 @@ public class UserProfile extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    public boolean isReadStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Read Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG, "Read Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 3);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Read Permission is granted");
+            return true;
+        }
+    }
+
+    public boolean isWriteStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG, "Write Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG, "Write Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG, "Write Permission is granted");
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 2:
+                Log.d(TAG, "External storage2");
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+                }
+                break;
+
+            case 3:
+                Log.d(TAG, "External storage1");
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+                    Intent intent;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setType("*/*");
+                        startActivityForResult(intent, KITKAT_VALUE);
+                    } else {
+                        intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setType("*/*");
+                        startActivityForResult(intent, KITKAT_VALUE);
+                    }
+                }
+                break;
+        }
     }
 
 }

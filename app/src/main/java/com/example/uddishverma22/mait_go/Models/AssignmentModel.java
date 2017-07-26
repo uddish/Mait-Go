@@ -2,8 +2,6 @@ package com.example.uddishverma22.mait_go.Models;
 
 import org.json.JSONArray;
 
-import io.realm.RealmObject;
-
 /**
  * Created by uddishverma22 on 07/05/17.
  */

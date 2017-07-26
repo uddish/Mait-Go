@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,6 +39,7 @@ import com.example.uddishverma22.mait_go.Models.ResultHeader;
 import com.example.uddishverma22.mait_go.Models.ResultModel;
 import com.example.uddishverma22.mait_go.R;
 import com.example.uddishverma22.mait_go.Utils.CheckInternet;
+import com.example.uddishverma22.mait_go.Utils.Globals;
 import com.example.uddishverma22.mait_go.Utils.Preferences;
 import com.example.uddishverma22.mait_go.Utils.VolleySingleton;
 import com.google.gson.Gson;
@@ -50,7 +52,9 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import at.grabner.circleprogress.CircleProgressView;
 
@@ -310,7 +314,20 @@ public class Result extends AppCompatActivity {
                 recyclerView.setAdapter(resultAdapter);
 
             }
-        });
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("x-access-token", Globals.X_ACCESS_TOKEN);
+                return headers;
+            }
+
+        };
         requestQueue.add(request);
     }
 
@@ -521,7 +538,20 @@ public class Result extends AppCompatActivity {
                 }
 
             }
-        });
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("x-access-token", Globals.X_ACCESS_TOKEN);
+                return headers;
+            }
+
+        };
         VolleySingleton.getInstance(this).getRequestQueue().add(request);
     }
 }

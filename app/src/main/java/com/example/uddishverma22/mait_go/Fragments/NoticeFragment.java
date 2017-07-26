@@ -82,6 +82,8 @@ public class NoticeFragment extends Fragment {
             adapter = new NoticeAdapter(examinationNoticeList);
             indicatorView.hide();
         }
+
+
         recyclerView.setAdapter(adapter);
 
     }

@@ -149,7 +149,6 @@ public class MainActivity extends AppCompatActivity
 
     RelativeLayout mainLayout;
 
-    String shift;
     String notification;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -194,7 +193,6 @@ public class MainActivity extends AppCompatActivity
         //fetching data from API
         if (Globals.IS_OPENED_FIRST_TIME == 1998) {
             fetchData(queue);
-            Globals.IS_OPENED_FIRST_TIME = 1997;
             Log.d(TAG, "onCreate: Loading from api " + currentDay);
         }
 
@@ -225,10 +223,10 @@ public class MainActivity extends AppCompatActivity
         month.setText(currentMonth.substring(0, 3) + " " + currentYear);
 
         if (Globals.IS_OPENED_FIRST_TIME == 1997) {
+            stopLoading();
             if (!Preferences.getPrefs("mondaySchedule", MainActivity.this).equals("notfound")) {
                 IS_LOCAL_DB = 1008;
                 loadDataFromSharedPref();
-                stopLoading();
                 Log.d(TAG, "onCreate: load from LOCAL DB " + currentDay);
             }
         }
@@ -413,11 +411,13 @@ public class MainActivity extends AppCompatActivity
 
                             IS_LOCAL_DB = 1009;
                             notification = String.valueOf(response.get("notification"));
-//                            if (!notification.equals("found") && Globals.IS_OPENED_FIRST_TIME == 1998) {
-//                                showNotification();
-//                                Globals.IS_OPENED_FIRST_TIME = 1997;
-//                                stopLoading();
-//                            }
+                            if (!notification.equals("found") && Globals.IS_OPENED_FIRST_TIME == 1998) {
+                                showNotification();
+                                stopLoading();
+                            }
+
+                            Globals.IS_OPENED_FIRST_TIME = 1997;
+
                             mondayScheduleArray = response.getJSONArray("monday");
                             tuesdayScheduleArray = response.getJSONArray("tuesday");
                             wednesdayScheduleArray = response.getJSONArray("wednesday");
@@ -499,13 +499,24 @@ public class MainActivity extends AppCompatActivity
             public void onErrorResponse(VolleyError error) {
 
                 IS_LOCAL_DB = 1008;
-
+                stopLoading();
                 loadDataFromSharedPref();
 
-                stopLoading();
-
             }
-        });
+        }) {
+
+            /**
+             * Passing some request headers
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("x-access-token", Globals.X_ACCESS_TOKEN);
+                return headers;
+            }
+
+        };
         queue.add(request);
     }
 
