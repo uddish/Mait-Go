@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Check Your Daily Schedule"
+        android:text="Check your daily schedule"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@color/white"
         android:layout_gravity="center"/>

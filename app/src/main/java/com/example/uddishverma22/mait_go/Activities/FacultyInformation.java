@@ -139,7 +139,7 @@ public class FacultyInformation extends AppCompatActivity {
                                 itFacultyobj.name = itFacObj.getString("name");
                                 itFacultyobj.designation = itFacObj.getString("designation");
                                 itFacultyobj.qualification = itFacObj.getString("qualification");
-                                itFacultyobj.experience = itFacObj.getString("exp");
+                                itFacultyobj.room = itFacObj.getString("room");
                                 itFacultyobj.imageUrl = itFacObj.getString("img");
                                 itFacList.add(itFacultyobj);
                             }
@@ -151,7 +151,7 @@ public class FacultyInformation extends AppCompatActivity {
                                 cseFacultyobj.name = cseFacObj.getString("name");
                                 cseFacultyobj.designation = cseFacObj.getString("designation");
                                 cseFacultyobj.qualification = cseFacObj.getString("qualification");
-                                cseFacultyobj.experience = cseFacObj.getString("exp");
+                                cseFacultyobj.room = cseFacObj.getString("room");
                                 cseFacultyobj.imageUrl = cseFacObj.getString("img");
                                 cseFacList.add(cseFacultyobj);
                             }
@@ -163,7 +163,7 @@ public class FacultyInformation extends AppCompatActivity {
                                 eceFacultyobj.name = eceFacObj.getString("name");
                                 eceFacultyobj.designation = eceFacObj.getString("designation");
                                 eceFacultyobj.qualification = eceFacObj.getString("qualification");
-                                eceFacultyobj.experience = eceFacObj.getString("exp");
+                                eceFacultyobj.room = eceFacObj.getString("room");
                                 eceFacultyobj.imageUrl = eceFacObj.getString("img");
                                 eceFacList.add(eceFacultyobj);
                             }

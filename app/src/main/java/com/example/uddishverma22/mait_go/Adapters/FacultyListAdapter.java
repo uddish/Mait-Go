@@ -6,14 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.uddishverma22.mait_go.Models.Faculty;
 import com.example.uddishverma22.mait_go.R;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -70,7 +67,7 @@ public class FacultyListAdapter extends RecyclerView.Adapter<FacultyListAdapter.
         holder.name.setText(facultyObj.name);
         holder.designation.setText(facultyObj.designation);
         holder.qual.setText(facultyObj.qualification);
-        holder.exp.setText(facultyObj.experience);
+        holder.exp.setText(facultyObj.room);
 
         holder.name.setTypeface(holder.openSansBold);
         holder.designation.setTypeface(holder.openSansReg);

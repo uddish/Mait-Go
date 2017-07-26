@@ -241,7 +241,7 @@ public class Result extends AppCompatActivity {
                              */
                             Gson gson = new Gson();
                             String resultJson = gson.toJson(resultList);
-                            new saveDataAsync().execute(resultHeader.univRank, resultHeader.colRank, resultHeader.creditPerc, resultHeader.cgpa, String.valueOf(response.get("percentage")), resultJson);
+                            new saveDataAsync().execute(resultHeader.univRank, resultHeader.colRank, resultHeader.creditPerc, resultHeader.cgpa, String.valueOf(response.get("percentage")), resultJson, semester);
 
                             resultAdapter = new ResultAdapter(resultList, resultHeader);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(Result.this);
@@ -280,6 +280,8 @@ public class Result extends AppCompatActivity {
                             String listString = gson.toJson(arrayList, new TypeToken<ArrayList<ResultModel>>() {
                             }.getType());
                             JSONArray jsonArray = new JSONArray(listString);
+
+                            semesterBtn.setText(Preferences.getPrefs("resultSem", Result.this));
 
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 jsonObject = jsonArray.getJSONObject(i);
@@ -342,6 +344,7 @@ public class Result extends AppCompatActivity {
             Preferences.setPrefs("resultCgpa", params[3], Result.this);
             Preferences.setPrefs("resultPercentage", params[4], Result.this);
             Preferences.setPrefs("result", params[5], Result.this);
+            Preferences.setPrefs("resultSem", params[6], Result.this);
 
             return null;
         }
@@ -463,8 +466,6 @@ public class Result extends AppCompatActivity {
 
         resultList = new ArrayList<>();
         resultHeader = new ResultHeader();
-
-        Log.d(TAG, "fetchSemData: " + url + "?sem=" + semester);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url + "?sem=" + semester, null,
                 new Response.Listener<JSONObject>() {

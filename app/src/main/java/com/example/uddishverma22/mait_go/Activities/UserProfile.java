@@ -158,6 +158,7 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
                 Preferences.deletePrefs(getApplicationContext());
+                Globals.IS_OPENED_FIRST_TIME = 1998;
                 startActivity(new Intent(getApplicationContext(), Login.class));
                 finish();
             }

@@ -9,7 +9,7 @@ public class Faculty{
     public String name;
     public String designation;
     public String qualification;
-    public String experience;
+    public String room;
     public String imageUrl;
 
     public String getName() {
@@ -36,11 +36,11 @@ public class Faculty{
         this.qualification = qualification;
     }
 
-    public String getExperience() {
-        return experience;
+    public String getRoom() {
+        return room;
     }
 
-    public void setExperience(String experience) {
-        this.experience = experience;
+    public void setRoom(String room) {
+        this.room = room;
     }
 }
