@@ -266,6 +266,7 @@ public class UserProfile extends AppCompatActivity {
         buildVersion.setTypeface(tf);
         buildTitle.setTypeface(tfLight);
 
+        //Setting the build version
         buildVersion.setText(Globals.BUILD_VERSION);
 
     }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Globals {
 
-    public static String BUILD_VERSION = "1.1";
+    public static String BUILD_VERSION = "1.0";
 
     public static int IS_OPENED_FIRST_TIME = 1998;
 

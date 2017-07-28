@@ -162,7 +162,6 @@ public class MainActivity extends AppCompatActivity
 
         context = getApplicationContext();
 
-        //Crashlytics support
         Fabric.with(this, new Crashlytics());
 
         // Obtain the FirebaseAnalytics instance.

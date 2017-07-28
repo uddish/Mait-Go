@@ -47,7 +47,6 @@ public class SplashIntroActivity extends com.heinrichreimersoftware.materialintr
 
     @Override
     public void onBackPressed() {
-//        finishAffinity();
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

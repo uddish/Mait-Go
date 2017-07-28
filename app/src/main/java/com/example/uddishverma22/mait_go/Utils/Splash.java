@@ -8,11 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.example.uddishverma22.mait_go.Activities.Login;
 import com.example.uddishverma22.mait_go.Activities.MainActivity;
 import com.example.uddishverma22.mait_go.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Splash extends AppCompatActivity {
 
@@ -39,6 +43,11 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Crashlytics support
+
+        Fabric.with(this, new Answers(), new Crashlytics());
+
         setContentView(R.layout.activity_splash);
 
         mAuth = FirebaseAuth.getInstance();

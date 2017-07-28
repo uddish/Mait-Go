@@ -90,27 +90,6 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <!--<android.support.design.widget.TextInputLayout-->
-            <!--android:id="@+id/input_layout_semester"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:textColorHint="@color/white">-->
-
-            <!--<EditText-->
-                <!--android:id="@+id/input_semester"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:backgroundTint="@color/white"-->
-                <!--android:hint="Semester"-->
-                <!--android:inputType="number"-->
-                <!--android:maxLength="1"-->
-                <!--android:textAppearance="?android:textAppearanceMedium"-->
-                <!--android:textColor="@color/white" />-->
-
-        <!--</android.support.design.widget.TextInputLayout>-->
-
-
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/avi"
             style="@style/AVLoadingIndicatorView.Large"

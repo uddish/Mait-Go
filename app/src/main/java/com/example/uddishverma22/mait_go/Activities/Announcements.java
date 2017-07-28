@@ -108,7 +108,8 @@ public class Announcements extends AppCompatActivity {
                                 announcement = new ClassAnnouncementsModel();
                                 announcement.teacherName = object.getString("name");
                                 announcement.announcement = object.getString("message");
-                                announcement.msgDate = object.getString("createdAt");
+                                announcement.msgDate = object.getString("date");
+                                announcement.msgTime = object.getString("time");
                                 list.add(announcement);
                             }
 

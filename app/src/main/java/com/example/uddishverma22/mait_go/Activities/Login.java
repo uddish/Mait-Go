@@ -121,12 +121,11 @@ public class Login extends AppCompatActivity {
                 if (checkForNullRollNo() && checkForNullSection()) {
                     fetchBranch();
                     signIn();
-                    avi.show();
+                    startLoading();
                     InputMethodManager imm = (InputMethodManager) Login.this.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(signInButton.getWindowToken(), 0);
 
                 }
-
 
             }
         });
@@ -231,7 +230,7 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
-                avi.hide();
+                stopLoading();
                 Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
                 // Google Sign In failed, update UI appropriately
             }
@@ -251,7 +250,7 @@ public class Login extends AppCompatActivity {
                             Preferences.setPrefs("studentName", acct.getDisplayName(), getApplicationContext());
                             Preferences.setPrefs("studentImage", String.valueOf(acct.getPhotoUrl()), getApplicationContext());
                             if (!Preferences.getPrefs("class and section", Login.this).equals("notfound")) {
-                                avi.hide();
+                                stopLoading();
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 finish();
                             } else {
@@ -259,7 +258,7 @@ public class Login extends AppCompatActivity {
                             }
 
                         } else {
-                            avi.hide();
+                            stopLoading();
                             // If sign in fails, display a message to the user.
                             Log.d(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",
@@ -316,6 +315,17 @@ public class Login extends AppCompatActivity {
 
         };
         queue.add(objectRequest);
+    }
+
+    private void startLoading() {
+        avi.show();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void stopLoading() {
+        avi.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
 
