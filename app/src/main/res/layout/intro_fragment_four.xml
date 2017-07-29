@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.uddishverma22.mait_go.Utils.Splash">
+    tools:context="com.app.uddishverma22.mait_go.Utils.Splash">
 
     <ImageView
         android:layout_width="50dp"
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Check notices, assignments, events and much more."
+        android:text="Your gateway to Notices, Assignments, Events and much more."
         android:textAppearance="?android:textAppearanceSmall"
         android:textColor="@color/white"
         android:layout_gravity="center"/>

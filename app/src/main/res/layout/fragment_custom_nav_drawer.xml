@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkBlue"
-    tools:context="com.example.uddishverma22.mait_go.Fragments.CustomNavDrawer">
+    tools:context="com.app.uddishverma22.mait_go.Fragments.CustomNavDrawer">
 
     <LinearLayout
         android:layout_width="match_parent"

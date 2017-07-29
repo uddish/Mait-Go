@@ -8,28 +8,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:589182318144:android:114b444fa975b490",
+        "mobilesdk_app_id": "1:589182318144:android:6afac5a4adc04a60",
         "android_client_info": {
-          "package_name": "com.example.uddishverma22.mait_go"
+          "package_name": "com.app.uddishverma22.mait_go"
         }
       },
       "oauth_client": [
         {
-          "client_id": "589182318144-ern2lmg4dmqtph2f8t0ml3gucebajv49.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.uddishverma22.mait_go",
-            "certificate_hash": "158743e541875de80cbe9a567663e9b262a06ac2"
-          }
+          "client_id": "589182318144-77jm9b3nv98rp1edsnnnjcsqmi9fovd2.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
-          "client_id": "589182318144-o2atlgr3fdu7uuspvt9j7q5gupi58soc.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "589182318144-7dbc1rgprs2ghdirtn540kp9qvqb7kn4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.uddishverma22.mait_go",
+            "certificate_hash": "bb9946723174d962138c9e61fdf3e557e3aa9f55"
+          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD3GG2rk1v8H2mXEbFT3Ir4-2VgtzTr0bw"
+          "current_key": "AIzaSyBNQSfoGvr8zA0isM_RiWSVl1_upGgCegg"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "589182318144-o2atlgr3fdu7uuspvt9j7q5gupi58soc.apps.googleusercontent.com",
+              "client_id": "589182318144-77jm9b3nv98rp1edsnnnjcsqmi9fovd2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

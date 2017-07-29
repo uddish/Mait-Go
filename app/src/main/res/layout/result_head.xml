@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="com.example.uddishverma22.mait_go.Activities.UserProfile">
+    tools:context="com.app.uddishverma22.mait_go.Activities.UserProfile">
 
     <LinearLayout
         android:id="@+id/perc_cgpa_ll"
