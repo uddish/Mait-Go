@@ -24,6 +24,7 @@ import com.app.uddishverma22.mait_go.Adapters.AnnouncementAdapter;
 import com.app.uddishverma22.mait_go.Models.ClassAnnouncementsModel;
 import com.app.uddishverma22.mait_go.R;
 import com.app.uddishverma22.mait_go.Utils.CheckInternet;
+import com.app.uddishverma22.mait_go.Utils.DefaultExceptionHandler;
 import com.app.uddishverma22.mait_go.Utils.Globals;
 import com.app.uddishverma22.mait_go.Utils.Preferences;
 import com.app.uddishverma22.mait_go.Utils.VolleySingleton;
@@ -87,6 +88,8 @@ public class Announcements extends AppCompatActivity {
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         startLoading();
+
+        Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this));
 
     }
 

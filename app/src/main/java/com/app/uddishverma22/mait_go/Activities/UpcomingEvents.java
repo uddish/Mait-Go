@@ -23,6 +23,7 @@ import com.app.uddishverma22.mait_go.Adapters.UpcomingEventsAdapter;
 import com.app.uddishverma22.mait_go.Models.UpcomingEventsModel;
 import com.app.uddishverma22.mait_go.R;
 import com.app.uddishverma22.mait_go.Utils.CheckInternet;
+import com.app.uddishverma22.mait_go.Utils.DefaultExceptionHandler;
 import com.app.uddishverma22.mait_go.Utils.Globals;
 import com.app.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
 import com.app.uddishverma22.mait_go.Utils.VolleySingleton;
@@ -72,6 +73,8 @@ public class UpcomingEvents extends AppCompatActivity {
             indicatorView.hide();
             errorLayout.setVisibility(View.VISIBLE);
         }
+
+        Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this));
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getApplicationContext(), recyclerView,
                 new RecyclerItemClickListener.OnItemClickListener() {

@@ -119,6 +119,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkForNullRollNo() && checkForNullSection()) {
+//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     fetchBranch();
                     signIn();
                     startLoading();

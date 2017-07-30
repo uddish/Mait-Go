@@ -23,6 +23,7 @@ import com.app.uddishverma22.mait_go.Adapters.AssignmentAdapter;
 import com.app.uddishverma22.mait_go.Models.AssignmentModel;
 import com.app.uddishverma22.mait_go.R;
 import com.app.uddishverma22.mait_go.Utils.CheckInternet;
+import com.app.uddishverma22.mait_go.Utils.DefaultExceptionHandler;
 import com.app.uddishverma22.mait_go.Utils.Globals;
 import com.app.uddishverma22.mait_go.Utils.Preferences;
 import com.app.uddishverma22.mait_go.Utils.RecyclerItemClickListener;
@@ -80,6 +81,8 @@ public class Assignments extends AppCompatActivity {
         RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
 
         fetchData(queue);
+
+        Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this));
 
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {

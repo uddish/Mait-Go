@@ -39,6 +39,7 @@ import com.app.uddishverma22.mait_go.Models.ResultHeader;
 import com.app.uddishverma22.mait_go.Models.ResultModel;
 import com.app.uddishverma22.mait_go.R;
 import com.app.uddishverma22.mait_go.Utils.CheckInternet;
+import com.app.uddishverma22.mait_go.Utils.DefaultExceptionHandler;
 import com.app.uddishverma22.mait_go.Utils.Globals;
 import com.app.uddishverma22.mait_go.Utils.Preferences;
 import com.app.uddishverma22.mait_go.Utils.VolleySingleton;
@@ -128,6 +129,9 @@ public class Result extends AppCompatActivity {
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         avi.show();
 
+        //To handle CRASH
+        Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this));
+
         semesterBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -209,9 +213,13 @@ public class Result extends AppCompatActivity {
                             semesterBtn.setText(semester);
 
                             //converting perc and gpa upto 2 decimal places
-                            double creditp = (double) response.get("creditp");
+//                            double creditp = (double) response.get("creditp");
+//                            double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
+//                            double gpa = (double) response.get("gpa");
+//                            double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
+                            double creditp = Double.parseDouble(String.valueOf(response.get("creditp")));
                             double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
-                            double gpa = (double) response.get("gpa");
+                            double gpa = Double.parseDouble(String.valueOf(response.get("gpa")));
                             double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
 
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
@@ -482,10 +490,19 @@ public class Result extends AppCompatActivity {
                             percentage = String.valueOf((response.get("percentage")));
 
                             //converting perc and gpa upto 2 decimal places
-                            double creditp = (double) response.get("creditp");
-                            double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
-                            double gpa = (double) response.get("gpa");
-                            double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
+                            double creditp = 0;
+                            double roundOffPerc = 0;
+                            double roundOffGpa = 0;
+                            double gpa = 0;
+//                                if (response.get("percentage") instanceof Integer) {
+//                                    resultHeader.creditPerc = String.valueOf(response.get("creditp"));
+//                                } else {
+                            creditp = Double.parseDouble(String.valueOf(response.get("creditp")));
+                            roundOffPerc = Math.round(creditp * 100.0) / 100.0;
+//                                }
+
+                            gpa = Double.parseDouble(String.valueOf(response.get("gpa")));
+                            roundOffGpa = Math.round(gpa * 100.0) / 100.0;
 
                             //Setting the percentage in the circleView and the cgpa and creditPercentage
                             mCircleView.setValueAnimated(Float.parseFloat(percentage));
