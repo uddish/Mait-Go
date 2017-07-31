@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Globals {
 
-    public static String BUILD_VERSION = "1.3";
+    public static String BUILD_VERSION = "1.6";
 
     public static int IS_OPENED_FIRST_TIME = 1998;
 
@@ -26,6 +26,7 @@ public class Globals {
 
     public static String rollNo;
     public static String section;
+    public static String sectionNumber;
     public static String semester;
     public static String userName;
     public static String fcmRefreshToken;

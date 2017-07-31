@@ -8,9 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -62,8 +60,8 @@ public class Login extends AppCompatActivity {
     Typeface tf, tfBold;
 
     TextView heading, subHeading;
-    EditText rollNo, section;
-    TextInputLayout rollnoLayout, sectionLayout;
+    EditText rollNo, section, sectionNumber;
+    TextInputLayout rollnoLayout, sectionLayout, sectionNumberLayout;
     AVLoadingIndicatorView avi;
 
     RequestQueue queue;
@@ -118,7 +116,7 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkForNullRollNo() && checkForNullSection()) {
+                if (checkForNullRollNo() && checkForNullSection() && checkForNullSectionNumber()) {
 //                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     fetchBranch();
                     signIn();
@@ -131,35 +129,35 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        section.addTextChangedListener(new TextWatcher() {
-
-            int flag = 0;
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                Log.d(TAG, "beforeTextChanged: " + count);
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged: " + count);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.d(TAG, "afterTextChanged: " + s);
-                if (s.length() == 1 && flag == 0) {
-                    s.append("-");
-                    flag = 1;
-                }
-                if (s.length() == 1) {
-                    flag = 0;
-                }
-
-            }
-        });
+//        section.addTextChangedListener(new TextWatcher() {
+//
+//            int flag = 0;
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//                Log.d(TAG, "beforeTextChanged: " + count);
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Log.d(TAG, "onTextChanged: " + count);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                Log.d(TAG, "afterTextChanged: " + s);
+//                if (s.length() == 1 && flag == 0) {
+//                    s.append("-");
+//                    flag = 1;
+//                }
+//                if (s.length() == 1) {
+//                    flag = 0;
+//                }
+//
+//            }
+//        });
 
     }
 
@@ -170,11 +168,13 @@ public class Login extends AppCompatActivity {
         subHeading = (TextView) findViewById(R.id.subhead);
         rollNo = (EditText) findViewById(R.id.input_rollno);
         section = (EditText) findViewById(R.id.input_class);
+        sectionNumber = (EditText) findViewById(R.id.input_class_no);
 
         avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         rollnoLayout = (TextInputLayout) findViewById(R.id.input_layout_rollno);
         sectionLayout = (TextInputLayout) findViewById(R.id.input_layout_class);
+        sectionNumberLayout = (TextInputLayout) findViewById(R.id.input_layout_class_no);
 
         heading.setTypeface(tfBold);
         subHeading.setTypeface(tf);
@@ -195,7 +195,7 @@ public class Login extends AppCompatActivity {
     }
 
     private boolean checkForNullSection() {
-        if (TextUtils.isEmpty(section.getText().toString()) || section.getText().toString().length() < 3) {
+        if (TextUtils.isEmpty(section.getText().toString())) {
             sectionLayout.setError(getString(R.string.section_error));
             requestFocus(section);
             return false;
@@ -205,6 +205,20 @@ public class Login extends AppCompatActivity {
             sectionLayout.setErrorEnabled(false);
         }
         Log.d(TAG, "checkForNullSection: " + section.getText().toString().length());
+        return true;
+    }
+
+    private boolean checkForNullSectionNumber() {
+        if (TextUtils.isEmpty(sectionNumber.getText().toString())) {
+            sectionNumberLayout.setError(getString(R.string.section_error));
+            requestFocus(section);
+            return false;
+        } else {
+            Globals.sectionNumber = sectionNumber.getText().toString();
+            Preferences.setPrefs("studentSectionNumber", Globals.sectionNumber, getApplicationContext());
+            sectionNumberLayout.setErrorEnabled(false);
+        }
+        Log.d(TAG, "checkForNullSection: " + sectionNumber.getText().toString().length());
         return true;
     }
 
@@ -292,7 +306,8 @@ public class Login extends AppCompatActivity {
                             if (Globals.semester != null && response.get("branch") != null) {
                                 Preferences.setPrefs("studentSemester", Globals.semester, getApplicationContext());
                                 Preferences.setPrefs("studentBranch", String.valueOf(response.get("branch")), getApplicationContext());
-                                Preferences.setPrefs("class and section", Globals.semester + Globals.section.charAt(0) + Globals.section.charAt(2), Login.this);
+                                Preferences.setPrefs("class and section", Globals.semester + Globals.section + Globals.sectionNumber, Login.this);
+                                Log.d(TAG, "onResponse: " + Globals.semester + Globals.section + Globals.sectionNumber);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
