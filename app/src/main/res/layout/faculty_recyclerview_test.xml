@@ -13,16 +13,16 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi"
-        style="@style/AVLoadingIndicatorView.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true"
-        android:visibility="visible"
-        app:indicatorColor="@color/white"
-        app:indicatorName="BallClipRotatePulseIndicator" />
+    <!--<com.wang.avi.AVLoadingIndicatorView-->
+        <!--android:id="@+id/avi"-->
+        <!--style="@style/AVLoadingIndicatorView.Large"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:visibility="visible"-->
+        <!--app:indicatorColor="@color/white"-->
+        <!--app:indicatorName="BallClipRotatePulseIndicator" />-->
 
 
 </RelativeLayout>

@@ -67,6 +67,7 @@ public class UserProfile extends AppCompatActivity {
     String studentSection;
     String studentBranch;
     String studentSemester;
+    String studentSectionNumber;
 
     //Components to change image in the profile page
     CircleImageView profileImage;
@@ -292,12 +293,13 @@ public class UserProfile extends AppCompatActivity {
         studentSection = Preferences.getPrefs("studentSection", getApplicationContext());
         studentBranch = Preferences.getPrefs("studentBranch", getApplicationContext());
         studentSemester = Preferences.getPrefs("studentSemester", getApplicationContext());
+        studentSectionNumber = Preferences.getPrefs("studentSectionNumber", getApplicationContext());
         Log.d(TAG, "setStudentDetails:  + " + studentBranch + " " + studentName + " " + studentRollNo);
         if (!studentName.equals("notfound") && !studentRollNo.equals("notfound")
                 && !studentSection.equals("notfound") && !studentSemester.equals("notfound")) {
             name.setText(studentName);
             roll.setText(studentRollNo);
-            className.setText(studentSection);
+            className.setText(studentSection + "-" + studentSectionNumber);
             branch.setText(studentBranch);
             semester.setText(studentSemester);
         }

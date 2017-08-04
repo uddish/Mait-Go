@@ -29,8 +29,8 @@ android {
         applicationId "com.app.uddishverma22.mait_go"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 8
-        versionName "1.6"
+        versionCode 9
+        versionName "1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     dataBinding {

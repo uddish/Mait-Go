@@ -40,8 +40,8 @@ public class FacultyFragment extends Fragment {
 
         view = inflater.inflate(R.layout.faculty_recyclerview_test, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
-        indicatorView.show();
+//        indicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avi);
+//        indicatorView.show();
         Log.d(TAG, "onCreateView: Setting up recycler");
         setupRecycler();
 
@@ -55,18 +55,22 @@ public class FacultyFragment extends Fragment {
         if (title.equals("CSE")) {
             if (Globals.cseFacList != null && Globals.cseFacList.size() > 0) {
                 adapter = new FacultyListAdapter(Globals.cseFacList);
-                indicatorView.hide();
+//                indicatorView.hide();
             }
-        } else if(title.equals("IT")) {
+        } else if (title.equals("IT")) {
             if (Globals.itFacList != null && Globals.itFacList.size() > 0) {
                 adapter = new FacultyListAdapter(Globals.itFacList);
-                indicatorView.hide();
+//                indicatorView.hide();
             }
-        }
-        else    {
+        } else if (title.equals("ECE")) {
             if (Globals.eceFacList != null && Globals.eceFacList.size() > 0) {
                 adapter = new FacultyListAdapter(Globals.eceFacList);
-                indicatorView.hide();
+//                indicatorView.hide();
+            }
+        } else {
+            if (Globals.eeeFacList != null && Globals.eeeFacList.size() > 0) {
+                adapter = new FacultyListAdapter(Globals.eeeFacList);
+//                indicatorView.hide();
             }
         }
         recyclerView.setAdapter(adapter);

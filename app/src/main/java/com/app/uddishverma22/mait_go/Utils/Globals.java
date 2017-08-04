@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Globals {
 
-    public static String BUILD_VERSION = "1.6";
+    public static String BUILD_VERSION = "1.7";
 
     public static int IS_OPENED_FIRST_TIME = 1998;
 
@@ -20,6 +20,7 @@ public class Globals {
     public static ArrayList<Faculty> itFacList = new ArrayList<>();
     public static ArrayList<Faculty> cseFacList = new ArrayList<>();
     public static ArrayList<Faculty> eceFacList = new ArrayList<>();
+    public static ArrayList<Faculty> eeeFacList = new ArrayList<>();
 
     public static ArrayList<Notice> noticeList = new ArrayList<>();
     public static ArrayList<Notice> examinationNoticeList = new ArrayList<>();

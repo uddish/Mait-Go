@@ -26,6 +26,7 @@ import com.app.uddishverma22.mait_go.R;
 import com.app.uddishverma22.mait_go.Utils.CheckInternet;
 import com.app.uddishverma22.mait_go.Utils.Globals;
 import com.app.uddishverma22.mait_go.Utils.VolleySingleton;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,21 +48,24 @@ public class FacultyInformation extends AppCompatActivity {
     JSONArray itFaculty = null;
     JSONArray cseFaculty = null;
     JSONArray eceFaculty = null;
+    JSONArray eeeFaculty = null;
 
-    JSONObject itFacObj, cseFacObj, eceFacObj;
-    Faculty itFacultyobj, cseFacultyobj, eceFacultyobj;
+    JSONObject itFacObj, cseFacObj, eceFacObj, eeeFacObj;
+    Faculty itFacultyobj, cseFacultyobj, eceFacultyobj, eeeFacultyobj;
 
     Typeface openSansReg, openSansBold;
 
     ArrayList<Faculty> itFacList = new ArrayList<>();
     ArrayList<Faculty> cseFacList = new ArrayList<>();
     ArrayList<Faculty> eceFacList = new ArrayList<>();
+    ArrayList<Faculty> eeeFacList = new ArrayList<>();
 
     String url = "http://ec2-52-66-87-230.ap-south-1.compute.amazonaws.com/faculty";
 
     CoordinatorLayout coordinatorLayout;
 
     RequestQueue queue;
+    AVLoadingIndicatorView indicatorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,9 @@ public class FacultyInformation extends AppCompatActivity {
         fetchData(queue);
 
         setToolbar();
+
+        indicatorView = (AVLoadingIndicatorView) findViewById(R.id.avi);
+        indicatorView.show();
 
         openSansReg = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Regular.ttf");
         openSansBold = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/OpenSans-Bold.ttf");
@@ -101,11 +108,12 @@ public class FacultyInformation extends AppCompatActivity {
                         break;
                     case 1:
                         Globals.title = "IT";
-                        Log.d(TAG, "onTabSelected: " + itFacList);
                         break;
                     case 2:
                         Globals.title = "ECE";
-                        Log.d(TAG, "onTabSelected: " + eceFacList);
+                        break;
+                    case 3:
+                        Globals.title = "EEE";
                         break;
                 }
             }
@@ -129,10 +137,14 @@ public class FacultyInformation extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        indicatorView.hide();
+
                         try {
                             itFaculty = response.getJSONArray("IT");
                             cseFaculty = response.getJSONArray("CSE");
                             eceFaculty = response.getJSONArray("ECE");
+                            eeeFaculty = response.getJSONArray("EEE");
+
                             for (int i = 0; i < itFaculty.length(); i++) {
                                 itFacObj = itFaculty.getJSONObject(i);
                                 itFacultyobj = new Faculty();
@@ -169,6 +181,18 @@ public class FacultyInformation extends AppCompatActivity {
                             }
                             Globals.eceFacList = eceFacList;
 
+                            for (int i = 0; i < eeeFaculty.length(); i++) {
+                                eeeFacObj = eeeFaculty.getJSONObject(i);
+                                eeeFacultyobj = new Faculty();
+                                eeeFacultyobj.name = eeeFacObj.getString("name");
+                                eeeFacultyobj.designation = eeeFacObj.getString("designation");
+                                eeeFacultyobj.qualification = eeeFacObj.getString("qualification");
+                                eeeFacultyobj.room = eeeFacObj.getString("room");
+                                eeeFacultyobj.imageUrl = eeeFacObj.getString("img");
+                                eeeFacList.add(eeeFacultyobj);
+                            }
+                            Globals.eeeFacList = eeeFacList;
+
                             setupViewPager(viewPager);
 
                         } catch (JSONException e) {
@@ -179,6 +203,7 @@ public class FacultyInformation extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                indicatorView.hide();
                 Log.d(TAG, "onErrorResponse: " + error.toString());
             }
         }) {
@@ -203,6 +228,7 @@ public class FacultyInformation extends AppCompatActivity {
         adapter.addFrag(new FacultyFragment("CSE"), "CSE");
         adapter.addFrag(new FacultyFragment("IT"), "IT");
         adapter.addFrag(new FacultyFragment("ECE"), "ECE");
+        adapter.addFrag(new FacultyFragment("EEE"), "EEE");
         viewPager.setAdapter(adapter);
     }
 

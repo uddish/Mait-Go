@@ -212,11 +212,6 @@ public class Result extends AppCompatActivity {
 
                             semesterBtn.setText(semester);
 
-                            //converting perc and gpa upto 2 decimal places
-//                            double creditp = (double) response.get("creditp");
-//                            double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
-//                            double gpa = (double) response.get("gpa");
-//                            double roundOffGpa = Math.round(gpa * 100.0) / 100.0;
                             double creditp = Double.parseDouble(String.valueOf(response.get("creditp")));
                             double roundOffPerc = Math.round(creditp * 100.0) / 100.0;
                             double gpa = Double.parseDouble(String.valueOf(response.get("gpa")));

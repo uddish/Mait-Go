@@ -1,5 +1,6 @@
 package com.app.uddishverma22.mait_go.Activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -117,7 +118,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (checkForNullRollNo() && checkForNullSection() && checkForNullSectionNumber()) {
-//                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     fetchBranch();
                     signIn();
                     startLoading();
@@ -128,36 +128,6 @@ public class Login extends AppCompatActivity {
 
             }
         });
-
-//        section.addTextChangedListener(new TextWatcher() {
-//
-//            int flag = 0;
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                Log.d(TAG, "beforeTextChanged: " + count);
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Log.d(TAG, "onTextChanged: " + count);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                Log.d(TAG, "afterTextChanged: " + s);
-//                if (s.length() == 1 && flag == 0) {
-//                    s.append("-");
-//                    flag = 1;
-//                }
-//                if (s.length() == 1) {
-//                    flag = 0;
-//                }
-//
-//            }
-//        });
 
     }
 
@@ -218,10 +188,8 @@ public class Login extends AppCompatActivity {
             Preferences.setPrefs("studentSectionNumber", Globals.sectionNumber, getApplicationContext());
             sectionNumberLayout.setErrorEnabled(false);
         }
-        Log.d(TAG, "checkForNullSection: " + sectionNumber.getText().toString().length());
         return true;
     }
-
 
 
     private void requestFocus(View view) {
@@ -239,8 +207,9 @@ public class Login extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        //Added RESULT_OK for XIAOMI devices
+
+        if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
@@ -281,7 +250,6 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
     }
