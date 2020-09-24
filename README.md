@@ -21,3 +21,11 @@ A one stop destination to access academic data, events, major happenings and muc
 • Events in MAIT
 
 • Faculty Info
+
+![pageres](ipu_go_home.jpg "Main")
+
+![pageres](ipu_go_nav.jpg "Main")
+
+![pageres](ipu_go_results.jpg "Main")
+
+![pageres](ipu_go_announcements.jpg "Main")
