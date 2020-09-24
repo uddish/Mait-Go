@@ -1,6 +1,7 @@
 # IPU Go
 
 ## An application for MAIT'ians to explore academic information and much more.
+### Demo Link: https://youtu.be/JYT7S_Sf3OM
 
 Experience MAIT like never before. 
 
